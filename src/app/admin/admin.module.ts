@@ -8,6 +8,11 @@ import { ProgressComponent } from './progress/progress.component';
 import { Grafica1Component } from './grafica1/grafica1.component';
 import { AdminComponent } from './admin.component';
 import { SharedModule } from '../shared/shared.module';
+import { AreaComponent } from './area/area.component';
+import { CargoComponent } from './cargo/cargo.component';
+import { DependenciaComponent } from './dependencia/dependencia.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -16,7 +21,10 @@ import { SharedModule } from '../shared/shared.module';
     DashboardComponent,
     ProgressComponent,
     Grafica1Component,
-    AdminComponent
+    AdminComponent,
+    AreaComponent,
+    CargoComponent,
+    DependenciaComponent
   ],
   exports:[
     DashboardComponent,
@@ -27,7 +35,10 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ]
 })
 export class AdminModule { }

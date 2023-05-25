@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
+  ano= new Date().getFullYear();
   constructor() { }
 
   ngOnInit(): void {

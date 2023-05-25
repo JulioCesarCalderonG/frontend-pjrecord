@@ -4,6 +4,9 @@ import { AdminComponent } from './admin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
 import { Grafica1Component } from './grafica1/grafica1.component';
+import { AreaComponent } from './area/area.component';
+import { CargoComponent } from './cargo/cargo.component';
+import { DependenciaComponent } from './dependencia/dependencia.component';
 
 
 const routes: Routes = [
@@ -14,6 +17,9 @@ const routes: Routes = [
             { path: '', component: DashboardComponent },
             { path: 'progress', component: ProgressComponent },
             { path: 'grafica1', component: Grafica1Component },
+            { path: 'area', component: AreaComponent },
+            { path: 'cargo', component: CargoComponent },
+            { path: 'dependencia', component: DependenciaComponent },
         ]
     },
     //{ path: 'path/:routeParam', component: MyComponent },
