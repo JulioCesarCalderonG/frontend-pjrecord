@@ -20,6 +20,7 @@ export class GeneralComponent implements OnInit {
     this.generalService.getGeneral().subscribe(
       (data)=>{
         this.listGeneral = data.resp;
+        
       }, (error)=>{
         console.log(error);
       }

@@ -15,5 +15,4 @@ export class GeneralService {
   getGeneral():Observable<any>{
     return this.http.get(this.url);
   }
-
 }

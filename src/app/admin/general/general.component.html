@@ -4,22 +4,23 @@
         <th scope="col">ID</th>
         <th scope="col">PERSONAL</th>
         <th scope="col">TIPO DOCUMENTO</th>
+        <th scope="col">DEPENDENCIA</th>
         <th scope="col">CARGO</th>
         <th scope="col">AREA</th>
-        <th scope="col">DEPENDENCIA</th>
         <th scope="col">INICIO</th>
         <th scope="col">FIN</th>
         <th scope="col">DOCUMENTO</th>
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let general of listGeneral">
         <th scope="row">{{general.id}}</th>
-        <td>{{general.id_personal}}</td>
-        <td>{{general.id_tipo_documento}}</td>
-        <td>{{general.id_cargo}}</td>
-        <td>{{general.id_dependencia}}</td>
-        <td>{{general.id_area}}</td>
+        <td>{{general.Personal.nombre}}</td>
+        <td>{{general.Tipodocumento.descripcion}}</td>
+        <td>{{general.Dependencium.descripcion}}</td>
+        <td>{{general.Cargo.descripcion}}</td>
+        <td>{{general.Area.nombre}}</td>
         <td>{{general.inicio}}</td>
         <td>{{general.fin}}</td>
         <td>{{general.documento}}</td>
