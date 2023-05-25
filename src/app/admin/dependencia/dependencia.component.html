@@ -1,1 +1,14 @@
-<p>dependencia works!</p>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">DESCRIPCION</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dependencia of listDependencia">
+        <th scope="row">{{dependencia.id}}</th>
+        <td>{{dependencia.descripcion}}</td>
+      </tr>
+    </tbody>
+  </table>

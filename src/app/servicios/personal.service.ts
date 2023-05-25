@@ -7,12 +7,12 @@ import { environment } from 'src/environments/environment.prod';
 @Injectable({
   providedIn: 'root'
 })
-export class CargoService {
+export class PersonalService {
 
-  private url = `${environment.backendUrl}/cargo`
+  private url = `${environment.backendUrl}/personal`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getCargos():Observable<any>{
+  getPersonal():Observable<any>{
     return this.http.get(this.url);
   }
 

@@ -7,6 +7,10 @@ import { Grafica1Component } from './grafica1/grafica1.component';
 import { AreaComponent } from './area/area.component';
 import { CargoComponent } from './cargo/cargo.component';
 import { DependenciaComponent } from './dependencia/dependencia.component';
+import { TipodocumentoComponent } from './tipodocumento/tipodocumento.component';
+import { PersonalComponent } from './personal/personal.component';
+import { AdministradorComponent } from './administrador/administrador.component';
+import { GeneralComponent } from './general/general.component';
 
 
 const routes: Routes = [
@@ -20,6 +24,10 @@ const routes: Routes = [
             { path: 'area', component: AreaComponent },
             { path: 'cargo', component: CargoComponent },
             { path: 'dependencia', component: DependenciaComponent },
+            { path: 'tipodocumento', component: TipodocumentoComponent },
+            { path: 'personal', component: PersonalComponent },
+            { path: 'administrador', component: AdministradorComponent },
+            { path: 'general', component: GeneralComponent },
         ]
     },
     //{ path: 'path/:routeParam', component: MyComponent },

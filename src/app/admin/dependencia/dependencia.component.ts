@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DependenciaService } from 'src/app/servicios/dependencia.service';
 
 @Component({
   selector: 'app-dependencia',
@@ -7,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DependenciaComponent implements OnInit {
 
-  constructor() { }
+  listDependencia?:Array<any>
+
+  constructor(private dependenciaService:DependenciaService) { }
 
   ngOnInit(): void {
+    this.mostrarDependencias();
+  }
+
+  mostrarDependencias(){
+    this.dependenciaService.getDependencias().subscribe(
+      (data)=>{
+        this.listDependencia = data.resp;
+        
+      },(error)=>{
+        console.log(error);
+        
+      }
+    )
   }
 
 }

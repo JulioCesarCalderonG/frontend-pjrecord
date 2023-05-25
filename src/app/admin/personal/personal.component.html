@@ -1,0 +1,20 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">NOMBRE</th>
+        <th scope="col">APELLIDO</th>
+        <th scope="col">ESCALAFON</th>
+        <th scope="col">FECHA INICIO</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let personal of listPersonal">
+        <th scope="row">{{personal.id}}</th>
+        <td>{{personal.nombre}}</td>
+        <td>{{personal.apellido}}</td>
+        <td>{{personal.escalafon}}</td>
+        <td>{{personal.fecha_inicio}}</td>
+      </tr>
+    </tbody>
+  </table>

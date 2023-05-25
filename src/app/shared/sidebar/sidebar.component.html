@@ -9,14 +9,14 @@
       <ul id="sidebarnav">
         <li class="user-profile">
           <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img
-              src="./assets/images/users/profile.png" alt="user" /><span class="hide-menu">Steave Jobs
+              src="./assets/images/users/profile.png" alt="user" /><span class="hide-menu">Record Laboral
             </span></a>
           <ul aria-expanded="false" class="collapse">
-            <li><a href="javascript:void()">My Profile </a></li>
-            <li><a href="javascript:void()">My Balance</a></li>
-            <li><a href="javascript:void()">Inbox</a></li>
-            <li><a href="javascript:void()">Account Setting</a></li>
-            <li><a href="javascript:void()">Logout</a></li>
+            <li><a href="javascript:void()">Mi perfil</a></li>
+            <li><a href="javascript:void()">Mi balance</a></li>
+            <li><a href="javascript:void()">Bandeja de entrada</a></li>
+            <li><a href="javascript:void()">Configuracion de cuenta</a></li>
+            <li><a href="javascript:void()">Cerrar sesión</a></li>
           </ul>
         </li>
         <li class="nav-devider"></li>
@@ -25,7 +25,7 @@
           <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
               class="mdi mdi-gauge"></i><span class="hide-menu">Area</span></a>
           <ul aria-expanded="false" class="collapse">
-            <li><a [routerLink]="['/admin/area']" routerLinkActive="router-link-active" >Mostrar Area </a></li>
+            <li><a [routerLink]="['/admin/area']" routerLinkActive="router-link-active" >Mostrar Area</a></li>
 
           </ul>
         </li>
@@ -33,7 +33,7 @@
           <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
               class="mdi mdi-gauge"></i><span class="hide-menu">Dependencia</span></a>
           <ul aria-expanded="false" class="collapse">
-            <li><a [routerLink]="['/admin/dependencia']" routerLinkActive="router-link-active" >Mostrar Dependencia </a></li>
+            <li><a [routerLink]="['/admin/dependencia']" routerLinkActive="router-link-active" >Mostrar Dependencia</a></li>
 
           </ul>
         </li>
@@ -41,17 +41,39 @@
           <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
               class="mdi mdi-gauge"></i><span class="hide-menu">Cargo</span></a>
           <ul aria-expanded="false" class="collapse">
-            <li><a [routerLink]="['/admin/cargo']" routerLinkActive="router-link-active" >Mostrar Cargo </a></li>
+            <li><a [routerLink]="['/admin/cargo']" routerLinkActive="router-link-active" >Mostrar Cargo</a></li>
 
           </ul>
         </li>
         <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-              class="mdi mdi-gauge"></i><span class="hide-menu">Cargo </span></a>
+              class="mdi mdi-gauge"></i><span class="hide-menu">Tipo de Documento</span></a>
           <ul aria-expanded="false" class="collapse">
-            <li><a href="index.html">Minimal </a></li>
-            <li><a href="index2.html">Analytical</a></li>
-            <li><a href="index3.html">Demographical</a></li>
-            <li><a href="index4.html">Modern</a></li>
+            <li><a [routerLink]="['/admin/tipodocumento']" routerLinkActive="router-link-active" >Mostrar Tipo de Documento </a></li>
+          
+          </ul>
+        </li>
+        <li>
+          <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+              class="mdi mdi-gauge"></i><span class="hide-menu">Personal</span></a>
+          <ul aria-expanded="false" class="collapse">
+            <li><a [routerLink]="['/admin/personal']" routerLinkActive="router-link-active" >Mostrar Personal</a></li>
+
+          </ul>
+        </li>
+        <li>
+          <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+              class="mdi mdi-gauge"></i><span class="hide-menu">Administradores</span></a>
+          <ul aria-expanded="false" class="collapse">
+            <li><a [routerLink]="['/admin/administrador']" routerLinkActive="router-link-active" >Mostrar Administradores</a></li>
+
+          </ul>
+        </li>
+        <li>
+          <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+              class="mdi mdi-gauge"></i><span class="hide-menu">General</span></a>
+          <ul aria-expanded="false" class="collapse">
+            <li><a [routerLink]="['/admin/general']" routerLinkActive="router-link-active" >Mostrar General</a></li>
+
           </ul>
         </li>
       </ul>

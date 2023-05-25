@@ -13,6 +13,10 @@ import { CargoComponent } from './cargo/cargo.component';
 import { DependenciaComponent } from './dependencia/dependencia.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { TipodocumentoComponent } from './tipodocumento/tipodocumento.component';
+import { PersonalComponent } from './personal/personal.component';
+import { AdministradorComponent } from './administrador/administrador.component';
+import { GeneralComponent } from './general/general.component';
 
 
 
@@ -24,7 +28,11 @@ import { HttpClientModule } from '@angular/common/http';
     AdminComponent,
     AreaComponent,
     CargoComponent,
-    DependenciaComponent
+    DependenciaComponent,
+    TipodocumentoComponent,
+    PersonalComponent,
+    AdministradorComponent,
+    GeneralComponent
   ],
   exports:[
     DashboardComponent,
