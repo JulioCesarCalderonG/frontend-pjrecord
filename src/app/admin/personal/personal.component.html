@@ -1,3 +1,10 @@
+
+<div class="row">
+  <div class="col-lg-12">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalPersonal" data-whatever="@mdo">Agregar</button>
+  </div>
+</div>
+
 <table class="table">
     <thead>
       <tr>
@@ -18,3 +25,41 @@
       </tr>
     </tbody>
   </table>
+
+
+  <div class="modal fade" id="modalPersonal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ingresar Registro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="personalForm">
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Nombre:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Apellido:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="apellido">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Escalafon:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="escalafon">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Fecha inicio:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="fecha_inicio">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="registrarPersonal()" [disabled]="personalForm.invalid">Registrar</button>
+        </div>
+      </div>
+    </div>
+  </div>

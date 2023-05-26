@@ -16,4 +16,8 @@ export class AdministradorService {
     return this.http.get(this.url);
   }
 
+  postAdministrador(body:FormData):Observable<any>{
+    return this.http.post(this.url,body);
+  }
+
 }

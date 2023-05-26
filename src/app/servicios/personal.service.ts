@@ -16,4 +16,8 @@ export class PersonalService {
     return this.http.get(this.url);
   }
 
+  postPersonal(body:FormData):Observable<any>{
+    return this.http.post(this.url,body);
+  }
+
 }

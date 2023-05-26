@@ -16,4 +16,7 @@ export class TipodocumentoService {
     return this.http.get(this.url);
   }
 
+  postTipodocumento(body:FormData):Observable<any>{
+    return this.http.post(this.url,body);
+  }
 }

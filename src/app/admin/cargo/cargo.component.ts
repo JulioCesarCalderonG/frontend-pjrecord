@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CargoService } from 'src/app/servicios/cargo.service';
-
 
 @Component({
   selector: 'app-cargo',
@@ -10,8 +10,16 @@ import { CargoService } from 'src/app/servicios/cargo.service';
 export class CargoComponent implements OnInit {
 
   listCargo?:Array<any>
+  cargoForm:FormGroup;
 
-  constructor(private cargoService:CargoService) { }
+  constructor(
+    private cargoService:CargoService,
+    private fb:FormBuilder
+    ) {
+      this.cargoForm = this.fb.group({
+        descripcion:['',Validators.required]
+      })
+    }
 
   ngOnInit(): void {
     this.mostrarCargos();
@@ -27,6 +35,27 @@ export class CargoComponent implements OnInit {
         
       }
     )
+  }
+
+  registrarCargo(){
+    const formData = new FormData();
+    formData.append('descripcion',this.cargoForm.get('descripcion')?.value);
+
+    this.cargoService.postCargos(formData).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarCargos();
+      }, (error)=>{
+        console.log(error);
+        
+      }
+    )
+  }
+
+  cancelar(){
+    this.cargoForm.setValue({
+      descripcion:''
+    })
   }
 
 }

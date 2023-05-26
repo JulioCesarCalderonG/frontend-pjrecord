@@ -1,3 +1,9 @@
+<div class="row">
+  <div class="col-lg-12">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalArea" data-whatever="@mdo">Agregar</button>
+  </div>
+</div>
+
 <table class="table">
   <thead>
     <tr>
@@ -15,3 +21,32 @@
 
   </tbody>
 </table>
+
+<div class="modal fade" id="modalArea" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ingresar Registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="areaForm">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Nombre:</label>
+            <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Sigla:</label>
+            <input type="text" class="form-control" id="recipient-name" formControlName="sigla">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="registrarAreas()" [disabled]="areaForm.invalid">Registrar</button>
+      </div>
+    </div>
+  </div>
+</div>
