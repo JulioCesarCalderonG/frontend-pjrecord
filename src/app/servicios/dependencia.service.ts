@@ -15,5 +15,7 @@ export class DependenciaService {
   getDependencias():Observable<any>{
     return this.http.get(this.url);
   }
-
+  postDependencia(body:FormData):Observable<any>{
+    return this.http.post(this.url,body);
+  }
 }

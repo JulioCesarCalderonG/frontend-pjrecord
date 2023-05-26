@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DependenciaService } from 'src/app/servicios/dependencia.service';
 
 @Component({
@@ -9,8 +10,15 @@ import { DependenciaService } from 'src/app/servicios/dependencia.service';
 export class DependenciaComponent implements OnInit {
 
   listDependencia?:Array<any>
-
-  constructor(private dependenciaService:DependenciaService) { }
+  dependenciaForm:FormGroup;
+  constructor(
+    private dependenciaService:DependenciaService,
+    private fb:FormBuilder
+  ) {
+    this.dependenciaForm = this.fb.group({
+      descripcion:['',Validators.required]
+    })
+  }
 
   ngOnInit(): void {
     this.mostrarDependencias();
@@ -20,12 +28,33 @@ export class DependenciaComponent implements OnInit {
     this.dependenciaService.getDependencias().subscribe(
       (data)=>{
         this.listDependencia = data.resp;
-        
+
       },(error)=>{
         console.log(error);
-        
+
       }
     )
   }
 
+  registrarDependencia(){
+    const formData = new FormData();
+    formData.append('descripcion',this.dependenciaForm.get('descripcion')?.value);
+
+    this.dependenciaService.postDependencia(formData).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarDependencias();
+      },(error)=>{
+        console.log(error);
+
+      }
+    )
+
+
+  }
+  cancelar(){
+    this.dependenciaForm.setValue({
+      descripcion:''
+    })
+  }
 }
