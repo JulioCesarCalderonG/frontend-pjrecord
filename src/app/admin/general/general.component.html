@@ -1,29 +1,179 @@
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">PERSONAL</th>
-        <th scope="col">TIPO DOCUMENTO</th>
-        <th scope="col">DEPENDENCIA</th>
-        <th scope="col">CARGO</th>
-        <th scope="col">AREA</th>
-        <th scope="col">INICIO</th>
-        <th scope="col">FIN</th>
-        <th scope="col">DOCUMENTO</th>
-      </tr>
-    </thead>
+<div class="row mb-5">
+  <div class="col-lg-4">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegistrar" data-whatever="@mdo">REGISTRAR</button>
+  </div>
+</div>
 
-    <tbody>
-      <tr *ngFor="let general of listGeneral">
-        <th scope="row">{{general.id}}</th>
-        <td>{{general.Personal.nombre}} {{general.Personal.apellido}}</td>
-        <td>{{general.Tipodocumento.descripcion}}</td>
-        <td>{{general.Dependencium.descripcion}}</td>
-        <td>{{general.Cargo.descripcion}}</td>
-        <td>{{general.Area.nombre}}</td>
-        <td>{{general.inicio}}</td>
-        <td>{{general.fin}}</td>
-        <td>{{general.documento}}</td>
-      </tr>
-    </tbody>
-  </table>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">DOCUMENTO QUE AUTORIZA</th>
+      <th scope="col">DEPENDENCIA</th>
+      <th scope="col">NOMBRES Y APELLIDOS</th>
+      <th scope="col">CARGO FUNCIONAL</th>
+      <th scope="col">DESDE</th>
+      <th scope="col">HASTA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let general of listGeneral">
+      <th scope="row">{{general.id}}</th>
+      <td>{{general.codigo_documento}}</td>
+      <td>{{general.dependencia}}</td>
+      <td>{{general.Personal.nombre}} {{general.Personal.apellido}}</td>
+      <td>{{general.Cargo.descripcion}}</td>
+      <td>{{general.inicio}}</td>
+      <td>{{general.fin}}</td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+<div class="modal fade" id="modalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold; ">REGISTRAR RECORD LABORAL</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="generalForm">
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">INGRESAR PERSONAL</h5>
+              <hr>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Personal:</label><br>
+                <select class="form-control custom-select" formControlName="personal" >
+                  <option selected value="">Seleccionar</option>
+                  <option *ngFor="let personal of listPersonal" value="{{personal.id}}">{{personal.nombre}} {{personal.apellido}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">GENERAR CODIGO DE DOCUMENTO</h5>
+              <hr>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Documento:</label><br>
+                <select class="form-control custom-select" formControlName="tipodocumento">
+                  <option selected value="">Seleccionar</option>
+                  <option *ngFor="let tipodoc of listTipodocumento" value="{{tipodoc.id}}">{{tipodoc.descripcion}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Numero:</label>
+                <input type="text" class="form-control" id="recipient-name" formControlName="numero">
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Año:</label>
+                <input type="text" class="form-control" id="recipient-name" formControlName="ano">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Sigla:</label><br>
+                <select class="form-control custom-select"  (change)="buscarSigla($event)" formControlName="tiposigla">
+                  <option value="0">Seleccionar</option>
+                  <option value="1">Organo</option>
+                  <option value="2">Unidad Organica</option>
+                  <option value="3">Area</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Area que autoriza:</label><br>
+                <select class="form-control custom-select" formControlName="autoriza">
+                  <option value="0">Seleccionar</option>
+                  <option *ngFor="let autoriza of listAutoriza" value="{{autoriza.id}}">{{autoriza.nombre}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">GENERAR DEPENDENCIA</h5>
+              <hr>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Dependecia:</label><br>
+                <select class="form-control custom-select"  (change)="buscarDependencia($event)" formControlName="tipodependencia">
+                  <option selected value="">Seleccionar</option>
+                  <option value="1">Organo</option>
+                  <option value="2">Unidad Organica</option>
+                  <option value="3">Area</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Dependencia:</label><br>
+                <select class="form-control custom-select" formControlName="dependencia">
+                  <option selected value="">Seleccionar</option>
+                  <option *ngFor="let dependencia of listDependencia" value="{{dependencia.id}}">{{dependencia.nombre}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">INGRESAR CARGO</h5>
+              <hr>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Cargo:</label><br>
+                <select class="form-control custom-select" formControlName="cargo" >
+                  <option selected value="">Seleccionar</option>
+                  <option *ngFor="let cargo of listCargo" value="{{cargo.id}}">{{cargo.descripcion}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">INGRESAR PERIODO LABORAL</h5>
+              <hr>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Desde:</label>
+                  <input class="form-control" type="date"  id="example-date-input" formControlName="desde">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Hasta:</label>
+                  <input class="form-control" type="date"  id="example-date-input" formControlName="hasta">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="registrarGeneral()"  [disabled]="generalForm.invalid">Registrar Record</button>
+      </div>
+    </div>
+  </div>
+</div>
+

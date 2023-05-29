@@ -17,6 +17,8 @@ import { TipodocumentoComponent } from './tipodocumento/tipodocumento.component'
 import { PersonalComponent } from './personal/personal.component';
 import { AdministradorComponent } from './administrador/administrador.component';
 import { GeneralComponent } from './general/general.component';
+import { OrganoComponent } from './organo/organo.component';
+import { SedeComponent } from './sede/sede.component';
 
 
 
@@ -32,7 +34,9 @@ import { GeneralComponent } from './general/general.component';
     TipodocumentoComponent,
     PersonalComponent,
     AdministradorComponent,
-    GeneralComponent
+    GeneralComponent,
+    OrganoComponent,
+    SedeComponent
   ],
   exports:[
     DashboardComponent,

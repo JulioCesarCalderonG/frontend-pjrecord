@@ -29,10 +29,10 @@ export class CargoComponent implements OnInit {
     this.cargoService.getCargos().subscribe(
       (data)=>{
         this.listCargo = data.resp;
-        
+
       }, (error)=>{
         console.log(error);
-        
+
       }
     )
   }
@@ -45,9 +45,10 @@ export class CargoComponent implements OnInit {
       (data)=>{
         console.log(data);
         this.mostrarCargos();
+        this.cancelar();
       }, (error)=>{
         console.log(error);
-        
+
       }
     )
   }

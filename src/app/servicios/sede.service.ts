@@ -7,15 +7,15 @@ import { environment } from 'src/environments/environment.prod';
 @Injectable({
   providedIn: 'root'
 })
-export class DependenciaService {
+export class SedeService {
 
-  private url = `${environment.backendUrl}/unidadorganica`;
+  url=`${environment.backendUrl}/sede`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getUnidad():Observable<any>{
+  getSedes():Observable<any>{
     return this.http.get(this.url);
   }
-  postUnidad(body:FormData):Observable<any>{
+  postSede(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
   }
 }

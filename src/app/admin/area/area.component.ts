@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AreaService } from 'src/app/servicios/area.service';
+import { DependenciaService } from 'src/app/servicios/dependencia.service';
 
 @Component({
   selector: 'app-area',
@@ -9,21 +10,25 @@ import { AreaService } from 'src/app/servicios/area.service';
 })
 export class AreaComponent implements OnInit {
 
-  listArea?:Array<any>
+  listArea?:Array<any>;
+  listUnidad?:Array<any>;
   areaForm:FormGroup;
 
   constructor(
     private areaService:AreaService,
+    private dependenciaService:DependenciaService,
     private fb:FormBuilder
     ) {
       this.areaForm = this.fb.group({
         nombre:['',Validators.required],
-        sigla:['',Validators.required]
+        sigla:['',Validators.required],
+        unidad:['',Validators.required]
       })
     }
 
   ngOnInit(): void {
     this.mostrarAreas();
+    this.mostrarUnidadOrganica();
   }
 
   mostrarAreas(){
@@ -36,17 +41,32 @@ export class AreaComponent implements OnInit {
     )
   }
 
+  mostrarUnidadOrganica(){
+    this.dependenciaService.getUnidad().subscribe(
+      (data)=>{
+        this.listUnidad = data.resp;
+        console.log(this.listUnidad);
+
+      },(error)=>{
+        console.log(error);
+
+      }
+    )
+  }
+
   registrarAreas(){
     const formData = new FormData();
     formData.append('nombre', this.areaForm.get('nombre')?.value);
     formData.append('sigla', this.areaForm.get('sigla')?.value);
+    formData.append('id_unidad_organica', this.areaForm.get('unidad')?.value);
 
     this.areaService.postAreas(formData).subscribe(
       (data)=>{
         console.log(data);
-        this.mostrarAreas();   
+        this.mostrarAreas();
+        this.cancelar();
       }, (error)=>{
-        console.log(error); 
+        console.log(error);
       }
     )
   }
@@ -54,7 +74,8 @@ export class AreaComponent implements OnInit {
   cancelar(){
     this.areaForm.setValue({
       nombre:'',
-      sigla:''
+      sigla:'',
+      unidad:'',
     })
   }
 

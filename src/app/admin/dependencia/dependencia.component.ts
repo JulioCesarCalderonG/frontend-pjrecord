@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ResultOrgano } from 'src/app/interfaces/organo-interface';
 import { DependenciaService } from 'src/app/servicios/dependencia.service';
+import { OrganoService } from 'src/app/servicios/organo.service';
 
 @Component({
   selector: 'app-dependencia',
@@ -9,25 +11,43 @@ import { DependenciaService } from 'src/app/servicios/dependencia.service';
 })
 export class DependenciaComponent implements OnInit {
 
-  listDependencia?:Array<any>
-  dependenciaForm:FormGroup;
+  listUnidad?:Array<any>;
+  listOrgano?:Array<any>;
+  unidadForm:FormGroup;
   constructor(
     private dependenciaService:DependenciaService,
+    private organoService:OrganoService,
     private fb:FormBuilder
   ) {
-    this.dependenciaForm = this.fb.group({
-      descripcion:['',Validators.required]
+    this.unidadForm = this.fb.group({
+      nombre:['',Validators.required],
+      sigla:['',Validators.required],
+      organo:['',Validators.required]
     })
   }
 
   ngOnInit(): void {
-    this.mostrarDependencias();
+    this.mostrarUnidadOrganica();
+    this.mostrarOrgano();
   }
 
-  mostrarDependencias(){
-    this.dependenciaService.getDependencias().subscribe(
+  mostrarUnidadOrganica(){
+    this.dependenciaService.getUnidad().subscribe(
       (data)=>{
-        this.listDependencia = data.resp;
+        this.listUnidad = data.resp;
+        console.log(this.listUnidad);
+
+      },(error)=>{
+        console.log(error);
+
+      }
+    )
+  }
+  mostrarOrgano(){
+    this.organoService.getOrgano().subscribe(
+      (data:ResultOrgano)=>{
+        this.listOrgano = data.resp;
+        console.log(this.listOrgano);
 
       },(error)=>{
         console.log(error);
@@ -36,14 +56,17 @@ export class DependenciaComponent implements OnInit {
     )
   }
 
-  registrarDependencia(){
+  registrarUnidadOrganica(){
     const formData = new FormData();
-    formData.append('descripcion',this.dependenciaForm.get('descripcion')?.value);
+    formData.append('nombre',this.unidadForm.get('nombre')?.value);
+    formData.append('sigla',this.unidadForm.get('sigla')?.value);
+    formData.append('id_organo',this.unidadForm.get('organo')?.value);
 
-    this.dependenciaService.postDependencia(formData).subscribe(
+    this.dependenciaService.postUnidad(formData).subscribe(
       (data)=>{
         console.log(data);
-        this.mostrarDependencias();
+        this.mostrarUnidadOrganica();
+        this.cancelar();
       },(error)=>{
         console.log(error);
 
@@ -53,8 +76,10 @@ export class DependenciaComponent implements OnInit {
 
   }
   cancelar(){
-    this.dependenciaForm.setValue({
-      descripcion:''
+    this.unidadForm.setValue({
+      nombre:'',
+      sigla:'',
+      organo:''
     })
   }
 }

@@ -15,4 +15,7 @@ export class GeneralService {
   getGeneral():Observable<any>{
     return this.http.get(this.url);
   }
+  postGeneral(body:FormData):Observable<any>{
+    return this.http.post(this.url,body)
+  }
 }

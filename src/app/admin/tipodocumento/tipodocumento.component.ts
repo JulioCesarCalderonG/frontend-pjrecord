@@ -31,7 +31,7 @@ export class TipodocumentoComponent implements OnInit {
       (data)=>{
         this.listTipodocumento = data.resp;
       }, (error)=>{
-        console.log(error);        
+        console.log(error);
       }
     )
   }
@@ -39,13 +39,14 @@ export class TipodocumentoComponent implements OnInit {
   registrarTipodocumento(){
     const formData = new FormData();
     formData.append('descripcion', this.tipodocumentoform.get('descripcion')?.value)
-   
+
     this.tipodocumentoService.postTipodocumento(formData).subscribe(
       (data)=>{
         console.log(data);
         this.mostrartipodocumento();
+        this.cancelar();
       }, (error)=>{
-        console.log(error);     
+        console.log(error);
       }
     )
   }

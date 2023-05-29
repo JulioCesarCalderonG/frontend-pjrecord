@@ -10,6 +10,8 @@
       <th scope="col">ID</th>
       <th scope="col">NOMBRE</th>
       <th scope="col">SIGLA</th>
+      <th scope="col">UNIDAD ORGANICA</th>
+      <th scope="col">ESTADO</th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +19,9 @@
       <th scope="row">{{area.id}}</th>
       <td>{{area.nombre}}</td>
       <td>{{area.sigla}}</td>
+      <td>{{area.UnidadOrganica.nombre}}</td>
+      <td *ngIf="area.estado===1">Activo</td>
+      <td *ngIf="area.estado===0">Inactivo</td>
     </tr>
 
   </tbody>
@@ -40,6 +45,13 @@
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Sigla:</label>
             <input type="text" class="form-control" id="recipient-name" formControlName="sigla">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Seleccionar Unidad Organica:</label><br>
+            <select class="form-control custom-select" formControlName="unidad" >
+              <option selected value="">Seleccionar</option>
+              <option *ngFor="let unidad of listUnidad" value="{{unidad.id}}">{{unidad.nombre}}</option>
+            </select>
           </div>
         </form>
       </div>

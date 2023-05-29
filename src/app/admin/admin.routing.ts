@@ -11,6 +11,8 @@ import { TipodocumentoComponent } from './tipodocumento/tipodocumento.component'
 import { PersonalComponent } from './personal/personal.component';
 import { AdministradorComponent } from './administrador/administrador.component';
 import { GeneralComponent } from './general/general.component';
+import { OrganoComponent } from './organo/organo.component';
+import { SedeComponent } from './sede/sede.component';
 
 
 const routes: Routes = [
@@ -23,11 +25,13 @@ const routes: Routes = [
             { path: 'grafica1', component: Grafica1Component },
             { path: 'area', component: AreaComponent },
             { path: 'cargo', component: CargoComponent },
-            { path: 'dependencia', component: DependenciaComponent },
+            { path: 'unidadorganica', component: DependenciaComponent },
             { path: 'tipodocumento', component: TipodocumentoComponent },
             { path: 'personal', component: PersonalComponent },
             { path: 'administrador', component: AdministradorComponent },
             { path: 'general', component: GeneralComponent },
+            { path: 'organojurisdiccional', component: OrganoComponent },
+            { path: 'sede', component: SedeComponent },
         ]
     },
     //{ path: 'path/:routeParam', component: MyComponent },
