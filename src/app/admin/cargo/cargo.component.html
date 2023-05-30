@@ -1,5 +1,5 @@
-<div class="row">
-  <div class="col-lg-12">
+<div class="row mb-5">
+  <div class="col-lg-4">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCargo" data-whatever="@mdo">Agregar</button>
   </div>
 </div>
@@ -10,12 +10,15 @@
       <tr>
         <th scope="col">ID</th>
         <th scope="col">DESCRIPCION</th>
+        <th scope="col">ESTADO</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let cargo of listCargo">
         <th scope="row">{{cargo.id}}</th>
         <td>{{cargo.descripcion}}</td>
+        <td *ngIf="cargo.estado===1">Activo</td>
+        <td *ngIf="cargo.estado===0">Inactivo</td>
       </tr>
     </tbody>
   </table>

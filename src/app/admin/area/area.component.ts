@@ -26,6 +26,9 @@ export class AreaComponent implements OnInit {
       })
     }
 
+
+
+
   ngOnInit(): void {
     this.mostrarAreas();
     this.mostrarUnidadOrganica();
@@ -78,5 +81,6 @@ export class AreaComponent implements OnInit {
       unidad:'',
     })
   }
+
 
 }

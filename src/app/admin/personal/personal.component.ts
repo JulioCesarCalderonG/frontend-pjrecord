@@ -49,6 +49,7 @@ export class PersonalComponent implements OnInit {
       (data)=>{
         console.log(data);
         this.mostrarPersonal();
+        this.cancelar();
       }, (error)=>{
         console.log(error);
       }

@@ -58,12 +58,13 @@ export class GeneralComponent implements OnInit {
     this.generalService.getGeneral().subscribe(
       (data)=>{
         this.listGeneral = data.resp;
-
       }, (error)=>{
         console.log(error);
       }
     )
   }
+
+
   registrarGeneral(){
     const formData = new FormData();
     formData.append('tipo_documento',this.generalForm.get('tipodocumento')?.value);
@@ -81,6 +82,7 @@ export class GeneralComponent implements OnInit {
       (data)=>{
         console.log(data);
         this.mostrarGeneral();
+        this.cancelar();
       },(error)=>{
         console.log(error);
 
@@ -191,4 +193,22 @@ export class GeneralComponent implements OnInit {
         return;
     }
   }
+
+
+  cancelar(){
+    this.generalForm.setValue({
+      tipodocumento:'',
+      numero:'',
+      ano:'',
+      tiposigla:'',
+      autoriza:'',
+      tipodependencia:'',
+      dependencia:'',
+      cargo:'',
+      desde:'',
+      hasta:'',
+      personal:''
+    })
+  }
+
 }
