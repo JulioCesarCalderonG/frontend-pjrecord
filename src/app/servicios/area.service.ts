@@ -15,9 +15,13 @@ export class AreaService {
   getAreas():Observable<any>{
     return this.http.get(this.url);
   }
-
+  getAreaId(id:number|string):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
   postAreas(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
   }
-
+  putAreas(body:FormData, id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/${id}`,body)
+  }
 }

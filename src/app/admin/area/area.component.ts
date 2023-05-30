@@ -13,13 +13,19 @@ export class AreaComponent implements OnInit {
   listArea?:Array<any>;
   listUnidad?:Array<any>;
   areaForm:FormGroup;
-
+  areaEditarForm:FormGroup;
+  ids?:string|number;
   constructor(
     private areaService:AreaService,
     private dependenciaService:DependenciaService,
     private fb:FormBuilder
     ) {
       this.areaForm = this.fb.group({
+        nombre:['',Validators.required],
+        sigla:['',Validators.required],
+        unidad:['',Validators.required]
+      });
+      this.areaEditarForm = this.fb.group({
         nombre:['',Validators.required],
         sigla:['',Validators.required],
         unidad:['',Validators.required]
@@ -74,8 +80,47 @@ export class AreaComponent implements OnInit {
     )
   }
 
+  editarAreas(){
+    const formData = new FormData();
+    formData.append('nombre',this.areaEditarForm.get('nombre')?.value);
+    formData.append('sigla',this.areaEditarForm.get('sigla')?.value);
+    formData.append('id_unidad_organica',this.areaEditarForm.get('unidad')?.value);
+
+    this.areaService.putAreas(formData,this.ids!).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarAreas();
+      },(error)=>{
+        console.log(error);
+
+      }
+    )
+
+  }
+
+  obtenerDatosId(id:number){
+    this.areaService.getAreaId(id).subscribe(
+      (data)=>{
+        this.areaEditarForm.setValue({
+          nombre:data.resp.nombre,
+          sigla:data.resp.sigla,
+          unidad:data.resp.id_unidad_organica,
+        })
+        this.ids = data.resp.id;
+      },(error)=>{
+        console.log(error);
+
+      }
+    )
+  }
+
   cancelar(){
     this.areaForm.setValue({
+      nombre:'',
+      sigla:'',
+      unidad:'',
+    })
+    this.areaEditarForm.setValue({
       nombre:'',
       sigla:'',
       unidad:'',
