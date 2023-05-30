@@ -47,6 +47,7 @@ export class AdministradorComponent implements OnInit {
       (data)=>{
         console.log(data);
         this.mostrarAdministrador();
+        this.cancelar();
       }, (error)=>{
         console.log(error);
       }
