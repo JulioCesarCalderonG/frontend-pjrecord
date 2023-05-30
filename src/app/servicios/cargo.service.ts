@@ -16,8 +16,16 @@ export class CargoService {
     return this.http.get(this.url);
   }
 
+  getCargoId(id:number|string):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
   postCargos(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
+  }
+
+  putCargo(body:FormData, id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/${id}`, body);
   }
 
 }

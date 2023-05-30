@@ -11,6 +11,8 @@ export class CargoComponent implements OnInit {
 
   listCargo?:Array<any>
   cargoForm:FormGroup;
+  cargoEditarForm:FormGroup;
+  ids?:string|number;
 
   constructor(
     private cargoService:CargoService,
@@ -18,8 +20,11 @@ export class CargoComponent implements OnInit {
     ) {
       this.cargoForm = this.fb.group({
         descripcion:['',Validators.required]
-      })
-    }
+      });
+        this.cargoEditarForm = this.fb.group({
+          descripcion:['',Validators.required]
+        })
+  }
 
   ngOnInit(): void {
     this.mostrarCargos();
@@ -29,7 +34,6 @@ export class CargoComponent implements OnInit {
     this.cargoService.getCargos().subscribe(
       (data)=>{
         this.listCargo = data.resp;
-
       }, (error)=>{
         console.log(error);
 
@@ -48,13 +52,45 @@ export class CargoComponent implements OnInit {
         this.cancelar();
       }, (error)=>{
         console.log(error);
+      })
+  }
 
+
+  modificarCargo(){
+    const formData = new FormData();
+    formData.append('descripcion',this.cargoEditarForm.get('descripcion')?.value);
+    this.cargoService.putCargo(formData,this.ids!).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarCargos();
+      }, (error)=>{
+        console.log(error);
+        
+      }
+    )
+  }
+
+
+  obtenerDatosId(id:number){
+    this.cargoService.getCargoId(id).subscribe(
+      (data)=>{
+        console.log(data);
+        
+        this.cargoEditarForm.setValue({
+          descripcion:data.resp.descripcion,
+        })
+        this.ids = data.resp.id;
+      }, (error)=>{
+        console.log(error);        
       }
     )
   }
 
   cancelar(){
     this.cargoForm.setValue({
+      descripcion:''
+    });
+    this.cargoEditarForm.setValue({
       descripcion:''
     })
   }
