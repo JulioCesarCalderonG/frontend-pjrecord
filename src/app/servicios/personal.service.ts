@@ -16,8 +16,16 @@ export class PersonalService {
     return this.http.get(this.url);
   }
 
+  getPersonalId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
   postPersonal(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
+  }
+
+  putPersonal(body:FormData, id:string|number){
+    return this.http.put(`${this.url}/${id}`, body);
   }
 
 }

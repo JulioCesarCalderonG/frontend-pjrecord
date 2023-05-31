@@ -15,7 +15,19 @@ export class DependenciaService {
   getUnidad():Observable<any>{
     return this.http.get(this.url);
   }
+
+
+  getUnidadId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
+
   postUnidad(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
+  }
+
+
+  putUnidad(body:FormData, id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/${id}`,body);
   }
 }

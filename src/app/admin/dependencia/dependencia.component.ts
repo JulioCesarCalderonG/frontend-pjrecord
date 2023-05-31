@@ -14,6 +14,9 @@ export class DependenciaComponent implements OnInit {
   listUnidad?:Array<any>;
   listOrgano?:Array<any>;
   unidadForm:FormGroup;
+  unidadEditarForm:FormGroup;
+  ids?:string|number;
+
   constructor(
     private dependenciaService:DependenciaService,
     private organoService:OrganoService,
@@ -23,38 +26,45 @@ export class DependenciaComponent implements OnInit {
       nombre:['',Validators.required],
       sigla:['',Validators.required],
       organo:['',Validators.required]
+    });
+    this.unidadEditarForm = this.fb.group({
+      nombre:['',Validators.required],
+      sigla:['',Validators.required],
+      organo:['',Validators.required]
     })
   }
+
+
 
   ngOnInit(): void {
     this.mostrarUnidadOrganica();
     this.mostrarOrgano();
   }
 
+
   mostrarUnidadOrganica(){
     this.dependenciaService.getUnidad().subscribe(
       (data)=>{
         this.listUnidad = data.resp;
         console.log(this.listUnidad);
-
       },(error)=>{
         console.log(error);
-
       }
     )
   }
+
+
   mostrarOrgano(){
     this.organoService.getOrgano().subscribe(
       (data:ResultOrgano)=>{
         this.listOrgano = data.resp;
         console.log(this.listOrgano);
-
       },(error)=>{
         console.log(error);
-
       }
     )
   }
+
 
   registrarUnidadOrganica(){
     const formData = new FormData();
@@ -69,14 +79,51 @@ export class DependenciaComponent implements OnInit {
         this.cancelar();
       },(error)=>{
         console.log(error);
-
       }
     )
-
-
   }
+
+
+  editarUnidadOrganica(){
+    const formData = new FormData();
+    formData.append('nombre', this.unidadEditarForm.get('nombre')?.value);
+    formData.append('sigla', this.unidadEditarForm.get('sigla')?.value);
+    formData.append('id_organo', this.unidadEditarForm.get('organo')?.value);
+
+    this.dependenciaService.putUnidad(formData, this.ids!).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarUnidadOrganica();
+      }, (error)=>{
+        console.log(error);
+      }
+    )
+  }
+
+  
+  obtenerUnidadId(id:number){
+    this.dependenciaService.getUnidadId(id).subscribe(
+      (data)=>{
+        this.unidadEditarForm.setValue({
+          nombre:data.resp.nombre,
+          sigla:data.resp.sigla,
+          organo:data.resp.id_organo,
+        })  
+        this.ids = data.resp.id;
+      }, (error)=>{
+        console.log(error);
+      }
+    )
+  }
+
+
   cancelar(){
     this.unidadForm.setValue({
+      nombre:'',
+      sigla:'',
+      organo:''
+    })
+    this.unidadEditarForm.setValue({
       nombre:'',
       sigla:'',
       organo:''

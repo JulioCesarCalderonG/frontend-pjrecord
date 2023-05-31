@@ -16,7 +16,17 @@ export class TipodocumentoService {
     return this.http.get(this.url);
   }
 
+  getTipodocumentoId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
   postTipodocumento(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
   }
+
+  putTipodocumento(body:FormData, id:string|number){
+    return this.http.put(`${this.url}/${id}`,body);
+  }
+
+
 }

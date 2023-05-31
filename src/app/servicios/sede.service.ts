@@ -15,7 +15,16 @@ export class SedeService {
   getSedes():Observable<any>{
     return this.http.get(this.url);
   }
+
+  getSedeId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
   postSede(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
+  }
+
+  putSede(body:FormData, id:string|number){
+    return this.http.put(`${this.url}/${id}`,body);
   }
 }

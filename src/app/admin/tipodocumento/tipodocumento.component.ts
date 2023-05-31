@@ -12,6 +12,8 @@ export class TipodocumentoComponent implements OnInit {
 
   listTipodocumento?:Array<any>
   tipodocumentoform:FormGroup;
+  tipodocumentoEditarform:FormGroup;
+  ids?:string|number;
 
   constructor(
     private tipodocumentoService:TipodocumentoService,
@@ -19,12 +21,17 @@ export class TipodocumentoComponent implements OnInit {
     ) {
       this.tipodocumentoform = this.fb.group({
         descripcion:['',Validators.required]
+      });
+      this.tipodocumentoEditarform = this.fb.group({
+        descripcion:['',Validators.required]
       })
     }
+
 
   ngOnInit(): void {
     this.mostrartipodocumento();
   }
+
 
   mostrartipodocumento(){
     this.tipodocumentoService.getTipodocumento().subscribe(
@@ -35,6 +42,7 @@ export class TipodocumentoComponent implements OnInit {
       }
     )
   }
+
 
   registrarTipodocumento(){
     const formData = new FormData();
@@ -51,8 +59,42 @@ export class TipodocumentoComponent implements OnInit {
     )
   }
 
+
+  editarTipodocumento(){
+    const formData = new FormData();
+
+    formData.append('descripcion', this.tipodocumentoEditarform.get('descripcion')?.value);
+
+    this.tipodocumentoService.putTipodocumento(formData, this.ids!).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrartipodocumento();
+      }, (error)=>{
+        console.log(error);
+        
+      }
+    )
+  }
+
+  obtenerTipodocumentoId(id:number){
+    this.tipodocumentoService.getTipodocumentoId(id).subscribe(
+      (data)=>{
+        this.tipodocumentoEditarform.setValue({
+          descripcion:data.resp.descripcion,
+        })
+        this.ids = data.resp.id;
+      }, (error)=>{
+        console.log(error);
+      }
+    )
+  }
+
+
   cancelar(){
     this.tipodocumentoform.setValue({
+      descripcion:''
+    })
+    this.tipodocumentoEditarform.setValue({
       descripcion:''
     })
   }

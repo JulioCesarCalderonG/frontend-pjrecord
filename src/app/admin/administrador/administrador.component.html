@@ -11,7 +11,8 @@
         <th scope="col">ID</th>
         <th scope="col">USUARIO</th>
         <th scope="col">PASSWORD</th>
-        <th scope="col">ACTIVO</th>
+        <th scope="col">ESTADO</th>
+        <th>Editar</th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +20,11 @@
         <th scope="row">{{administrador.id}}</th>
         <td>{{administrador.usuario}}</td>
         <td>{{administrador.password}}</td>
-        <td>{{administrador.activo}}</td>
+        <td *ngIf="administrador.activo===1">Activo</td>
+      <td *ngIf="administrador.activo===0">Inactivo</td>
+        <td>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarAdministrador" data-whatever="@mdo" (click)="obtenerAdministradorId(administrador.id)">Editar</button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -44,15 +49,40 @@
               <label for="recipient-name" class="col-form-label">Password:</label>
               <input type="text" class="form-control" id="recipient-name" formControlName="password">
             </div>
-            <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Activo:</label>
-              <input type="text" class="form-control" id="recipient-name" formControlName="activo">
-            </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
           <button type="button" class="btn btn-primary" (click)="registrarAdministrador()" [disabled]="administradorForm.invalid">Registrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modificarAdministrador" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar Registro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="administradorEditarForm">
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Usuario:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="usuario">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Password:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="password">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="modificarAdministrador()" [disabled]="administradorEditarForm.invalid">Editar</button>
         </div>
       </div>
     </div>

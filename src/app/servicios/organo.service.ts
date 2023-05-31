@@ -15,8 +15,17 @@ export class OrganoService {
   getOrgano():Observable<any>{
     return this.http.get(this.url);
   }
+
+  getOrganoId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
   postOrgano(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
+  }
+
+  putOrgano(body:FormData, id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/${id}`, body);
   }
 
 }

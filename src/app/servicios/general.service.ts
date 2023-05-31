@@ -15,7 +15,16 @@ export class GeneralService {
   getGeneral():Observable<any>{
     return this.http.get(this.url);
   }
+
+  getGeneralId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
   postGeneral(body:FormData):Observable<any>{
-    return this.http.post(this.url,body)
+    return this.http.post(this.url,body);
+  }
+
+  putGeneral(body:FormData, id:string|number){
+    return this.http.put(`${this.url}/${id}`, body);
   }
 }

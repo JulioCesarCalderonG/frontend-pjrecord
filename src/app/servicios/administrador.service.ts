@@ -16,8 +16,16 @@ export class AdministradorService {
     return this.http.get(this.url);
   }
 
+  getAdministradorId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
   postAdministrador(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
+  }
+
+  putAdministrador(body:FormData, id:string|number){
+    return this.http.put(`${this.url}/${id}`, body)
   }
 
 }

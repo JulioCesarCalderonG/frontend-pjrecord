@@ -10,6 +10,7 @@
       <th scope="col">ID</th>
       <th scope="col">NOMBRE</th>
       <th scope="col">ESTADO</th>
+      <th>Editar</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +19,9 @@
       <td>{{sedes.nombre}}</td>
       <td *ngIf="sedes.estado===1">Activo</td>
       <td *ngIf="sedes.estado===0">Inactivo</td>
+      <td>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarSede" data-whatever="@mdo" (click)="obtenerSedeId(sedes.id)">Editar</button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -43,6 +47,31 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="registrarSede()" [disabled]="sedeForm.invalid">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modificarSede" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Sede</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="sedeEditarForm">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Nombre</label>
+            <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="editarSede()" [disabled]="sedeEditarForm.invalid">Editar</button>
       </div>
     </div>
   </div>

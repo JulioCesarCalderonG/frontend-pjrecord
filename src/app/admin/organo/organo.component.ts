@@ -15,6 +15,10 @@ export class OrganoComponent implements OnInit {
   listOrgano?:Resp[];
   listSedes?:Array<any>;
   organoForm:FormGroup;
+  organoEditarForm:FormGroup;
+  ids?:string|number;
+
+
   constructor(
     private organoService:OrganoService,
     private sedeService:SedeService,
@@ -24,38 +28,44 @@ export class OrganoComponent implements OnInit {
       nombre:['',Validators.required],
       sigla:['',Validators.required],
       sede:['',Validators.required]
+    });
+    this.organoEditarForm = this.fb.group({
+      nombre:['',Validators.required],
+      sigla:['',Validators.required],
+      sede:['',Validators.required]
     })
   }
+
 
   ngOnInit(): void {
     this.mostrarOrgano();
     this.mostrarSede();
   }
+
+  
   mostrarOrgano(){
     this.organoService.getOrgano().subscribe(
       (data:ResultOrgano)=>{
         this.listOrgano = data.resp;
         console.log(this.listOrgano);
-
       },(error)=>{
         console.log(error);
+      })
+    }
 
-      }
-    )
-  }
+
   mostrarSede(){
     this.sedeService.getSedes().subscribe(
       (data:ResultSede)=>{
         this.listSedes = data.resp;
         console.log(this.listSedes);
-
       },
       (error)=>{
         console.log(error);
-
-      }
-    )
+      })
   }
+
+
   registrarOrgano(){
     const formData = new FormData();
     formData.append('nombre',this.organoForm.get('nombre')?.value);
@@ -68,14 +78,49 @@ export class OrganoComponent implements OnInit {
         this.cancelar();
       },(error)=>{
         console.log(error);
+      })
+  }
 
+  editarOrgano(){
+    const formData = new FormData();
+    formData.append('nombre', this.organoEditarForm.get('nombre')?.value);
+    formData.append('sigla', this.organoEditarForm.get('sigla')?.value);
+    formData.append('id_sede', this.organoEditarForm.get('sede')?.value);
+
+    this.organoService.putOrgano(formData, this.ids!).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarOrgano();
+      },(error)=>{
+        console.log(error);
       }
     )
 
-
   }
+
+  obtenerOrganoId(id:number){
+    this.organoService.getOrganoId(id).subscribe(
+      (data)=>{
+        this.organoEditarForm.setValue({
+          nombre:data.resp.nombre,
+          sigla:data.resp.sigla,
+          sede:data.resp.id_sede,
+        })
+        this.ids = data.resp.id;
+      }, (error)=>{
+        console.log(error);
+      }
+    )
+  }
+
+  
   cancelar(){
     this.organoForm.setValue({
+      nombre:'',
+      sigla:'',
+      sede:''
+    })
+    this.organoEditarForm.setValue({
       nombre:'',
       sigla:'',
       sede:''

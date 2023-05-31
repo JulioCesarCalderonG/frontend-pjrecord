@@ -10,13 +10,21 @@ import { PersonalService } from 'src/app/servicios/personal.service';
 export class PersonalComponent implements OnInit {
 
   listPersonal?:Array<any>
-  personalForm:FormGroup;  
+  personalForm:FormGroup;
+  personalEditarForm:FormGroup;
+  ids?:string|number;
 
   constructor(
     private personalService:PersonalService,
     private fb:FormBuilder
     ) {
       this.personalForm = this.fb.group({
+        nombre:['', Validators.required],
+        apellido:['',Validators.required],
+        escalafon:['',Validators.required],
+        fecha_inicio:['',Validators.required]
+      });
+      this.personalEditarForm = this.fb.group({
         nombre:['', Validators.required],
         apellido:['',Validators.required],
         escalafon:['',Validators.required],
@@ -56,8 +64,52 @@ export class PersonalComponent implements OnInit {
     )
   }
 
+
+  editarPersonal(){
+    const formData = new FormData();
+    formData.append('nombre', this.personalEditarForm.get('nombre')?.value);
+    formData.append('apellido', this.personalEditarForm.get('apellido')?.value);
+    formData.append('escalafon', this.personalEditarForm.get('escalafon')?.value);
+    formData.append('fecha_inicio', this.personalEditarForm.get('fecha_inicio')?.value);
+
+    this.personalService.putPersonal(formData, this.ids!).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarPersonal();
+        
+      }, (error)=>{
+        console.log(error);
+        
+      }
+    )
+
+  }
+
+  obtenerPersonalId(id:number){
+    this.personalService.getPersonalId(id).subscribe(
+      (data)=>{
+        this.personalEditarForm.setValue({
+          nombre:data.resp.nombre,
+          apellido:data.resp.apellido,
+          escalafon:data.resp.escalafon,
+          fecha_inicio:data.resp.fecha_inicio,
+        })
+        this.ids = data.resp.id;
+      }, (error)=>{
+        console.log(error);
+      }
+    )
+  }
+
+
   cancelar(){
     this.personalForm.setValue({
+      nombre:'',
+      apellido:'',
+      escalafon:'',
+      fecha_inicio:''
+    })
+    this.personalEditarForm.setValue({
       nombre:'',
       apellido:'',
       escalafon:'',

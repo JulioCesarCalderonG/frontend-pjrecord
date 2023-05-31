@@ -22,6 +22,9 @@ export class GeneralComponent implements OnInit {
   listPersonal?:Array<any>
   listAutoriza?:Array<any>;
   listDependencia?:Array<any>;
+  generalEditarForm:FormGroup;
+  ids?:string|number;
+
   constructor(
     private generalService:GeneralService,
     private tipodocumentoService:TipodocumentoService,
@@ -33,6 +36,19 @@ export class GeneralComponent implements OnInit {
     private fb:FormBuilder
   ) {
     this.generalForm = this.fb.group({
+      tipodocumento:['',Validators.required],
+      numero:[''],
+      ano:[''],
+      tiposigla:['0'],
+      autoriza:['0'],
+      tipodependencia:['',Validators.required],
+      dependencia:['',Validators.required],
+      cargo:['',Validators.required],
+      desde:['', Validators.required],
+      hasta:[''],
+      personal:['',Validators.required]
+    });
+    this.generalEditarForm = this.fb.group({
       tipodocumento:['',Validators.required],
       numero:[''],
       ano:[''],
@@ -195,8 +211,71 @@ export class GeneralComponent implements OnInit {
   }
 
 
+  editarGeneral(){
+    const formData = new FormData();
+
+    formData.append('tipo_documento',this.generalEditarForm.get('tipodocumento')?.value);
+    formData.append('numero',this.generalEditarForm.get('numero')?.value);
+    formData.append('ano',this.generalEditarForm.get('ano')?.value);
+    formData.append('tipo_sigla',this.generalEditarForm.get('tiposigla')?.value);
+    formData.append('autoriza',this.generalEditarForm.get('autoriza')?.value);
+    formData.append('tipo_dependencia',this.generalEditarForm.get('tipodependencia')?.value);
+    formData.append('dependencia',this.generalEditarForm.get('dependencia')?.value);
+    formData.append('id_cargo',this.generalEditarForm.get('cargo')?.value);
+    formData.append('desde',this.generalEditarForm.get('desde')?.value);
+    formData.append('hasta',this.generalEditarForm.get('hasta')?.value);
+    formData.append('id_personal',this.generalEditarForm.get('personal')?.value);
+
+    this.generalService.putGeneral(formData, this.ids!).subscribe(
+      (data)=>{
+        console.log(data);
+        this.mostrarGeneral();
+      }, (error)=>{
+        console.log(error);
+      }
+    )
+  }
+
+  obtenerGeneralId(id:number){
+    this.generalService.getGeneralId(id).subscribe(
+      (data)=>{
+        this.generalEditarForm.setValue({
+          tipodocumento:data.resp.tipodocumento,
+          numero:data.resp.numero,
+          ano:data.resp.ano,
+          tiposigla:data.resp.tiposigla,
+          autoriza:data.resp.autoriza,
+          tipodependencia:data.resp.tipodependencia,
+          dependencia:data.resp.dependencia,
+          cargo:data.resp.cargo,
+          desde:data.resp.desde,
+          hasta:data.resp.hasta,
+          personal:data.resp.personal,
+        })
+        this.ids = data.resp.id;
+      }, (error)=>{
+        console.log(error);
+        
+      }
+    )
+  }
+
+
   cancelar(){
     this.generalForm.setValue({
+      tipodocumento:'',
+      numero:'',
+      ano:'',
+      tiposigla:'',
+      autoriza:'',
+      tipodependencia:'',
+      dependencia:'',
+      cargo:'',
+      desde:'',
+      hasta:'',
+      personal:''
+    })
+    this.generalEditarForm.setValue({
       tipodocumento:'',
       numero:'',
       ano:'',

@@ -13,6 +13,7 @@
         <th scope="col">SIGLA UNIDAD</th>
         <th scope="col">NOMBRE ORGANO</th>
         <th scope="col">ESTADO</th>
+        <th>Editar</th>
       </tr>
     </thead>
     <tbody>
@@ -23,6 +24,9 @@
         <td>{{unidad.Organo.nombre}}</td>
         <td *ngIf="unidad.estado===1">Activo</td>
       <td *ngIf="unidad.estado===0">Inactivo</td>
+      <td>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarDependencia" data-whatever="@mdo" (click)="obtenerUnidadId(unidad.id)">Editar</button>
+      </td>
       </tr>
     </tbody>
   </table>
@@ -59,6 +63,42 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
           <button type="button" class="btn btn-primary" (click)=" registrarUnidadOrganica()" [disabled]="unidadForm.invalid">Registrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modificarDependencia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar Registro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="unidadEditarForm">
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Nombre:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Sigla:</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="sigla">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Seleccionar Organo:</label><br>
+              <select class="form-control custom-select" formControlName="organo" >
+                <option selected value="">Seleccionar</option>
+                <option *ngFor="let organo of listOrgano" value="{{organo.id}}">{{organo.nombre}}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)=" editarUnidadOrganica()" [disabled]="unidadEditarForm.invalid">Editar</button>
         </div>
       </div>
     </div>
