@@ -15,6 +15,7 @@ export class AreaComponent implements OnInit {
   areaForm:FormGroup;
   areaEditarForm:FormGroup;
   ids?:string|number;
+  estado:string="1";
   constructor(
     private areaService:AreaService,
     private dependenciaService:DependenciaService,
@@ -41,7 +42,7 @@ export class AreaComponent implements OnInit {
   }
 
   mostrarAreas(){
-    this.areaService.getAreas().subscribe(
+    this.areaService.getAreas(this.estado).subscribe(
       (data)=>{
         this.listArea = data.resp;
       },(error)=>{

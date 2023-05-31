@@ -12,8 +12,8 @@ export class AreaService {
   private url = `${environment.backendUrl}/area`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getAreas():Observable<any>{
-    return this.http.get(this.url);
+  getAreas(estado:string="1"):Observable<any>{
+    return this.http.get(this.url,{params:{estado}});
   }
   getAreaId(id:number|string):Observable<any>{
     return this.http.get(`${this.url}/${id}`);
