@@ -13,6 +13,7 @@ export class CargoComponent implements OnInit {
   cargoForm:FormGroup;
   cargoEditarForm:FormGroup;
   ids?:string|number;
+  estado:string='1';
 
   constructor(
     private cargoService:CargoService,
@@ -26,12 +27,14 @@ export class CargoComponent implements OnInit {
         })
   }
 
+
   ngOnInit(): void {
     this.mostrarCargos();
   }
 
+
   mostrarCargos(){
-    this.cargoService.getCargos().subscribe(
+    this.cargoService.getCargos(this.estado).subscribe(
       (data)=>{
         this.listCargo = data.resp;
       }, (error)=>{

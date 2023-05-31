@@ -12,8 +12,8 @@ export class CargoService {
   private url = `${environment.backendUrl}/cargo`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getCargos():Observable<any>{
-    return this.http.get(this.url);
+  getCargos(estado:string='1'):Observable<any>{
+    return this.http.get(this.url,{params:{estado}});
   }
 
   getCargoId(id:number|string):Observable<any>{

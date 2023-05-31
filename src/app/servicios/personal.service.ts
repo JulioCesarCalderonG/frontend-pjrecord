@@ -12,8 +12,8 @@ export class PersonalService {
   private url = `${environment.backendUrl}/personal`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getPersonal():Observable<any>{
-    return this.http.get(this.url);
+  getPersonal(estado:string='1'):Observable<any>{
+    return this.http.get(this.url,{params:{estado}});
   }
 
   getPersonalId(id:string|number):Observable<any>{

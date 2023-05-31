@@ -17,12 +17,13 @@ export class OrganoComponent implements OnInit {
   organoForm:FormGroup;
   organoEditarForm:FormGroup;
   ids?:string|number;
+  estado:string='1';
 
 
   constructor(
     private organoService:OrganoService,
     private sedeService:SedeService,
-    private fb:FormBuilder
+    private fb:FormBuilder,
   ) {
     this.organoForm = this.fb.group({
       nombre:['',Validators.required],
@@ -44,7 +45,7 @@ export class OrganoComponent implements OnInit {
 
   
   mostrarOrgano(){
-    this.organoService.getOrgano().subscribe(
+    this.organoService.getOrgano(this.estado).subscribe(
       (data:ResultOrgano)=>{
         this.listOrgano = data.resp;
         console.log(this.listOrgano);

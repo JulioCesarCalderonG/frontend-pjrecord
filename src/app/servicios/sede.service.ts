@@ -12,8 +12,8 @@ export class SedeService {
   url=`${environment.backendUrl}/sede`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getSedes():Observable<any>{
-    return this.http.get(this.url);
+  getSedes(estado:string='1'):Observable<any>{
+    return this.http.get(this.url,{params:{estado}});
   }
 
   getSedeId(id:string|number):Observable<any>{

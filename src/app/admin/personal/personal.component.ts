@@ -13,6 +13,7 @@ export class PersonalComponent implements OnInit {
   personalForm:FormGroup;
   personalEditarForm:FormGroup;
   ids?:string|number;
+  estado:string='1';
 
   constructor(
     private personalService:PersonalService,
@@ -37,7 +38,7 @@ export class PersonalComponent implements OnInit {
   }
 
   mostrarPersonal(){
-    this.personalService.getPersonal().subscribe(
+    this.personalService.getPersonal(this.estado).subscribe(
       (data)=>{
         this.listPersonal = data.resp;
       },(error)=>{

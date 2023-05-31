@@ -12,8 +12,8 @@ export class AdministradorService {
   private url = `${environment.backendUrl}/administrador`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getAdministrador():Observable<any>{
-    return this.http.get(this.url);
+  getAdministrador(activo:string):Observable<any>{
+    return this.http.get(this.url,{params:{activo}});
   }
 
   getAdministradorId(id:string|number):Observable<any>{

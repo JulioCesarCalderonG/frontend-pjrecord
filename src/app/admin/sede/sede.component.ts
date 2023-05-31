@@ -14,6 +14,7 @@ export class SedeComponent implements OnInit {
   sedeForm:FormGroup;
   sedeEditarForm:FormGroup;
   ids?:string|number;
+  estado:string='1';
 
   constructor(
     private sedeService:SedeService,
@@ -34,7 +35,7 @@ export class SedeComponent implements OnInit {
 
 
   mostrarSede(){
-    this.sedeService.getSedes().subscribe(
+    this.sedeService.getSedes(this.estado).subscribe(
       (data:ResultSede)=>{
         this.listSedes = data.resp;
         console.log(this.listSedes);

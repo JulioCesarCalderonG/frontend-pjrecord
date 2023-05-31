@@ -13,6 +13,8 @@ export class AdministradorComponent implements OnInit {
   administradorForm:FormGroup;
   administradorEditarForm:FormGroup;
   ids?:string|number;
+  activo:string='1';
+
 
   constructor(
     private administradorService:AdministradorService,
@@ -33,7 +35,7 @@ export class AdministradorComponent implements OnInit {
   }
 
   mostrarAdministrador(){
-    this.administradorService.getAdministrador().subscribe(
+    this.administradorService.getAdministrador(this.activo).subscribe(
       (data)=>{
         this.listAdministrador = data.resp;
       }, (error)=>{

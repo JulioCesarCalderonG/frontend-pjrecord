@@ -12,8 +12,8 @@ export class OrganoService {
   url=`${environment.backendUrl}/organo`;
   constructor(private http:HttpClient, private router:Router) { }
 
-  getOrgano():Observable<any>{
-    return this.http.get(this.url);
+  getOrgano(estado:string='1'):Observable<any>{
+    return this.http.get(this.url,{params:{estado}});
   }
 
   getOrganoId(id:string|number):Observable<any>{
