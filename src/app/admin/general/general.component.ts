@@ -24,7 +24,8 @@ export class GeneralComponent implements OnInit {
   listDependencia?:Array<any>;
   generalEditarForm:FormGroup;
   ids?:string|number;
-
+  tipofiltro:string='';
+  datobuscar:string='';
   constructor(
     private generalService:GeneralService,
     private tipodocumentoService:TipodocumentoService,
@@ -71,7 +72,7 @@ export class GeneralComponent implements OnInit {
   }
 
   mostrarGeneral(){
-    this.generalService.getGeneral().subscribe(
+    this.generalService.getGeneral(this.tipofiltro,this.datobuscar).subscribe(
       (data)=>{
         this.listGeneral = data.resp;
       }, (error)=>{
@@ -255,11 +256,27 @@ export class GeneralComponent implements OnInit {
         this.ids = data.resp.id;
       }, (error)=>{
         console.log(error);
-        
+
       }
     )
   }
+  filtrar(){
+    if (this.tipofiltro !== '' && this.datobuscar !=='') {
+      console.log(this.tipofiltro, this.datobuscar);
+      this.mostrarGeneral();
+    }
+    if (this.tipofiltro==='0') {
+      this.tipofiltro='';
+      this.datobuscar='';
+      this.mostrarGeneral();
+    }
 
+  }
+  tipoFiltro(event:any){
+    this.tipofiltro = event.target.value;
+    console.log(this.tipofiltro);
+
+  }
 
   cancelar(){
     this.generalForm.setValue({

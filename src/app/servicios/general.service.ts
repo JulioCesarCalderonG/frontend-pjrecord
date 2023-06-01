@@ -12,8 +12,8 @@ export class GeneralService {
   private url = `${environment.backendUrl}/general`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getGeneral():Observable<any>{
-    return this.http.get(this.url);
+  getGeneral(tipofiltro:string,dato:string):Observable<any>{
+    return this.http.get(this.url,{params:{tipofiltro,dato}});
   }
 
   getGeneralId(id:string|number):Observable<any>{

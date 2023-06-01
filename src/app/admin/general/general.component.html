@@ -1,6 +1,29 @@
-<div class="row mb-5">
-  <div class="col-lg-4">
+<div class="row mb-5" style=" align-items: center;">
+  <div class="col-lg-2">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegistrar" data-whatever="@mdo">REGISTRAR</button>
+  </div>
+  <div class="col-lg-2">
+    <div class="form-group">
+      <label class="control-label">Seleccionar Tipo de Filtro</label>
+      <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" (change)="tipoFiltro($event)">
+          <option value="0" selected>Todos</option>
+          <option value="1">Documento que autoriza</option>
+          <option value="2">Dependencia</option>
+          <option value="3">Personal</option>
+      </select>
+  </div>
+  </div>
+  <div class="col-lg-3">
+    <div class="form-group">
+      <label class="control-label">Ingrese valor a buscar</label>
+      <input type="text" id="firstName" class="form-control" placeholder="ingrese dato" [(ngModel)]="datobuscar">
+    </div>
+  </div>
+  <div class="col-lg-2">
+      <button type="button" class="btn waves-effect waves-light btn-outline-primary" (click)="filtrar()">Filtrar Contenido</button>
+  </div>
+  <div class="col-lg-2">
+    <button type="button" class="btn waves-effect waves-light btn-outline-info">Generar Reporte</button>
   </div>
 </div>
 
