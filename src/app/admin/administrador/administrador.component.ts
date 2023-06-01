@@ -101,7 +101,6 @@ export class AdministradorComponent implements OnInit {
             console.log(error);
           }
         )
-        
       }
     })
   }

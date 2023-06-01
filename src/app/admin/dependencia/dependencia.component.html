@@ -3,6 +3,14 @@
   <div class="col-lg-4">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalDependencia" data-whatever="@mdo">Agregar</button>
   </div>
+  <div class="col lg-4">
+    <div class="form-group">
+      <select class="form-control custom-select" (change)="mostrarUnidadTipo($event)">
+        <option value="1" selected>Habilitados</option>
+        <option value="0">Deshabilitados</option>
+      </select>
+    </div>
+  </div>
 </div>
 
 <table class="table">
@@ -14,6 +22,7 @@
         <th scope="col">NOMBRE ORGANO</th>
         <th scope="col">ESTADO</th>
         <th>Editar</th>
+        <th>Eliminar</th>
       </tr>
     </thead>
     <tbody>
@@ -26,6 +35,12 @@
       <td *ngIf="unidad.estado===0">Inactivo</td>
       <td>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarDependencia" data-whatever="@mdo" (click)="obtenerUnidadId(unidad.id)">Editar</button>
+      </td>
+      <td *ngIf="unidad.estado===0">
+        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 1)">Habilitar</button>
+      </td>
+      <td *ngIf="unidad.estado===1">
+        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 0)">Deshabilitar</button>
       </td>
       </tr>
     </tbody>

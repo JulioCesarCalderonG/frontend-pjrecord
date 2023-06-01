@@ -4,6 +4,7 @@ import { Resp, ResultOrgano } from 'src/app/interfaces/organo-interface';
 import { ResultSede } from 'src/app/interfaces/sede-interface';
 import { OrganoService } from 'src/app/servicios/organo.service';
 import { SedeService } from 'src/app/servicios/sede.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-organo',
@@ -96,8 +97,45 @@ export class OrganoComponent implements OnInit {
         console.log(error);
       }
     )
-
   }
+
+  eliminarOrgano(id:number, estado:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: (estado===1)?"El Organo sera habilitado":"El Organo sera deshabilitado",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.organoService.deleteOrgano(id, estado).subscribe(
+          (data)=>{
+            this.mostrarOrgano();
+            Swal.fire(
+              (estado===1)?'Habilitado':'Deshabilitado',
+              'Correcto',
+              'success'
+            )
+          }, (error)=>{
+            console.log(error);
+            
+          }
+        )
+      }
+    })
+  }
+
+
+  mostrarOrganoTipo(event:any){
+    console.log(event.target.value);
+    this.estado = event.target.value;
+    this.mostrarOrgano();
+  }
+
+
 
   obtenerOrganoId(id:number){
     this.organoService.getOrganoId(id).subscribe(

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResultOrgano } from 'src/app/interfaces/organo-interface';
 import { DependenciaService } from 'src/app/servicios/dependencia.service';
 import { OrganoService } from 'src/app/servicios/organo.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dependencia',
@@ -101,6 +102,41 @@ export class DependenciaComponent implements OnInit {
     )
   }
 
+  eliminarUnidad(id:number, estado:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: (estado===1)?"La Unidad sera habilitado":"La Unidad sera deshabilitado",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'si, estoy seguro!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dependenciaService.deleteUnidad(id,estado).subscribe(
+          (data)=>{
+            this.mostrarUnidadOrganica();
+            Swal.fire(
+              (estado===1)?'Habilitado':'Deshabilitado',
+              'Correcto',
+              'success'
+            )
+          }, (error)=>{
+            console.log(error);
+            
+          }
+        )
+      }
+    })
+  }
+
+
+  mostrarUnidadTipo(event:any){
+    console.log(event.target.value);
+    this.estado = event.target.value;
+    this.mostrarUnidadOrganica();
+    
+  }
   
   obtenerUnidadId(id:number){
     this.dependenciaService.getUnidadId(id).subscribe(

@@ -82,7 +82,8 @@ export class CargoComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro!'
+      confirmButtonText: 'Si, estoy seguro!',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.cargoService.deleteCargo(id, estado).subscribe(
@@ -96,14 +97,18 @@ export class CargoComponent implements OnInit {
           }, (error)=>{
             console.log(error);
           }
-        )
-        
+        )  
       }
     })
   }
   
   
-
+mostrarCargoTipo(event:any){
+  console.log(event.target.value);
+  this.estado = event.target.value;
+  this.mostrarCargos();
+}
+  
 
   obtenerDatosId(id:number){
     this.cargoService.getCargoId(id).subscribe(
@@ -119,6 +124,8 @@ export class CargoComponent implements OnInit {
       }
     )
   }
+
+
 
   cancelar(){
     this.cargoForm.setValue({

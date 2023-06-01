@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TipodocumentoService } from 'src/app/servicios/tipodocumento.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tipodocumento',
@@ -76,6 +77,40 @@ export class TipodocumentoComponent implements OnInit {
       }
     )
   }
+
+  eliminarTipodocumento(id:number, estado:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: (estado===1)?"El tipo de documento sera habilitado":"El tipo de documento sera deshabilitado",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tipodocumentoService.deleteTipodocumento(id, estado).subscribe(
+          (data)=>{
+            this.mostrartipodocumento();
+            Swal.fire(
+              (estado===1)?'Habilitado':'Deshabilitado',
+              'Correcto',
+              'success'
+            )          
+          }, (error)=>{
+            console.log(error); 
+          })    
+      }
+    })
+  }
+
+
+  mostrarTipodocTipo(event:any){
+    console.log(event.target.value);
+    this.estado = event.target.value;
+    this.mostrartipodocumento();
+  }
+
 
   obtenerTipodocumentoId(id:number){
     this.tipodocumentoService.getTipodocumentoId(id).subscribe(

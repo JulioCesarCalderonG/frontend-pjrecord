@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PersonalService } from 'src/app/servicios/personal.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-personal',
@@ -85,6 +86,45 @@ export class PersonalComponent implements OnInit {
     )
 
   }
+
+
+  eliminarPersonal(id:number, estado:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: (estado===1)?"El personal sera habilitado":"El personal sera deshabilitado",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.personalService.deletePersonal(id,estado).subscribe(
+          (data)=>{
+            this.mostrarPersonal();
+            Swal.fire(
+              (estado===1)?'Habilitado':'Deshabilitado',
+              'Correcto',
+              'success'
+            )
+          }, (error)=>{
+            console.log(error);
+            
+          }
+        )
+      }
+    })
+  }
+
+  mostrarPersonalTipo(event:any){
+    console.log(event.target.value);
+    this.estado = event.target.value;
+    this.mostrarPersonal();
+    
+  }
+
+
+
 
   obtenerPersonalId(id:number){
     this.personalService.getPersonalId(id).subscribe(

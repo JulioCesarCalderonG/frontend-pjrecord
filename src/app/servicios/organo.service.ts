@@ -28,4 +28,8 @@ export class OrganoService {
     return this.http.put(`${this.url}/${id}`, body);
   }
 
+  deleteOrgano(id:number, estado:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}});
+  }
+
 }

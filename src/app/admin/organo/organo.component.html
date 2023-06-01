@@ -3,6 +3,14 @@
   <div class="col-lg-4">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarOrgano" data-whatever="@mdo">Agregar</button>
   </div>
+  <div class="col lg-4">
+    <div class="form-group">
+      <select class="form-control custom-select" (change)="mostrarOrganoTipo($event)">
+        <option value="1" selected>Habilitados</option>
+        <option value="0">Deshabilitados</option>
+      </select>
+    </div>
+  </div>
 </div>
 
 
@@ -15,6 +23,7 @@
       <th scope="col">Nombre de Sede</th>
       <th scope="col">Estado</th>
       <th>Editar</th>
+      <th>Eliminar</th>
     </tr>
   </thead>
   <tbody>
@@ -27,6 +36,12 @@
       <td *ngIf="organo.estado===0">Inactivo</td>
       <td>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarOrgano" data-whatever="@mdo" (click)="obtenerOrganoId(organo.id)">Editar</button>
+      </td>
+      <td *ngIf="organo.estado===0">
+        <button type="button" class="btn btn-primary" (click)="eliminarOrgano(organo.id, 1)">Habilitar</button>
+      </td>
+      <td *ngIf="organo.estado===1">
+        <button type="button" class="btn btn-primary" (click)="eliminarOrgano(organo.id, 0)">Deshabilitar</button>
       </td>
     </tr>
   </tbody>

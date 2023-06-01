@@ -24,9 +24,11 @@ export class TipodocumentoService {
     return this.http.post(this.url,body);
   }
 
-  putTipodocumento(body:FormData, id:string|number){
+  putTipodocumento(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`,body);
   }
 
-
+  deleteTipodocumento(id:number, estado:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}})
+  }
 }

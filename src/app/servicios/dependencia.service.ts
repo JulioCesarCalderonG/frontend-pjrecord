@@ -30,4 +30,10 @@ export class DependenciaService {
   putUnidad(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`,body);
   }
+
+
+  deleteUnidad(id:number, estado:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}});
+  }
+
 }

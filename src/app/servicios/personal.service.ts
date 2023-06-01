@@ -28,4 +28,8 @@ export class PersonalService {
     return this.http.put(`${this.url}/${id}`, body);
   }
 
+  deletePersonal(id:number, estado:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}});
+  }
+
 }

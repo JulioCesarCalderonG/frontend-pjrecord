@@ -24,7 +24,12 @@ export class SedeService {
     return this.http.post(this.url,body);
   }
 
-  putSede(body:FormData, id:string|number){
+  putSede(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`,body);
   }
+
+  deleteSede(id:number, estado:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}});
+  }
+
 }
