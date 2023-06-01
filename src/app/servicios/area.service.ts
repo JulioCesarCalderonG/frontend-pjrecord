@@ -24,4 +24,7 @@ export class AreaService {
   putAreas(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`,body)
   }
+  deleteAreas(id:number,estado:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`,{params:{estado:String(estado)}})
+  }
 }

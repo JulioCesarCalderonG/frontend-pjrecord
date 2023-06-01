@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AreaService } from 'src/app/servicios/area.service';
 import { DependenciaService } from 'src/app/servicios/dependencia.service';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-area',
@@ -98,7 +99,40 @@ export class AreaComponent implements OnInit {
     )
 
   }
+  eliminarArea(id:number,estado:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: (estado===1)?"El area sera habilitado":"El area sera deshabilitado",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro!',
+      cancelButtonText:'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.areaService.deleteAreas(id,estado).subscribe(
+          (data)=>{
+            this.mostrarAreas();
+            Swal.fire(
+              (estado===1)?'Habilitado':'Deshabilitado',
+              'Correcto',
+              'success'
+            )
+          },(error)=>{
+            console.log(error);
 
+          }
+        )
+
+      }
+    })
+  }
+  mostrarAreaTipo(event:any){
+    console.log(event.target.value);
+    this.estado = event.target.value;
+    this.mostrarAreas();
+  }
   obtenerDatosId(id:number){
     this.areaService.getAreaId(id).subscribe(
       (data)=>{
