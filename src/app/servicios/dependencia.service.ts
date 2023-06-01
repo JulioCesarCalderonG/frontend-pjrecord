@@ -12,8 +12,8 @@ export class DependenciaService {
   private url = `${environment.backendUrl}/unidadorganica`;
   constructor(private http:HttpClient, private router:Router) { }
 
-  getUnidad():Observable<any>{
-    return this.http.get(this.url);
+  getUnidad(estado:string='1'):Observable<any>{
+    return this.http.get(this.url,{params:{estado}});
   }
 
 

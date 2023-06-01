@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CargoService } from 'src/app/servicios/cargo.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cargo',
@@ -72,6 +73,36 @@ export class CargoComponent implements OnInit {
       }
     )
   }
+
+  eliminarCargo(id:number, estado:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: (estado===1)?"El cargo sera habilitado":"El cargo sera deshabilitado",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cargoService.deleteCargo(id, estado).subscribe(
+          (data)=>{
+            this.mostrarCargos();
+            Swal.fire(
+              (estado===1)?'Habilitado':'Deshabilitado',
+              'Correcto',
+              'success'
+            )
+          }, (error)=>{
+            console.log(error);
+          }
+        )
+        
+      }
+    })
+  }
+  
+  
 
 
   obtenerDatosId(id:number){

@@ -12,7 +12,7 @@ export class AdministradorService {
   private url = `${environment.backendUrl}/administrador`
   constructor(private http:HttpClient, private router:Router) { }
 
-  getAdministrador(activo:string):Observable<any>{
+  getAdministrador(activo:string='1'):Observable<any>{
     return this.http.get(this.url,{params:{activo}});
   }
 
@@ -26,6 +26,10 @@ export class AdministradorService {
 
   putAdministrador(body:FormData, id:string|number){
     return this.http.put(`${this.url}/${id}`, body)
+  }
+
+  deleteAdministrador(id:number, activo:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{activo:String(activo)}})
   }
 
 }

@@ -27,5 +27,10 @@ export class CargoService {
   putCargo(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`, body);
   }
+  
+  deleteCargo(id:number, estado:number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}})
+
+  }
 
 }

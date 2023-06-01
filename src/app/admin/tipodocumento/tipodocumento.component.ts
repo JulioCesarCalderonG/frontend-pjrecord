@@ -14,6 +14,7 @@ export class TipodocumentoComponent implements OnInit {
   tipodocumentoform:FormGroup;
   tipodocumentoEditarform:FormGroup;
   ids?:string|number;
+  estado:string='1';
 
   constructor(
     private tipodocumentoService:TipodocumentoService,
@@ -34,7 +35,7 @@ export class TipodocumentoComponent implements OnInit {
 
 
   mostrartipodocumento(){
-    this.tipodocumentoService.getTipodocumento().subscribe(
+    this.tipodocumentoService.getTipodocumento(this.estado).subscribe(
       (data)=>{
         this.listTipodocumento = data.resp;
       }, (error)=>{

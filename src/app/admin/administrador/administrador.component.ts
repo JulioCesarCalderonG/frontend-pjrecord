@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdministradorService } from 'src/app/servicios/administrador.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-administrador',
@@ -13,7 +14,7 @@ export class AdministradorComponent implements OnInit {
   administradorForm:FormGroup;
   administradorEditarForm:FormGroup;
   ids?:string|number;
-  activo:string='1';
+  activo:string="1";
 
 
   constructor(
@@ -75,6 +76,43 @@ export class AdministradorComponent implements OnInit {
     )
   }
   
+
+  eliminarAdministrador(id:number, activo:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: (activo===1)?'El administrador sera habilitado':'El administrador sera deshabilitado',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.administradorService.deleteAdministrador(id,activo).subscribe(
+          (data)=>{
+            this.mostrarAdministrador();
+            Swal.fire(
+              (activo===1)?'Habilitado':'Deshabilitado',
+              'Correcto',
+              'success'
+            )
+          }, (error)=>{
+            console.log(error);
+          }
+        )
+        
+      }
+    })
+  }
+
+
+  mostrarAdminTipo(event:any){
+    console.log(event.target.value);
+    this.activo = event.target.value;
+    this.mostrarAdministrador();
+  }
+
 
   obtenerAdministradorId(id:number){
     this.administradorService.getAdministradorId(id).subscribe(

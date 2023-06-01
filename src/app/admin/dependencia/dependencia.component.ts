@@ -16,6 +16,7 @@ export class DependenciaComponent implements OnInit {
   unidadForm:FormGroup;
   unidadEditarForm:FormGroup;
   ids?:string|number;
+  estado:string='1;'
 
   constructor(
     private dependenciaService:DependenciaService,
@@ -43,7 +44,7 @@ export class DependenciaComponent implements OnInit {
 
 
   mostrarUnidadOrganica(){
-    this.dependenciaService.getUnidad().subscribe(
+    this.dependenciaService.getUnidad(this.estado).subscribe(
       (data)=>{
         this.listUnidad = data.resp;
         console.log(this.listUnidad);
