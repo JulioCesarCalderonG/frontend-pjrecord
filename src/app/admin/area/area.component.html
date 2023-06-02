@@ -39,12 +39,13 @@
       </td>
       <td *ngIf="area.estado===0">
         <button type="button" class="btn btn-primary" (click)="eliminarArea(area.id, 1)">
-          <i class="fa fa-lock"></i>
+          <i class="fa fa-lock-open"></i>
         </button>
       </td>
       <td *ngIf="area.estado===1">
         <button type="button" class="btn btn-primary" (click)="eliminarArea(area.id,0)">
-          <i class="fa fa-lock-open"></i>
+
+          <i class="fa fa-lock"></i>
         </button>
       </td>
     </tr>
