@@ -32,13 +32,19 @@
         <td *ngIf="administrador.activo===1">Activo</td>
       <td *ngIf="administrador.activo===0">Inactivo</td>
         <td>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarAdministrador" data-whatever="@mdo" (click)="obtenerAdministradorId(administrador.id)">Editar</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarAdministrador" data-whatever="@mdo" (click)="obtenerAdministradorId(administrador.id)">
+            <i class="fa fa-pencil-alt"></i>
+          </button>
         </td>
         <td *ngIf="administrador.activo===0">
-          <button type="button" class="btn btn-primary" (click)="eliminarAdministrador(administrador.id, 1)">Habilitar</button>
+          <button type="button" class="btn btn-primary" (click)="eliminarAdministrador(administrador.id, 1)">
+            <i class="fa fa-lock-open"></i>
+          </button>
         </td>
         <td *ngIf="administrador.activo===1">
-          <button type="button" class="btn btn-primary" (click)="eliminarAdministrador(administrador.id,0)">Deshabilitar</button>
+          <button type="button" class="btn btn-primary" (click)="eliminarAdministrador(administrador.id,0)">
+            <i class="fa fa-lock"></i>
+          </button>
         </td>
       </tr>
     </tbody>

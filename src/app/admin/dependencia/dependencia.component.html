@@ -34,13 +34,19 @@
         <td *ngIf="unidad.estado===1">Activo</td>
       <td *ngIf="unidad.estado===0">Inactivo</td>
       <td>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarDependencia" data-whatever="@mdo" (click)="obtenerUnidadId(unidad.id)">Editar</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarDependencia" data-whatever="@mdo" (click)="obtenerUnidadId(unidad.id)">
+          <i class="fa fa-pencil-alt"></i>
+        </button>
       </td>
       <td *ngIf="unidad.estado===0">
-        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 1)">Habilitar</button>
+        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 1)">
+          <i class="fa fa-lock-open"></i>
+        </button>
       </td>
       <td *ngIf="unidad.estado===1">
-        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 0)">Deshabilitar</button>
+        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 0)">
+          <i class="fa fa-lock"></i>
+        </button>
       </td>
       </tr>
     </tbody>
