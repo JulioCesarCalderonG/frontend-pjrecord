@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CargoService } from 'src/app/servicios/cargo.service';
+import { TipoPersonalService } from 'src/app/servicios/tipo-personal.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,7 +11,8 @@ import Swal from 'sweetalert2';
 })
 export class CargoComponent implements OnInit {
 
-  listCargo?:Array<any>
+  listCargo?:Array<any>;
+  listTipoPersonal?:Array<any>;
   cargoForm:FormGroup;
   cargoEditarForm:FormGroup;
   ids?:string|number;
@@ -18,19 +20,23 @@ export class CargoComponent implements OnInit {
 
   constructor(
     private cargoService:CargoService,
+    private tipoPersonal:TipoPersonalService,
     private fb:FormBuilder
     ) {
       this.cargoForm = this.fb.group({
-        descripcion:['',Validators.required]
+        descripcion:['',Validators.required],
+        tipo_personal:['',Validators.required]
       });
         this.cargoEditarForm = this.fb.group({
-          descripcion:['',Validators.required]
+          descripcion:['',Validators.required],
+          tipo_personal:['',Validators.required]
         })
   }
 
 
   ngOnInit(): void {
     this.mostrarCargos();
+    this.mostrarTipoPersonal();
   }
 
 
@@ -44,10 +50,22 @@ export class CargoComponent implements OnInit {
       }
     )
   }
+  mostrarTipoPersonal(){
+    this.tipoPersonal.getTipoPersonal('1').subscribe(
+      (data)=>{
+        this.listTipoPersonal = data.resp;
+
+      },(error)=>{
+        console.log(error);
+
+      }
+    )
+  }
 
   registrarCargo(){
     const formData = new FormData();
     formData.append('descripcion',this.cargoForm.get('descripcion')?.value);
+    formData.append('id_tipo_personal',this.cargoForm.get('tipo_personal')?.value);
 
     this.cargoService.postCargos(formData).subscribe(
       (data)=>{
@@ -63,13 +81,14 @@ export class CargoComponent implements OnInit {
   modificarCargo(){
     const formData = new FormData();
     formData.append('descripcion',this.cargoEditarForm.get('descripcion')?.value);
+    formData.append('id_tipo_personal',this.cargoEditarForm.get('tipo_personal')?.value);
     this.cargoService.putCargo(formData,this.ids!).subscribe(
       (data)=>{
         console.log(data);
         this.mostrarCargos();
       }, (error)=>{
         console.log(error);
-        
+
       }
     )
   }
@@ -97,30 +116,31 @@ export class CargoComponent implements OnInit {
           }, (error)=>{
             console.log(error);
           }
-        )  
+        )
       }
     })
   }
-  
-  
+
+
 mostrarCargoTipo(event:any){
   console.log(event.target.value);
   this.estado = event.target.value;
   this.mostrarCargos();
 }
-  
+
 
   obtenerDatosId(id:number){
     this.cargoService.getCargoId(id).subscribe(
       (data)=>{
         console.log(data);
-        
+
         this.cargoEditarForm.setValue({
           descripcion:data.resp.descripcion,
+          tipo_personal:data.resp.id_tipo_personal
         })
         this.ids = data.resp.id;
       }, (error)=>{
-        console.log(error);        
+        console.log(error);
       }
     )
   }
@@ -129,10 +149,12 @@ mostrarCargoTipo(event:any){
 
   cancelar(){
     this.cargoForm.setValue({
-      descripcion:''
+      descripcion:'',
+      tipo_personal:''
     });
     this.cargoEditarForm.setValue({
-      descripcion:''
+      descripcion:'',
+      tipo_personal:''
     })
   }
 

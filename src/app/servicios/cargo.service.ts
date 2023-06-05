@@ -20,6 +20,10 @@ export class CargoService {
     return this.http.get(`${this.url}/${id}`);
   }
 
+  getCargoPersonal(id:number | string):Observable<any>{
+    return this.http.get(`${this.url}/tipopersonal/${id}`);
+  }
+
   postCargos(body:FormData):Observable<any>{
     return this.http.post(this.url,body);
   }
@@ -27,7 +31,7 @@ export class CargoService {
   putCargo(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`, body);
   }
-  
+
   deleteCargo(id:number, estado:number):Observable<any>{
     return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}})
 

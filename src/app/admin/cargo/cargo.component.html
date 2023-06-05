@@ -19,6 +19,7 @@
       <tr>
         <th scope="col">ID</th>
         <th scope="col">DESCRIPCION</th>
+        <th scope="col">TIPO PERSONAL</th>
         <th scope="col">ESTADO</th>
         <th>Editar</th>
         <th>Eliminar</th>
@@ -28,6 +29,7 @@
       <tr *ngFor="let cargo of listCargo">
         <th scope="row">{{cargo.id}}</th>
         <td>{{cargo.descripcion}}</td>
+        <td>{{cargo.TipoPersonal.titulo}}</td>
         <td *ngIf="cargo.estado===1">Activo</td>
         <td *ngIf="cargo.estado===0">Inactivo</td>
         <td>
@@ -65,6 +67,13 @@
               <label for="recipient-name" class="col-form-label">Descripcion:</label>
               <input type="text" class="form-control" id="recipient-name" formControlName="descripcion">
             </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Personal:</label><br>
+              <select class="form-control custom-select" formControlName="tipo_personal" >
+                <option selected value="">Seleccionar</option>
+                <option *ngFor="let tipo of listTipoPersonal" value="{{tipo.id}}">{{tipo.titulo}}</option>
+              </select>
+            </div>
           </form>
         </div>
         <div class="modal-footer">
@@ -89,6 +98,13 @@
             <div class="form-group">
               <label for="recipient-name" class="col-form-label">Descripcion:</label>
               <input type="text" class="form-control" id="recipient-name" formControlName="descripcion">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Personal:</label><br>
+              <select class="form-control custom-select" formControlName="tipo_personal" >
+                <option selected value="">Seleccionar</option>
+                <option *ngFor="let tipo of listTipoPersonal" value="{{tipo.id}}">{{tipo.titulo}}</option>
+              </select>
             </div>
           </form>
         </div>

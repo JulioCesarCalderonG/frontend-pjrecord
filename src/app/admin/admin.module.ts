@@ -19,6 +19,7 @@ import { AdministradorComponent } from './administrador/administrador.component'
 import { GeneralComponent } from './general/general.component';
 import { OrganoComponent } from './organo/organo.component';
 import { SedeComponent } from './sede/sede.component';
+import { RecordLaboralComponent } from './record-laboral/record-laboral.component';
 
 
 
@@ -36,7 +37,8 @@ import { SedeComponent } from './sede/sede.component';
     AdministradorComponent,
     GeneralComponent,
     OrganoComponent,
-    SedeComponent
+    SedeComponent,
+    RecordLaboralComponent
   ],
   exports:[
     DashboardComponent,
