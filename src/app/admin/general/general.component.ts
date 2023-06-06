@@ -6,72 +6,76 @@ import { DependenciaService } from 'src/app/servicios/dependencia.service';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { OrganoService } from 'src/app/servicios/organo.service';
 import { PersonalService } from 'src/app/servicios/personal.service';
+import { ReporteService } from 'src/app/servicios/reporte.service';
 import { TipodocumentoService } from 'src/app/servicios/tipodocumento.service';
 import { environment } from 'src/environments/environment.prod';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-general',
   templateUrl: './general.component.html',
-  styleUrls: ['./general.component.css']
+  styleUrls: ['./general.component.css'],
 })
 export class GeneralComponent implements OnInit {
-
-  listGeneral?:Array<any>;
-  generalForm:FormGroup;
-  listTipodocumento?:Array<any>;
-  listCargo?:Array<any>;
-  listPersonal?:Array<any>
-  listAutoriza?:Array<any>;
-  listDependencia?:Array<any>;
-  generalEditarForm:FormGroup;
-  ids?:string|number;
-  tipofiltro:string='';
-  datobuscar:string='';
-  url=`${environment.backendUrl}/uploadgeneral/recordlaboral`;
-
+  listGeneral?: Array<any>;
+  generalForm: FormGroup;
+  listTipodocumento?: Array<any>;
+  listCargo?: Array<any>;
+  listPersonal?: Array<any>;
+  listAutoriza?: Array<any>;
+  listDependencia?: Array<any>;
+  generalEditarForm: FormGroup;
+  ids?: string | number;
+  tipofiltro: string = '';
+  datobuscar: string = '';
+  url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
+  url2 = `${environment.backendUrl}/reporte/recordlaboral`
   modelReporte = {
-    buscar:'',
-    tiporeporte:"",
-    tipodependencia:"",
-    dependencia:''
-  }
+    personal: '',
+    tiporeporte: '',
+    tipodependencia: '',
+    dependencia: '',
+    inicio: '',
+    fin: '',
+  };
 
   constructor(
-    private generalService:GeneralService,
-    private tipodocumentoService:TipodocumentoService,
-    private cargoService:CargoService,
-    private organoService:OrganoService,
-    private unidadService:DependenciaService,
-    private areaService:AreaService,
-    private personalService:PersonalService,
-    private fb:FormBuilder
+    private generalService: GeneralService,
+    private tipodocumentoService: TipodocumentoService,
+    private cargoService: CargoService,
+    private organoService: OrganoService,
+    private unidadService: DependenciaService,
+    private areaService: AreaService,
+    private personalService: PersonalService,
+    private reporteService:ReporteService,
+    private fb: FormBuilder
   ) {
     this.generalForm = this.fb.group({
-      tipodocumento:['',Validators.required],
-      numero:[''],
-      ano:[''],
-      tiposigla:['0'],
-      autoriza:['0'],
-      tipodependencia:['',Validators.required],
-      dependencia:['',Validators.required],
-      cargo:['',Validators.required],
-      desde:['', Validators.required],
-      hasta:[''],
-      personal:['',Validators.required]
+      tipodocumento: ['', Validators.required],
+      numero: [''],
+      ano: [''],
+      tiposigla: ['0'],
+      autoriza: ['0'],
+      tipodependencia: ['', Validators.required],
+      dependencia: ['', Validators.required],
+      cargo: ['', Validators.required],
+      desde: ['', Validators.required],
+      hasta: [''],
+      personal: ['', Validators.required],
     });
     this.generalEditarForm = this.fb.group({
-      tipodocumento:['',Validators.required],
-      numero:[''],
-      ano:[''],
-      tiposigla:['0'],
-      autoriza:['0'],
-      tipodependencia:['',Validators.required],
-      dependencia:['',Validators.required],
-      cargo:['',Validators.required],
-      desde:['', Validators.required],
-      hasta:[''],
-      personal:['',Validators.required]
-    })
+      tipodocumento: ['', Validators.required],
+      numero: [''],
+      ano: [''],
+      tiposigla: ['0'],
+      autoriza: ['0'],
+      tipodependencia: ['', Validators.required],
+      dependencia: ['', Validators.required],
+      cargo: ['', Validators.required],
+      desde: ['', Validators.required],
+      hasta: [''],
+      personal: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
@@ -81,258 +85,340 @@ export class GeneralComponent implements OnInit {
     this.mostrarPersonal();
   }
 
-  mostrarGeneral(){
-    this.generalService.getGeneral(this.tipofiltro,this.datobuscar).subscribe(
-      (data)=>{
+  mostrarGeneral() {
+    this.generalService.getGeneral(this.tipofiltro, this.datobuscar).subscribe(
+      (data) => {
         this.listGeneral = data.resp;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  registrarGeneral(){
-    const formData = new FormData();
-    formData.append('tipo_documento',this.generalForm.get('tipodocumento')?.value);
-    formData.append('numero',this.generalForm.get('numero')?.value);
-    formData.append('ano',this.generalForm.get('ano')?.value);
-    formData.append('tipo_sigla',this.generalForm.get('tiposigla')?.value);
-    formData.append('autoriza',this.generalForm.get('autoriza')?.value);
-    formData.append('tipo_dependencia',this.generalForm.get('tipodependencia')?.value);
-    formData.append('dependencia',this.generalForm.get('dependencia')?.value);
-    formData.append('id_cargo',this.generalForm.get('cargo')?.value);
-    formData.append('desde',this.generalForm.get('desde')?.value);
-    formData.append('hasta',this.generalForm.get('hasta')?.value);
-    formData.append('id_personal',this.generalForm.get('personal')?.value);
-    this.generalService.postGeneral(formData).subscribe(
-      (data)=>{
-        console.log(data);
-        this.mostrarGeneral();
-        this.cancelar();
-      },(error)=>{
-        console.log(error);
-
-      }
-    )
-  }
-  mostrartipodocumento(){
+  mostrartipodocumento() {
     this.tipodocumentoService.getTipodocumento().subscribe(
-      (data)=>{
+      (data) => {
         this.listTipodocumento = data.resp;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
-  mostrarCargos(){
+  mostrarCargos() {
     this.cargoService.getCargos().subscribe(
-      (data)=>{
+      (data) => {
         this.listCargo = data.resp;
-
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
-  mostrarPersonal(){
+  mostrarPersonal() {
     this.personalService.getPersonal().subscribe(
-      (data)=>{
+      (data) => {
         this.listPersonal = data.resp;
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  buscarSigla(event:any){
+  buscarSigla(event: any) {
     switch (event.target.value) {
       case '1':
-          this.organoService.getOrgano().subscribe(
-            (data)=>{
-              console.log(data);
-              this.listAutoriza = data.resp;
-            },(error)=>{
-              console.log(error);
-            }
-          );
-          return;
-      case '2':
-        this.unidadService.getUnidad().subscribe(
-          (data)=>{
+        this.organoService.getOrgano().subscribe(
+          (data) => {
             console.log(data);
             this.listAutoriza = data.resp;
-          },(error)=>{
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '2':
+        this.unidadService.getUnidad().subscribe(
+          (data) => {
+            console.log(data);
+            this.listAutoriza = data.resp;
+          },
+          (error) => {
             console.log(error);
           }
         );
         return;
       case '3':
         this.areaService.getAreas().subscribe(
-          (data)=>{
+          (data) => {
             console.log(data);
             this.listAutoriza = data.resp;
-          },(error)=>{
+          },
+          (error) => {
             console.log(error);
           }
         );
         return;
       default:
-        this.listAutoriza=[]
+        this.listAutoriza = [];
         return;
     }
   }
-  buscarDependencia(event:any){
+  buscarDependencia(event: any) {
     switch (event.target.value) {
       case '1':
-          this.organoService.getOrgano().subscribe(
-            (data)=>{
-              console.log(data);
-              this.listDependencia = data.resp;
-            },(error)=>{
-              console.log(error);
-            }
-          );
-          return;
-      case '2':
-        this.unidadService.getUnidad().subscribe(
-          (data)=>{
+        this.organoService.getOrgano().subscribe(
+          (data) => {
             console.log(data);
             this.listDependencia = data.resp;
-          },(error)=>{
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '2':
+        this.unidadService.getUnidad().subscribe(
+          (data) => {
+            console.log(data);
+            this.listDependencia = data.resp;
+          },
+          (error) => {
             console.log(error);
           }
         );
         return;
       case '3':
         this.areaService.getAreas().subscribe(
-          (data)=>{
+          (data) => {
             console.log(data);
             this.listDependencia = data.resp;
-          },(error)=>{
+          },
+          (error) => {
             console.log(error);
           }
         );
         return;
       default:
-        this.listDependencia=[]
+        this.listDependencia = [];
         return;
     }
   }
 
-
-  editarGeneral(){
+  editarGeneral() {
     const formData = new FormData();
 
-    formData.append('tipo_documento',this.generalEditarForm.get('tipodocumento')?.value);
-    formData.append('numero',this.generalEditarForm.get('numero')?.value);
-    formData.append('ano',this.generalEditarForm.get('ano')?.value);
-    formData.append('tipo_sigla',this.generalEditarForm.get('tiposigla')?.value);
-    formData.append('autoriza',this.generalEditarForm.get('autoriza')?.value);
-    formData.append('tipo_dependencia',this.generalEditarForm.get('tipodependencia')?.value);
-    formData.append('dependencia',this.generalEditarForm.get('dependencia')?.value);
-    formData.append('id_cargo',this.generalEditarForm.get('cargo')?.value);
-    formData.append('desde',this.generalEditarForm.get('desde')?.value);
-    formData.append('hasta',this.generalEditarForm.get('hasta')?.value);
-    formData.append('id_personal',this.generalEditarForm.get('personal')?.value);
+    formData.append(
+      'tipo_documento',
+      this.generalEditarForm.get('tipodocumento')?.value
+    );
+    formData.append('numero', this.generalEditarForm.get('numero')?.value);
+    formData.append('ano', this.generalEditarForm.get('ano')?.value);
+    formData.append(
+      'tipo_sigla',
+      this.generalEditarForm.get('tiposigla')?.value
+    );
+    formData.append('autoriza', this.generalEditarForm.get('autoriza')?.value);
+    formData.append(
+      'tipo_dependencia',
+      this.generalEditarForm.get('tipodependencia')?.value
+    );
+    formData.append(
+      'dependencia',
+      this.generalEditarForm.get('dependencia')?.value
+    );
+    formData.append('id_cargo', this.generalEditarForm.get('cargo')?.value);
+    formData.append('desde', this.generalEditarForm.get('desde')?.value);
+    formData.append('hasta', this.generalEditarForm.get('hasta')?.value);
+    formData.append(
+      'id_personal',
+      this.generalEditarForm.get('personal')?.value
+    );
 
     this.generalService.putGeneral(formData, this.ids!).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
         this.mostrarGeneral();
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  obtenerGeneralId(id:number){
+  obtenerGeneralId(id: number) {
     this.generalService.getGeneralId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.generalEditarForm.setValue({
-          tipodocumento:data.resp.tipodocumento,
-          numero:data.resp.numero,
-          ano:data.resp.ano,
-          tiposigla:data.resp.tiposigla,
-          autoriza:data.resp.autoriza,
-          tipodependencia:data.resp.tipodependencia,
-          dependencia:data.resp.dependencia,
-          cargo:data.resp.cargo,
-          desde:data.resp.desde,
-          hasta:data.resp.hasta,
-          personal:data.resp.personal,
-        })
+          tipodocumento: data.resp.tipodocumento,
+          numero: data.resp.numero,
+          ano: data.resp.ano,
+          tiposigla: data.resp.tiposigla,
+          autoriza: data.resp.autoriza,
+          tipodependencia: data.resp.tipodependencia,
+          dependencia: data.resp.dependencia,
+          cargo: data.resp.cargo,
+          desde: data.resp.desde,
+          hasta: data.resp.hasta,
+          personal: data.resp.personal,
+        });
         this.ids = data.resp.id;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
-  filtrar(){
-    if (this.tipofiltro !== '' && this.datobuscar !=='') {
+  filtrar() {
+    if (this.tipofiltro !== '' && this.datobuscar !== '') {
       console.log(this.tipofiltro, this.datobuscar);
       this.mostrarGeneral();
     }
-    if (this.tipofiltro==='0') {
-      this.tipofiltro='';
-      this.datobuscar='';
+    if (this.tipofiltro === '0') {
+      this.tipofiltro = '';
+      this.datobuscar = '';
       this.mostrarGeneral();
     }
-
   }
-  tipoFiltro(event:any){
+  tipoFiltro(event: any) {
     this.tipofiltro = event.target.value;
     console.log(this.tipofiltro);
-
   }
-  funcionReporte(event:any){
-    const valor =event.target.value;
+  funcionReporte(event: any) {
+    const valor = event.target.value;
     this.modelReporte.tiporeporte = valor;
-    if (valor!=="" && valor==="1") {
+    if (valor !== '' && valor === '1') {
       document.getElementById('seleTwo')?.classList.add('invi');
       document.getElementById('seleOne')?.classList.remove('invi');
     }
-    if (valor!=="" && valor==="2") {
+    if (valor !== '' && valor === '2') {
       document.getElementById('seleTwo')?.classList.remove('invi');
       document.getElementById('seleOne')?.classList.add('invi');
     }
-    if (valor === "") {
-      document.getElementById('seleTwo')?.classList.add('invi')
+    if (valor === '') {
+      document.getElementById('seleTwo')?.classList.add('invi');
       document.getElementById('seleOne')?.classList.add('invi');
     }
   }
-  generarReporte(){
+  generarReporte() {
+    if (this.modelReporte.tiporeporte === '1') {
+      console.log(this.modelReporte);
 
+      if (this.modelReporte.tipodependencia === '' || this.modelReporte.dependencia === '' || this.modelReporte.inicio === '') {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: 'warning',
+          title: 'Completa los datos',
+        });
+      } else {
+        const formData = new FormData();
+        formData.append('tipofiltro', this.modelReporte.tiporeporte);
+        formData.append('tipodependencia', this.modelReporte.tipodependencia);
+        formData.append('dependencia', this.modelReporte.dependencia);
+        formData.append('fechainicio',this.modelReporte.inicio);
+        formData.append('fechafin',this.modelReporte.fin);
+        formData.append('personal','');
+
+        this.reporteService.postReporteRecord(formData).subscribe(
+          (data)=>{
+            const urlreport=`${this.url2}/${data.nombre}`;
+            window.open(urlreport,'_blank');
+          }
+        )
+
+      }
+    }else if (this.modelReporte.tiporeporte === '2') {
+      if (this.modelReporte.personal==="") {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: 'warning',
+          title: 'Completa los datos',
+        });
+      }else{
+        const formData = new FormData();
+        formData.append('tipofiltro', "");
+        formData.append('tipodependencia', "");
+        formData.append('dependencia', "");
+        formData.append('fechainicio',"");
+        formData.append('fechafin',"");
+        formData.append('personal',this.modelReporte.personal);
+        this.reporteService.postReporteRecord(formData).subscribe(
+          (data)=>{
+            const urlreport=`${this.url2}/${data.nombre}`;
+            window.open(urlreport,'_blank');
+          }
+        )
+      }
+    } else {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: 'warning',
+        title: 'Selecciona el tipo de reporte',
+      });
+    }
   }
-  cancelar(){
+  cancelar() {
     this.generalForm.setValue({
-      tipodocumento:'',
-      numero:'',
-      ano:'',
-      tiposigla:'',
-      autoriza:'',
-      tipodependencia:'',
-      dependencia:'',
-      cargo:'',
-      desde:'',
-      hasta:'',
-      personal:''
-    })
+      tipodocumento: '',
+      numero: '',
+      ano: '',
+      tiposigla: '',
+      autoriza: '',
+      tipodependencia: '',
+      dependencia: '',
+      cargo: '',
+      desde: '',
+      hasta: '',
+      personal: '',
+    });
     this.generalEditarForm.setValue({
-      tipodocumento:'',
-      numero:'',
-      ano:'',
-      tiposigla:'',
-      autoriza:'',
-      tipodependencia:'',
-      dependencia:'',
-      cargo:'',
-      desde:'',
-      hasta:'',
-      personal:''
-    })
+      tipodocumento: '',
+      numero: '',
+      ano: '',
+      tiposigla: '',
+      autoriza: '',
+      tipodependencia: '',
+      dependencia: '',
+      cargo: '',
+      desde: '',
+      hasta: '',
+      personal: '',
+    });
   }
-
 }
