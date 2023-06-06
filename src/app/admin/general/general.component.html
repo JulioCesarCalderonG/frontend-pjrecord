@@ -47,7 +47,7 @@
       <td>{{general.Personal.nombre}} {{general.Personal.apellido}}</td>
       <td>{{general.Cargo.descripcion}}</td>
       <td>{{general.inicio}}</td>
-      <td>{{general.fin}}</td>
+      <td>{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
       <td class="text-center">
         <a href="{{url}}/{{general.documento}}" class="btn btn-warning" target="_blank">
           <i class="fa fa-file-pdf"></i>
