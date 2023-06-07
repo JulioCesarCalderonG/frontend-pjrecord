@@ -1,6 +1,6 @@
 <div class="row mb-5">
   <div class="col-lg-4">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegistrar" data-whatever="@mdo">
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalRegistrar" data-whatever="@mdo">
       <i class="fa fa-plus-square"></i> Agregar</button>
   </div>
   <div class="col lg-4">
@@ -30,7 +30,7 @@
       <td *ngIf="sedes.estado===1">Activo</td>
       <td *ngIf="sedes.estado===0">Inactivo</td>
       <td>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarSede" data-whatever="@mdo" (click)="obtenerSedeId(sedes.id)">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modificarSede" data-whatever="@mdo" (click)="obtenerSedeId(sedes.id)">
           <i class="fa fa-pencil-alt"></i>
         </button>
       </td>
