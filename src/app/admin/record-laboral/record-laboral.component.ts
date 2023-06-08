@@ -165,7 +165,6 @@ export class RecordLaboralComponent implements OnInit {
         }
       )
     }
-
   }
   buscarSigla(event:any){
     switch (event.target.value) {
@@ -241,10 +240,6 @@ export class RecordLaboralComponent implements OnInit {
         return;
     }
   }
-
-
-
-
   obtenerGeneralId(id:number){
     this.generalService.getGeneralId(id).subscribe(
       (data)=>{
