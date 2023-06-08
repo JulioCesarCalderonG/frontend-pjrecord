@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PersonalService } from 'src/app/servicios/personal.service';
 import Swal from 'sweetalert2';
 
@@ -18,7 +19,8 @@ export class PersonalComponent implements OnInit {
 
   constructor(
     private personalService:PersonalService,
-    private fb:FormBuilder
+    private fb:FormBuilder,
+    private router:Router
     ) {
       this.personalForm = this.fb.group({
         nombre:['', Validators.required],
@@ -43,7 +45,7 @@ export class PersonalComponent implements OnInit {
       (data)=>{
         this.listPersonal = data.resp;
       },(error)=>{
-        console.log(error);       
+        console.log(error);
       }
     )
   }
@@ -78,10 +80,10 @@ export class PersonalComponent implements OnInit {
       (data)=>{
         console.log(data);
         this.mostrarPersonal();
-        
+
       }, (error)=>{
         console.log(error);
-        
+
       }
     )
 
@@ -109,7 +111,7 @@ export class PersonalComponent implements OnInit {
             )
           }, (error)=>{
             console.log(error);
-            
+
           }
         )
       }
@@ -120,7 +122,7 @@ export class PersonalComponent implements OnInit {
     console.log(event.target.value);
     this.estado = event.target.value;
     this.mostrarPersonal();
-    
+
   }
 
 
@@ -142,7 +144,9 @@ export class PersonalComponent implements OnInit {
     )
   }
 
-
+  redireccionarCrear(id:number,nombre:string, apellido:string){
+    this.router.navigateByUrl(`admin/reporte-personal/${id}/${nombre} ${apellido}`);
+  }
   cancelar(){
     this.personalForm.setValue({
       nombre:'',

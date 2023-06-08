@@ -14,6 +14,7 @@ import { GeneralComponent } from './general/general.component';
 import { OrganoComponent } from './organo/organo.component';
 import { SedeComponent } from './sede/sede.component';
 import { RecordLaboralComponent } from './record-laboral/record-laboral.component';
+import { ReportesComponent } from './reportes/reportes.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
             { path: 'organojurisdiccional', component: OrganoComponent },
             { path: 'sede', component: SedeComponent },
             { path: 'agregar-record', component: RecordLaboralComponent },
+            { path: 'reporte-personal/:id/:personal', component: ReportesComponent },
         ]
     },
     //{ path: 'path/:routeParam', component: MyComponent },

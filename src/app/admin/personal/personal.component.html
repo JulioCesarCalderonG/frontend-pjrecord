@@ -24,6 +24,7 @@
         <th scope="col">FECHA INICIO</th>
         <th>Editar</th>
         <th>Eliminar</th>
+        <th>Mostrar Reportes</th>
       </tr>
     </thead>
     <tbody>
@@ -46,6 +47,11 @@
         <th *ngIf="personal.estado===1">
           <button type="button" class="btn btn-primary" (click)="eliminarPersonal(personal.id, 0)">
             <i class="fa fa-lock"></i>
+          </button>
+        </th>
+        <th>
+          <button type="button" class="btn btn-warning" (click)="redireccionarCrear(personal.id,personal.nombre, personal.apellido)">
+            <i class="fa fa-eye"></i>
           </button>
         </th>
       </tr>
@@ -81,7 +87,7 @@
                 <label for="recipient-name" class="col-form-label">Fecha inicio:</label>
                 <input class="form-control" type="date"  id="example-date-input" formControlName="fecha_inicio">
               </div>
-            </div>    
+            </div>
           </form>
         </div>
         <div class="modal-footer">
@@ -120,7 +126,7 @@
                 <label for="recipient-name" class="col-form-label">Fecha inicio:</label>
                 <input class="form-control" type="date"  id="example-date-input" formControlName="fecha_inicio">
               </div>
-            </div>    
+            </div>
           </form>
         </div>
         <div class="modal-footer">
