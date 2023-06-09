@@ -8,6 +8,7 @@ import { DetalleLicenciaService } from 'src/app/servicios/detalle-licencia.servi
 import { GeneralService } from 'src/app/servicios/general.service';
 import { LicenciaService } from 'src/app/servicios/licencia.service';
 import { OrganoService } from 'src/app/servicios/organo.service';
+import { ReporteService } from 'src/app/servicios/reporte.service';
 import { TipoLicenciaService } from 'src/app/servicios/tipo-licencia.service';
 import { TipoPersonalService } from 'src/app/servicios/tipo-personal.service';
 import { TipodocumentoService } from 'src/app/servicios/tipodocumento.service';
@@ -39,6 +40,7 @@ export class ReportesComponent implements OnInit {
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   url2 = `${environment.backendUrl}/uploadgeneral/licencia`;
+  url3 = `${environment.backendUrl}/reporte`;
   uploadFiles?: File;
   uploadLicencia?: File;
   constructor(
@@ -53,6 +55,7 @@ export class ReportesComponent implements OnInit {
     private tipoLicenciaService:TipoLicenciaService,
     private detalleLicenciaService:DetalleLicenciaService,
     private licenciaService:LicenciaService,
+    private reporteService:ReporteService,
     private fb:FormBuilder
   ) {
     this.generalForm = this.fb.group({
@@ -123,6 +126,37 @@ export class ReportesComponent implements OnInit {
     else{
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
+    }
+  }
+
+  generarReporte(){
+    if (this.opcionFiltro==='1') {
+      this.reporteService.postReporteRecordId(`${this.idpersonal}`).subscribe(
+        (data)=>{
+          const urlreport=`${this.url3}/recordlaboral/${data.nombre}`;
+          window.open(urlreport,'_blank');
+        },(error)=>{
+          console.log(error);
+
+        }
+      )
+    }else if (this.opcionFiltro==='2') {
+
+    }else if (this.opcionFiltro==='3') {
+      this.reporteService.postReporteLicenciaId(`${this.idpersonal}`).subscribe(
+        (data)=>{
+          const urlreport=`${this.url3}/licencia/${data.nombre}`;
+          window.open(urlreport,'_blank');
+        },(error)=>{
+          console.log(error);
+
+        }
+      )
+
+    }else if (this.opcionFiltro==='4') {
+
+    }else{
+
     }
   }
 

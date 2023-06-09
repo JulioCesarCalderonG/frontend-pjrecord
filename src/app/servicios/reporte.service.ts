@@ -14,4 +14,10 @@ export class ReporteService {
   postReporteRecord(formData:FormData):Observable<any>{
     return this.http.post(`${this.url}/recordlaboral`,formData);
   }
+  postReporteRecordId(id:string):Observable<any>{
+    return this.http.post(`${this.url}/recordlaboral/personal/${id}`,{});
+  }
+  postReporteLicenciaId(id:string):Observable<any>{
+    return this.http.post(`${this.url}/licencia/personal/${id}`,{});
+  }
 }
