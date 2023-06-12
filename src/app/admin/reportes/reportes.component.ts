@@ -12,6 +12,7 @@ import { ReporteService } from 'src/app/servicios/reporte.service';
 import { TipoLicenciaService } from 'src/app/servicios/tipo-licencia.service';
 import { TipoPersonalService } from 'src/app/servicios/tipo-personal.service';
 import { TipodocumentoService } from 'src/app/servicios/tipodocumento.service';
+import { VacacionalService } from 'src/app/servicios/vacacional.service';
 import { environment } from 'src/environments/environment.prod';
 import Swal from 'sweetalert2';
 @Component({
@@ -24,6 +25,7 @@ export class ReportesComponent implements OnInit {
   personal='';
   listLicencia?:Array<any>;
   listRecord?:Array<any>;
+  listVacacional?:Array<any>;
   listTipodocumento?:Array<any>;
   listCargo?:Array<any>;
   listAutoriza?:Array<any>;
@@ -33,16 +35,20 @@ export class ReportesComponent implements OnInit {
   listDetalleLicencia?:Array<any>;
   generalForm:FormGroup;
   licenciaForm:FormGroup;
+  vacacionalForm:FormGroup;
   loadImage: string='';
   loadLicencia: string='';
+  loadVacacional: string='';
   opcionFiltro:string='';
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
+  @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   url2 = `${environment.backendUrl}/uploadgeneral/licencia`;
   url3 = `${environment.backendUrl}/reporte`;
   uploadFiles?: File;
   uploadLicencia?: File;
+  uploadVacacional?: File;
   constructor(
     private rutaActiva: ActivatedRoute,
     private generalService:GeneralService,
@@ -55,6 +61,7 @@ export class ReportesComponent implements OnInit {
     private tipoLicenciaService:TipoLicenciaService,
     private detalleLicenciaService:DetalleLicenciaService,
     private licenciaService:LicenciaService,
+    private vacacionalService:VacacionalService,
     private reporteService:ReporteService,
     private fb:FormBuilder
   ) {
@@ -78,6 +85,16 @@ export class ReportesComponent implements OnInit {
       inicio:['',Validators.required],
       fin:['',Validators.required],
       detallelicencia:['',Validators.required]
+    });
+    this.vacacionalForm=this.fb.group({
+      tipodocumento:['',Validators.required],
+      areauno:[''],
+      areados:[''],
+      numero:[Number, Validators.required],
+      ano:[Number,Validators.required],
+      inicio:['',Validators.required],
+      fin:['',Validators.required],
+      periodo:['',Validators.required]
     })
   }
 
@@ -95,6 +112,7 @@ export class ReportesComponent implements OnInit {
     if (this.opcionFiltro === '1') {
       document.getElementById('tableRecord')?.classList.remove('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
+      document.getElementById('tableVacacional')?.classList.add('invi');
       this.generalService.getGeneralPersonal(`${this.idpersonal}`).subscribe(
         (data)=>{
           console.log(data);
@@ -107,9 +125,20 @@ export class ReportesComponent implements OnInit {
     }else if (this.opcionFiltro === '2') {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
+      document.getElementById('tableVacacional')?.classList.remove('invi');
+      this.vacacionalService.getVacacionalPersonal(`${this.idpersonal}`).subscribe(
+        (data)=>{
+          console.log(data);
+          this.listVacacional = data.resp;
+        },(error)=>{
+          console.log(error);
+
+        }
+      )
     }else if (this.opcionFiltro === '3') {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.remove('invi');
+      document.getElementById('tableVacacional')?.classList.add('invi');
       this.licenciaService.getLicenciaPersonal(`${this.idpersonal}`).subscribe(
         (data)=>{
           console.log(data);
@@ -122,10 +151,12 @@ export class ReportesComponent implements OnInit {
     }else if (this.opcionFiltro === '4') {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
+      document.getElementById('tableVacacional')?.classList.add('invi');
     }
     else{
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
+      document.getElementById('tableVacacional')?.classList.add('invi');
     }
   }
 
@@ -384,6 +415,7 @@ export class ReportesComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500
       });
+
     }else{
       formData.append('archivo',this.fileLicencia?.nativeElement.files[0]);
       this.licenciaService.postLicencia(formData).subscribe(
@@ -452,9 +484,115 @@ export class ReportesComponent implements OnInit {
   }
 
 
+  /* Seccion crear Record Vacacional */
+
+  registrarVacacional(){
+    const tipoDoc= this.vacacionalForm.get('tipodocumento')?.value;
+    const areauno = this.vacacionalForm.get('areauno')?.value;
+    const areados = this.vacacionalForm.get('areados')?.value;
+    const formData= new FormData();
+    formData.append('tipo_documento',tipoDoc);
+    formData.append('inicio',this.vacacionalForm.get('inicio')?.value);
+    formData.append('fin',this.vacacionalForm.get('fin')?.value);
+    formData.append('periodo',this.vacacionalForm.get('periodo')?.value);
+    formData.append('numero',this.vacacionalForm.get('numero')?.value);
+    formData.append('ano',this.vacacionalForm.get('ano')?.value);
+    formData.append('id_personal',`${this.idpersonal}`)
+    if (tipoDoc==="1") {
+      if (areauno==='') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Falta seleccionar el area que genera el documento',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        return;
+      }else{
+        formData.append('area',this.vacacionalForm.get('areauno')?.value);
+      }
+    }
+    if (tipoDoc==="2") {
+      if (areados==='') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Falta seleccionar el area que genera el documento',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        return;
+      }else{
+        formData.append('area',this.vacacionalForm.get('areados')?.value);
+      }
+    }
+    if (this.loadVacacional==='') {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Seleccione el documento que autoriza',
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+    }else{
+      formData.append('archivo',this.fileVacacional?.nativeElement.files[0]);
+      this.vacacionalService.postVacacional(formData).subscribe(
+        (data)=>{
+          Swal.fire(
+            'Registrado!',
+            data.msg,
+            'success'
+          )
+          this.cancelar();
+          this.reset();
+        },(error)=>{
+          console.log(error);
+
+        }
+      )
+    }
+
+  }
+
+  mostrarTipoDocVacional(event:any){
+    const valor = event.target.value;
+    console.log(valor);
+    if (valor === '1') {
+      document.getElementById('selectAreaUno')?.classList.remove('invi');
+      document.getElementById('selectAreaDos')?.classList.add('invi');
+    }else if (valor==='2') {
+      document.getElementById('selectAreaUno')?.classList.add('invi');
+      document.getElementById('selectAreaDos')?.classList.remove('invi');
+    }
+    else{
+      document.getElementById('selectAreaUno')?.classList.add('invi');
+      document.getElementById('selectAreaDos')?.classList.add('invi');
+    }
+  }
+  capturarFileVacacional(event:any){
+    this.uploadVacacional = event.target.files[0];
+
+    if (this.uploadVacacional!.size > 2500000) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'El tamaño maximo es de 20MB',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      this.reset();
+      this.loadVacacional = '';
+    }else{
+      this.loadVacacional='cargado';
+    }
+  }
+
+  /* Funciones Secundarias */
   reset() {
     this.fileInput!.nativeElement.value = '';
     this.fileLicencia!.nativeElement.value = '';
+    this.fileVacacional!.nativeElement.value = '';
   }
   extraserBase64 = async ($event: any) =>
     new Promise((resolve, reject) => {
@@ -498,7 +636,20 @@ export class ReportesComponent implements OnInit {
         inicio:'',
         fin:'',
         detallelicencia:''
-      })
+      });
+      this.licenciaForm.setValue({
+        tipodocumento:'',
+        areauno:'',
+        areados:'',
+        numero:'',
+        ano:'',
+        inicio:'',
+        fin:'',
+        periodo:''
+      });
+      this.loadLicencia='';
+      this.loadVacacional='';
+      this.loadImage='';
       this.reset();
     }
 }
