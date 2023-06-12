@@ -55,7 +55,7 @@ export class PersonalComponent implements OnInit {
     formData.append('nombre', this.personalForm.get('nombre')?.value);
     formData.append('apellido', this.personalForm.get('apellido')?.value);
     formData.append('escalafon', this.personalForm.get('escalafon')?.value);
-    formData.append('fechainicio', this.personalForm.get('fechainicio')?.value);
+    formData.append('fechainicio', this.personalForm.get('fecha_inicio')?.value);
 
     this.personalService.postPersonal(formData).subscribe(
       (data)=>{
