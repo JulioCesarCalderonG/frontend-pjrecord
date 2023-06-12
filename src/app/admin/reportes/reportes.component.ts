@@ -229,7 +229,7 @@ export class ReportesComponent implements OnInit {
             data.msg,
             'success'
           )
-          this.cancelar();
+          this.cancelaruno();
           this.reset();
         },(error)=>{
           console.log(error);
@@ -425,7 +425,7 @@ export class ReportesComponent implements OnInit {
             data.msg,
             'success'
           )
-          this.cancelar();
+          this.cancelardos();
           this.reset();
         },(error)=>{
           console.log(error);
@@ -544,7 +544,7 @@ export class ReportesComponent implements OnInit {
             data.msg,
             'success'
           )
-          this.cancelar();
+          this.cancelartres();
           this.reset();
         },(error)=>{
           console.log(error);
@@ -615,7 +615,7 @@ export class ReportesComponent implements OnInit {
         reject(e);
       }
     });
-    cancelar(){
+    cancelaruno(){
       this.generalForm.setValue({
         tipodocumento:'',
         numero:'',
@@ -628,6 +628,10 @@ export class ReportesComponent implements OnInit {
         desde:'',
         hasta:''
       });
+      this.loadImage='';
+      this.reset();
+    }
+    cancelardos(){
       this.licenciaForm.setValue({
         tipodocumento:'',
         area:'',
@@ -637,7 +641,11 @@ export class ReportesComponent implements OnInit {
         fin:'',
         detallelicencia:''
       });
-      this.licenciaForm.setValue({
+      this.loadLicencia='';
+      this.reset();
+    }
+    cancelartres(){
+      this.vacacionalForm.setValue({
         tipodocumento:'',
         areauno:'',
         areados:'',
@@ -647,9 +655,7 @@ export class ReportesComponent implements OnInit {
         fin:'',
         periodo:''
       });
-      this.loadLicencia='';
       this.loadVacacional='';
-      this.loadImage='';
       this.reset();
     }
 }
