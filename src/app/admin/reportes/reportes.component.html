@@ -191,6 +191,20 @@
         <form [formGroup]="generalForm">
           <div class="row">
             <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">GENERAR TIPO DE PERIODO</h5>
+              <hr>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Documento:</label><br>
+                <select class="form-control custom-select" formControlName="periodo">
+                  <option value="">Seleccionar</option>
+                  <option value="1">PRINCIPAL</option>
+                  <option value="2">ENCARGO DE FUNCIONES</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-12">
               <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">GENERAR CODIGO DE DOCUMENTO</h5>
               <hr>
             </div>

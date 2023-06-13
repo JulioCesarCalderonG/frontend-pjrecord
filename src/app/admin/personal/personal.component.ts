@@ -16,7 +16,7 @@ export class PersonalComponent implements OnInit {
   personalEditarForm:FormGroup;
   ids?:string|number;
   estado:string='1';
-
+  inputBuscar:string="";
   constructor(
     private personalService:PersonalService,
     private fb:FormBuilder,
@@ -41,7 +41,7 @@ export class PersonalComponent implements OnInit {
   }
 
   mostrarPersonal(){
-    this.personalService.getPersonal(this.estado).subscribe(
+    this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
       (data)=>{
         this.listPersonal = data.resp;
       },(error)=>{
@@ -146,6 +146,20 @@ export class PersonalComponent implements OnInit {
 
   redireccionarCrear(id:number,nombre:string, apellido:string){
     this.router.navigateByUrl(`admin/reporte-personal/${id}/${nombre} ${apellido}`);
+  }
+  buscar(event:string){
+    this.inputBuscar = event;
+    if (this.inputBuscar.length>=0) {
+      this.personalService.getPersonal(this.estado,this.inputBuscar).subscribe(
+        (data)=>{
+          this.listPersonal=data.resp
+        },(error)=>{
+          console.log(error);
+
+        }
+      )
+    }
+
   }
   cancelar(){
     this.personalForm.setValue({

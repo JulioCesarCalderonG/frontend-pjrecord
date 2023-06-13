@@ -4,6 +4,8 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { Router, RouterLink, RouterModule } from '@angular/router';
+import { BuscarPersonasComponent } from './buscar-personas/buscar-personas.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -11,16 +13,20 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
   declarations: [
     BreadcrumbsComponent,
     SidebarComponent,
-    HeaderComponent
+    HeaderComponent,
+    BuscarPersonasComponent
   ],
   exports:[
     BreadcrumbsComponent,
     SidebarComponent,
     HeaderComponent,
+    BuscarPersonasComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class SharedModule { }

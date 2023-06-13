@@ -66,6 +66,7 @@ export class ReportesComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.generalForm = this.fb.group({
+      periodo:['',Validators.required],
       tipodocumento: ['', Validators.required],
       numero: [''],
       ano: [''],
@@ -203,6 +204,7 @@ export class ReportesComponent implements OnInit {
   registrarGeneral() {
     const formData = new FormData();
     formData.append('tipo_documento', this.generalForm.get('tipodocumento')?.value);
+    formData.append('periodo',this.generalForm.get('periodo')?.value);
     formData.append('numero', this.generalForm.get('numero')?.value);
     formData.append('ano', this.generalForm.get('ano')?.value);
     formData.append('tipo_sigla', this.generalForm.get('tiposigla')?.value);
@@ -640,6 +642,7 @@ export class ReportesComponent implements OnInit {
     });
   cancelaruno() {
     this.generalForm.setValue({
+      periodo:'',
       tipodocumento: '',
       numero: '',
       ano: '',
