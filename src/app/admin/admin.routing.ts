@@ -15,7 +15,8 @@ import { OrganoComponent } from './organo/organo.component';
 import { SedeComponent } from './sede/sede.component';
 import { RecordLaboralComponent } from './record-laboral/record-laboral.component';
 import { ReportesComponent } from './reportes/reportes.component';
-
+import { TipoLicenciaComponent} from './tipo-licencia/tipo-licencia.component';
+import { DetalleLicenciaComponent} from './detalle-licencia/detalle-licencia.component';
 
 const routes: Routes = [
     {
@@ -36,6 +37,8 @@ const routes: Routes = [
             { path: 'sede', component: SedeComponent },
             { path: 'agregar-record', component: RecordLaboralComponent },
             { path: 'reporte-personal/:id/:personal', component: ReportesComponent },
+            { path: 'tipo-licencia', component: TipoLicenciaComponent},
+            { path: 'detalle-licencia', component: DetalleLicenciaComponent},
         ]
     },
     //{ path: 'path/:routeParam', component: MyComponent },
