@@ -21,6 +21,10 @@ import { OrganoComponent } from './organo/organo.component';
 import { SedeComponent } from './sede/sede.component';
 import { RecordLaboralComponent } from './record-laboral/record-laboral.component';
 import { ReportesComponent } from './reportes/reportes.component';
+import { TipoLicenciaComponent } from './tipo-licencia/tipo-licencia.component';
+import { TipoPersonalComponent } from './tipo-personal/tipo-personal.component';
+import { DetalleLicenciaComponent } from './detalle-licencia/detalle-licencia.component';
+import { LicenciaComponent } from './licencia/licencia.component';
 
 
 
@@ -40,7 +44,11 @@ import { ReportesComponent } from './reportes/reportes.component';
     OrganoComponent,
     SedeComponent,
     RecordLaboralComponent,
-    ReportesComponent
+    ReportesComponent,
+    TipoLicenciaComponent,
+    TipoPersonalComponent,
+    DetalleLicenciaComponent,
+    LicenciaComponent
   ],
   exports:[
     DashboardComponent,
