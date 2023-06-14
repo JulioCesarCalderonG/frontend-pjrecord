@@ -98,7 +98,7 @@ export class PersonalComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Si, estoy seguro!'
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalService.deletePersonal(id,estado).subscribe(

@@ -121,7 +121,6 @@ estado:string='1';
   obtenerDetallelicId(id:number){
     this.detallelicenciaService.getDetalleLicenciaId(id).subscribe(
       (data)=>{
-        console.log(data);
         this.detallelicenciaEditarForm.setValue({
           nombre:data.resp.nombre,
           tipo_detalle:data.resp.id_tipo_detalle
