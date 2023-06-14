@@ -8,10 +8,30 @@ import { environment } from 'src/environments/environment.prod';
   providedIn: 'root'
 })
 export class DetalleLicenciaService {
-  url=`${environment.backendUrl}/detallelicencia`
+  private url=`${environment.backendUrl}/detallelicencia`
   constructor(private http:HttpClient, private router:Router) { }
 
   getDetalleTipo(id:string):Observable<any>{
     return this.http.get(`${this.url}/tipo/${id}`);
+  }
+
+  getDetalleLicencia(estado:string='1'):Observable<any>{
+    return this.http.get(this.url, {params:{estado}});
+  }
+
+  getDetalleLicenciaId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
+
+  postDetalleLicencia(body:FormData):Observable<any>{
+    return this.http.post(this.url, body);
+  }
+
+  putDetalleLicencia(body:FormData, id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/${id}`, body);
+  }
+
+  deleteDetalleLicencia(id:number, estado:number){
+    return this.http.delete(`${this.url}/${id}`, {params:{estado:String(estado)}});
   }
 }

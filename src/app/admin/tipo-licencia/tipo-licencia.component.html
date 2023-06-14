@@ -35,7 +35,7 @@
                 <td *ngIf="tipolicencia.estado===1">Activo</td>
                 <td *ngIf="tipolicencia.estado===0">Inactivo</td>
                 <td>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarTipodocumento"
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarTipolicencia"
                     data-whatever="@mdo" (click)="obtenerTipolicenciaId(tipolicencia.id)">
                     <i class="fa fa-pencil-alt"></i>
                   </button>
@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modalTipolicencia" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="modificarTipolicencia" tabindex="-1" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

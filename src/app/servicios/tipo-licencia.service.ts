@@ -24,7 +24,7 @@ export class TipoLicenciaService {
   }
 
   putTipolicencia(body:FormData, id:string|number):Observable<any>{
-    return this.http.put(`${this.url}/${id}`, body);
+    return this.http.put(`${this.url}/${id}`,body);
   }
 
   deleteTipolicencia(id:number, estado:number):Observable<any>{

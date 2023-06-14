@@ -1,1 +1,122 @@
-<p>detalle-licencia works!</p>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+  <div class="row mb-5">
+    <div class="col-lg-4">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalDetallelicencia" data-whatever="@mdo">
+        <i class="fa fa-plus-square"></i> Agregar</button>
+    </div>
+    <div class="col lg-4">
+      <div class="form-group">
+        <select class="form-control custom-select" (change)="mostrarDetallelictipo($event)">
+          <option value="1" selected>Habilitados</option>
+          <option value="0">Deshabilitados</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+  
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">NOMBRE</th>
+          <th scope="col">TIPO LICENCIA</th>
+          <th scope="col">ESTADO</th>
+          <th>EDITAR</th>
+          <th>ELIMINAR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detalle_licencia of listDetallelicencia">
+          <th scope="row">{{detalle_licencia.id}}</th>
+          <td>{{detalle_licencia.nombre}}</td>
+          <td>{{detalle_licencia.TipoLicencium.nombre}}</td>
+          <td *ngIf="detalle_licencia.estado===1">Activo</td>
+          <td *ngIf="detalle_licencia.estado===0">Inactivo</td>
+          <td>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarDetallelicencia" data-whatever="@mdo" (click)="obtenerDetallelicId(detalle_licencia.id)">
+              <i class="fa fa-pencil-alt"></i>
+            </button>
+          </td>
+          <td *ngIf="detalle_licencia.estado===0">
+            <button type="button" class="btn btn-primary" (click)="eliminarDetallelicencia(detalle_licencia.id, 1)">
+              <i class="fa fa-lock-open"></i>
+            </button>
+          </td>
+          <td *ngIf="detalle_licencia.estado===1">
+            <button type="button" class="btn btn-primary" (click)="eliminarDetallelicencia(detalle_licencia.id, 0)">
+              <i class="fa fa-lock"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+        </div>
+      </div>
+  
+    <div class="modal fade" id="modalDetallelicencia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;" >REGISTRAR CARGO</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="detallelicenciaForm">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Nombre:</label>
+                <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Licencia:</label><br>
+                <select class="form-control custom-select" formControlName="tipo_detalle" >
+                  <option selected value="">Seleccionar</option>
+                  <option *ngFor="let tipo_detalle of listTipoLicencia" value="{{tipo_detalle.id}}">{{tipo_detalle.nombre}}</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
+            <button type="button" class="btn btn-primary" (click)="registrarDetallelicencia()" [disabled]="detallelicenciaForm.invalid">Registrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="modal fade" id="editarDetallelicencia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;" >EDITAR DETALLE LICENCIA</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="detallelicenciaEditarForm">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Nombre:</label>
+                <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Detalle:</label><br>
+                <select class="form-control custom-select" formControlName="tipo_detalle" >
+                  <option selected value="">Seleccionar</option>
+                  <option *ngFor="let tipo_detalle of listTipoLicencia" value="{{tipo_detalle.id}}">{{tipo_detalle.nombre}}</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cancelar</button>
+            <button type="button" class="btn btn-primary" (click)="editarDetallelicencia()" [disabled]="detallelicenciaEditarForm.invalid">Editar</button>
+          </div>
+        </div>
+      </div>
+    </div>
