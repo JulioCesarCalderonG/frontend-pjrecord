@@ -110,9 +110,9 @@
           </div>
           <div class="col-lg-12 invi" id="tableLicencia">
             <div class="table-responsive">
-              <table class="table">
+              <table class="table" >
                 <thead>
-                  <tr>
+                  <tr >
                     <th>ID</th>
                     <th>DOCUMENTO QUE AUTORIZA</th>
                     <th>TIPO</th>
@@ -127,7 +127,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let licencia of listLicencia">
+                  <tr *ngFor="let licencia of listLicencia" style="font-size: 10px;">
                     <td>{{licencia.ids}}</td>
                     <td>{{licencia.codigo_documento}}</td>
                     <td>{{licencia.DetalleLicencium.TipoLicencium.nombre}} </td>
