@@ -14,7 +14,16 @@ export class LicenciaService {
   getLicenciaPersonal(id:string):Observable<any>{
     return this.http.get(`${this.url}/personal/${id}`)
   }
+  getLicenciaId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`);
+  }
   postLicencia(body:FormData):Observable<any>{
     return this.http.post(this.url,body)
+  }
+  putLicencia(body:FormData,id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/${id}`,body)
+  }
+  deleteLicencia(id:string|number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`);
   }
 }

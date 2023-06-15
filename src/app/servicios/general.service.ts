@@ -27,7 +27,10 @@ export class GeneralService {
     return this.http.post(this.url,body);
   }
 
-  putGeneral(body:FormData, id:string|number){
+  putGeneral(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`, body);
+  }
+  deleteGeneral(id:string|number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`);
   }
 }

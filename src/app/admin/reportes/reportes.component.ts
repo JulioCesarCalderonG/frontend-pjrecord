@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
-  styleUrls: ['./reportes.component.css']
+  styleUrls: ['./reportes.component.css'],
 })
 export class ReportesComponent implements OnInit {
   idpersonal?: string | number;
@@ -36,10 +36,14 @@ export class ReportesComponent implements OnInit {
   generalForm: FormGroup;
   licenciaForm: FormGroup;
   vacacionalForm: FormGroup;
+  recordEditarForm: FormGroup;
+  licenciaEditarForm:FormGroup;
   loadImage: string = '';
   loadLicencia: string = '';
   loadVacacional: string = '';
   opcionFiltro: string = '';
+  idrecord: string = '';
+  idLicencia:string='';
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
   @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
@@ -66,7 +70,7 @@ export class ReportesComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.generalForm = this.fb.group({
-      periodo:['',Validators.required],
+      periodo: ['', Validators.required],
       tipodocumento: ['', Validators.required],
       numero: [''],
       ano: [''],
@@ -76,7 +80,7 @@ export class ReportesComponent implements OnInit {
       dependencia: ['', Validators.required],
       cargo: ['', Validators.required],
       desde: ['', Validators.required],
-      hasta: ['']
+      hasta: [''],
     });
     this.licenciaForm = this.fb.group({
       tipodocumento: ['', Validators.required],
@@ -86,7 +90,7 @@ export class ReportesComponent implements OnInit {
       ano: [Number, Validators.required],
       inicio: ['', Validators.required],
       fin: ['', Validators.required],
-      detallelicencia: ['', Validators.required]
+      detallelicencia: ['', Validators.required],
     });
     this.vacacionalForm = this.fb.group({
       tipodocumento: ['', Validators.required],
@@ -96,8 +100,33 @@ export class ReportesComponent implements OnInit {
       ano: [Number, Validators.required],
       inicio: ['', Validators.required],
       fin: ['', Validators.required],
-      periodo: ['', Validators.required]
-    })
+      periodo: ['', Validators.required],
+    });
+    this.recordEditarForm = this.fb.group({
+      periodo: ['', Validators.required],
+      tipodocumento: ['', Validators.required],
+      numero: [''],
+      ano: [''],
+      tiposigla: ['0'],
+      autoriza: ['0'],
+      tipodependencia: ['', Validators.required],
+      dependencia: ['', Validators.required],
+      cargo: ['', Validators.required],
+      desde: ['', Validators.required],
+      hasta: [''],
+      tipo_personal: [''],
+    });
+    this.licenciaEditarForm = this.fb.group({
+      tipodocumento: ['', Validators.required],
+      areauno: [''],
+      areados: [''],
+      numero: [Number, Validators.required],
+      ano: [Number, Validators.required],
+      inicio: ['', Validators.required],
+      fin: ['', Validators.required],
+      detallelicencia: ['', Validators.required],
+      tipo_licencia:['',Validators.required]
+    });
   }
 
   ngOnInit(): void {
@@ -119,24 +148,26 @@ export class ReportesComponent implements OnInit {
         (data) => {
           console.log(data);
           this.listRecord = data.resp;
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     } else if (this.opcionFiltro === '2') {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
       document.getElementById('tableVacacional')?.classList.remove('invi');
-      this.vacacionalService.getVacacionalPersonal(`${this.idpersonal}`).subscribe(
-        (data) => {
-          console.log(data);
-          this.listVacacional = data.resp;
-        }, (error) => {
-          console.log(error);
-
-        }
-      )
+      this.vacacionalService
+        .getVacacionalPersonal(`${this.idpersonal}`)
+        .subscribe(
+          (data) => {
+            console.log(data);
+            this.listVacacional = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     } else if (this.opcionFiltro === '3') {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.remove('invi');
@@ -145,17 +176,16 @@ export class ReportesComponent implements OnInit {
         (data) => {
           console.log(data);
           this.listLicencia = data.resp;
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     } else if (this.opcionFiltro === '4') {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
       document.getElementById('tableVacacional')?.classList.add('invi');
-    }
-    else {
+    } else {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
       document.getElementById('tableVacacional')?.classList.add('invi');
@@ -168,28 +198,24 @@ export class ReportesComponent implements OnInit {
         (data) => {
           const urlreport = `${this.url3}/recordlaboral/${data.nombre}`;
           window.open(urlreport, '_blank');
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     } else if (this.opcionFiltro === '2') {
-
     } else if (this.opcionFiltro === '3') {
       this.reporteService.postReporteLicenciaId(`${this.idpersonal}`).subscribe(
         (data) => {
           const urlreport = `${this.url3}/licencia/${data.nombre}`;
           window.open(urlreport, '_blank');
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
-
+      );
     } else if (this.opcionFiltro === '4') {
-
     } else {
-
     }
   }
 
@@ -197,19 +223,24 @@ export class ReportesComponent implements OnInit {
     const valor = event.target.value;
     this.opcionFiltro = valor;
     console.log(valor);
-
   }
 
   /* Registro de Record Laboral */
   registrarGeneral() {
     const formData = new FormData();
-    formData.append('tipo_documento', this.generalForm.get('tipodocumento')?.value);
-    formData.append('periodo',this.generalForm.get('periodo')?.value);
+    formData.append(
+      'tipo_documento',
+      this.generalForm.get('tipodocumento')?.value
+    );
+    formData.append('periodo', this.generalForm.get('periodo')?.value);
     formData.append('numero', this.generalForm.get('numero')?.value);
     formData.append('ano', this.generalForm.get('ano')?.value);
     formData.append('tipo_sigla', this.generalForm.get('tiposigla')?.value);
     formData.append('autoriza', this.generalForm.get('autoriza')?.value);
-    formData.append('tipo_dependencia', this.generalForm.get('tipodependencia')?.value);
+    formData.append(
+      'tipo_dependencia',
+      this.generalForm.get('tipodependencia')?.value
+    );
     formData.append('dependencia', this.generalForm.get('dependencia')?.value);
     formData.append('id_cargo', this.generalForm.get('cargo')?.value);
     formData.append('desde', this.generalForm.get('desde')?.value);
@@ -221,55 +252,136 @@ export class ReportesComponent implements OnInit {
         icon: 'warning',
         title: 'Seleccione el documento que autoriza',
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
     } else {
       formData.append('archivo', this.fileInput?.nativeElement.files[0]);
       this.generalService.postGeneral(formData).subscribe(
         (data) => {
-          Swal.fire(
-            'Registrado!',
-            data.msg,
-            'success'
-          )
+          Swal.fire('Registrado!', data.msg, 'success');
           this.cancelaruno();
           this.reset();
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     }
+  }
+  actualizarGeneral() {
+    const formData = new FormData();
+    formData.append(
+      'tipo_documento',
+      this.recordEditarForm.get('tipodocumento')?.value
+    );
+    formData.append('periodo', this.recordEditarForm.get('periodo')?.value);
+    formData.append('numero', this.recordEditarForm.get('numero')?.value);
+    formData.append('ano', this.recordEditarForm.get('ano')?.value);
+    formData.append('tipo_sigla', this.recordEditarForm.get('tiposigla')?.value);
+    formData.append('autoriza', this.recordEditarForm.get('autoriza')?.value);
+    formData.append(
+      'tipo_dependencia',
+      this.recordEditarForm.get('tipodependencia')?.value
+    );
+    formData.append('dependencia', this.recordEditarForm.get('dependencia')?.value);
+    formData.append('id_cargo', this.recordEditarForm.get('cargo')?.value);
+    formData.append('desde', this.recordEditarForm.get('desde')?.value);
+    formData.append('hasta', this.recordEditarForm.get('hasta')?.value);
+    formData.append('id_personal', `${this.idpersonal}`);
 
+    this.generalService.putGeneral(formData, this.idrecord).subscribe(
+      (data) => {
+        Swal.fire('Editado!', data.msg, 'success');
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  eliminarRecord(id:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: "Este registro sera eliminado de la base de datos!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText:'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.generalService.deleteGeneral(id).subscribe(
+          (data)=>{
+            Swal.fire(
+              'Eliminar!',
+              'Registro eliminado de la base de datos.',
+              'success'
+            )
+          },(error)=>{
+            console.log(error);
+          }
+        )
+      }
+    })
+  }
+  obtenerDatosRecordId(id: number) {
+    console.log(id);
+    this.idrecord = `${id}`;
+    this.generalService.getGeneralId(id).subscribe(
+      (data) => {
+        console.log(data);
+        this.recordEditarForm.setValue({
+          periodo: data.resp.periodo,
+          tipodocumento: `${data.resp.tipo_documento}`,
+          numero: data.resp.numero,
+          ano: data.resp.ano,
+          tiposigla: `${data.resp.tipo_sigla}`,
+          autoriza: `${data.resp.id_area}`,
+          tipodependencia: `${data.resp.tipo_dependencia}`,
+          dependencia: `${data.resp.id_dependencia}`,
+          cargo: `${data.resp.id_cargo}`,
+          desde: data.resp.inicio,
+          hasta: data.resp.fin === '2030-12-30' ? '' : data.resp.fin,
+          tipo_personal: data.resp.Cargo.TipoPersonal.id,
+        });
+        this.buscarSiglaDos(`${data.resp.tipo_sigla}`);
+        this.buscarDependenciaDos(`${data.resp.tipo_dependencia}`);
+        this.filtrarTipoPersonalDos(`${data.resp.Cargo.TipoPersonal.id}`);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
   mostrartipodocumento() {
     this.tipodocumentoService.getTipodocumento().subscribe(
       (data) => {
         this.listTipodocumento = data.resp;
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
   mostrarTipoPersonal() {
     this.tipoPersonalServicie.getTipoPersonal('1').subscribe(
       (data) => {
         this.listTipoPersonal = data.resp;
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
   mostrarTipoLicencia() {
     this.tipoLicenciaService.getTipoLicencia().subscribe(
       (data) => {
         this.listTipoLicencia = data.resp;
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
   buscarSigla(event: any) {
     switch (event.target.value) {
@@ -278,7 +390,8 @@ export class ReportesComponent implements OnInit {
           (data) => {
             console.log(data);
             this.listAutoriza = data.resp;
-          }, (error) => {
+          },
+          (error) => {
             console.log(error);
           }
         );
@@ -288,7 +401,8 @@ export class ReportesComponent implements OnInit {
           (data) => {
             console.log(data);
             this.listAutoriza = data.resp;
-          }, (error) => {
+          },
+          (error) => {
             console.log(error);
           }
         );
@@ -298,13 +412,54 @@ export class ReportesComponent implements OnInit {
           (data) => {
             console.log(data);
             this.listAutoriza = data.resp;
-          }, (error) => {
+          },
+          (error) => {
             console.log(error);
           }
         );
         return;
       default:
-        this.listAutoriza = []
+        this.listAutoriza = [];
+        return;
+    }
+  }
+  buscarSiglaDos(id: string) {
+    switch (id) {
+      case '1':
+        this.organoService.getOrgano().subscribe(
+          (data) => {
+            console.log(data);
+            this.listAutoriza = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '2':
+        this.unidadService.getUnidad().subscribe(
+          (data) => {
+            console.log(data);
+            this.listAutoriza = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '3':
+        this.areaService.getAreas().subscribe(
+          (data) => {
+            console.log(data);
+            this.listAutoriza = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      default:
+        this.listAutoriza = [];
         return;
     }
   }
@@ -315,7 +470,8 @@ export class ReportesComponent implements OnInit {
           (data) => {
             console.log(data);
             this.listDependencia = data.resp;
-          }, (error) => {
+          },
+          (error) => {
             console.log(error);
           }
         );
@@ -325,7 +481,8 @@ export class ReportesComponent implements OnInit {
           (data) => {
             console.log(data);
             this.listDependencia = data.resp;
-          }, (error) => {
+          },
+          (error) => {
             console.log(error);
           }
         );
@@ -335,13 +492,54 @@ export class ReportesComponent implements OnInit {
           (data) => {
             console.log(data);
             this.listDependencia = data.resp;
-          }, (error) => {
+          },
+          (error) => {
             console.log(error);
           }
         );
         return;
       default:
-        this.listDependencia = []
+        this.listDependencia = [];
+        return;
+    }
+  }
+  buscarDependenciaDos(id: string) {
+    switch (id) {
+      case '1':
+        this.organoService.getOrgano().subscribe(
+          (data) => {
+            console.log(data);
+            this.listDependencia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '2':
+        this.unidadService.getUnidad().subscribe(
+          (data) => {
+            console.log(data);
+            this.listDependencia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '3':
+        this.areaService.getAreas().subscribe(
+          (data) => {
+            console.log(data);
+            this.listDependencia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      default:
+        this.listDependencia = [];
         return;
     }
   }
@@ -351,20 +549,42 @@ export class ReportesComponent implements OnInit {
       this.cargoService.getCargoPersonal(0).subscribe(
         (data) => {
           this.listCargo = data.resp;
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     } else {
       this.cargoService.getCargoPersonal(tipo).subscribe(
         (data) => {
           this.listCargo = data.resp;
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
+    }
+  }
+  filtrarTipoPersonalDos(id: string) {
+    const tipo = id;
+    if (!tipo) {
+      this.cargoService.getCargoPersonal(0).subscribe(
+        (data) => {
+          this.listCargo = data.resp;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      this.cargoService.getCargoPersonal(tipo).subscribe(
+        (data) => {
+          this.listCargo = data.resp;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   }
   capturarFile(event: any) {
@@ -376,14 +596,13 @@ export class ReportesComponent implements OnInit {
         icon: 'warning',
         title: 'El tamaño maximo es de 20MB',
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
       this.reset();
       this.loadImage = '';
     } else {
       this.loadImage = 'cargado';
     }
-
   }
 
   /*  Seccion Crear Licencias */
@@ -392,35 +611,41 @@ export class ReportesComponent implements OnInit {
     const areauno = this.licenciaForm.get('areauno')?.value;
     const areados = this.licenciaForm.get('areados')?.value;
     const formData = new FormData();
-    formData.append('tipo_documento', this.licenciaForm.get('tipodocumento')?.value);
+    formData.append(
+      'tipo_documento',
+      this.licenciaForm.get('tipodocumento')?.value
+    );
     formData.append('numero', this.licenciaForm.get('numero')?.value);
     formData.append('ano', this.licenciaForm.get('ano')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
-    formData.append('id_detalle_licencia', this.licenciaForm.get('detallelicencia')?.value);
+    formData.append(
+      'id_detalle_licencia',
+      this.licenciaForm.get('detallelicencia')?.value
+    );
     formData.append('inicio', this.licenciaForm.get('inicio')?.value);
     formData.append('fin', this.licenciaForm.get('fin')?.value);
-    if (tipo === "1") {
+    if (tipo === '1') {
       if (areauno === '') {
         Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Falta seleccionar el area que genera el documento',
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         return;
       } else {
         formData.append('area', this.licenciaForm.get('areauno')?.value);
       }
     }
-    if (tipo === "2") {
+    if (tipo === '2') {
       if (areados === '') {
         Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Falta seleccionar el area que genera el documento',
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         return;
       } else {
@@ -433,26 +658,136 @@ export class ReportesComponent implements OnInit {
         icon: 'warning',
         title: 'Seleccione el documento que autoriza',
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-
     } else {
       formData.append('archivo', this.fileLicencia?.nativeElement.files[0]);
       this.licenciaService.postLicencia(formData).subscribe(
         (data) => {
-          Swal.fire(
-            'Registrado!',
-            data.msg,
-            'success'
-          )
+          Swal.fire('Registrado!', data.msg, 'success');
           this.cancelardos();
           this.reset();
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     }
+  }
+  editarLicencia(){
+    const tipo = this.licenciaEditarForm.get('tipodocumento')?.value;
+    console.log(tipo);
+
+    const areauno = this.licenciaEditarForm.get('areauno')?.value;
+    const areados = this.licenciaEditarForm.get('areados')?.value;
+    const formData = new FormData();
+    formData.append(
+      'tipo_documento',
+      this.licenciaEditarForm.get('tipodocumento')?.value
+    );
+    formData.append('numero', this.licenciaEditarForm.get('numero')?.value);
+    formData.append('ano', this.licenciaEditarForm.get('ano')?.value);
+    formData.append('id_personal', `${this.idpersonal}`);
+    formData.append(
+      'id_detalle_licencia',
+      this.licenciaEditarForm.get('detallelicencia')?.value
+    );
+    formData.append('inicio', this.licenciaEditarForm.get('inicio')?.value);
+    formData.append('fin', this.licenciaEditarForm.get('fin')?.value);
+    if (tipo === '1') {
+      if (areauno === '') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Falta seleccionar el area que genera el documento',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      } else {
+        formData.append('area', this.licenciaEditarForm.get('areauno')?.value);
+        console.log(areauno);
+
+      }
+    }
+    if (tipo === '2') {
+      if (areados === '') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Falta seleccionar el area que genera el documento',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      } else {
+        formData.append('area', this.licenciaEditarForm.get('areados')?.value);
+        console.log(areados);
+
+      }
+    }
+
+      this.licenciaService.putLicencia(formData,this.idLicencia).subscribe(
+        (data) => {
+          Swal.fire('Registrado!', data.msg, 'success');
+          console.log(data);
+
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+  }
+  eliminarLicencia(id:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: "Este registro sera eliminado de la base de datos!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText:'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.licenciaService.deleteLicencia(id).subscribe(
+          (data)=>{
+            Swal.fire(
+              'Eliminar!',
+              'Registro eliminado de la base de datos.',
+              'success'
+            )
+          },(error)=>{
+            console.log(error);
+          }
+        )
+      }
+    })
+  }
+  obtenerLicenciaId(id:number){
+    this.idLicencia=`${id}`;
+    this.licenciaService.getLicenciaId(id).subscribe(
+      (data)=>{
+        console.log(data);
+        this.licenciaEditarForm.setValue({
+          tipodocumento: `${data.resp.tipo_documento}`,
+          areauno: (data.resp.tipo_documento===1)?`${data.resp.area}`:'',
+          areados: (data.resp.tipo_documento===2)?`${data.resp.area}`:'',
+          numero: data.resp.numero,
+          ano: data.resp.ano,
+          inicio: data.resp.inicio,
+          fin: data.resp.fin,
+          detallelicencia: `${data.resp.id_detalle_licencia}`,
+          tipo_licencia:`${data.resp.DetalleLicencium.TipoLicencium.id}`
+        });
+        this.mostrarDetalleLicenciaDos(`${data.resp.DetalleLicencium.TipoLicencium.id}`);
+        this.mostrarProveidoTres(`${data.resp.tipo_documento}`);
+
+      },(error)=>{
+        console.log(error);
+      }
+    )
   }
   mostrarProveido(event: any) {
     const valor = event.target.value;
@@ -460,33 +795,84 @@ export class ReportesComponent implements OnInit {
     if (valor === '1') {
       document.getElementById('selectLiUno')?.classList.remove('invi');
       document.getElementById('selectLiDos')?.classList.add('invi');
-    }else if (valor==='2') {
+    } else if (valor === '2') {
       document.getElementById('selectLiUno')?.classList.add('invi');
       document.getElementById('selectLiDos')?.classList.remove('invi');
-    }
-    else {
+    } else {
       document.getElementById('selectLiDos')?.classList.add('invi');
       document.getElementById('selectLiUno')?.classList.add('invi');
     }
   }
+  mostrarProveidoDos(event: any) {
+    const valor = event.target.value;
+    console.log(valor);
+    if (valor === '1') {
+      document.getElementById('selectLiUnoProv')?.classList.remove('invi');
+      document.getElementById('selectLiDosProv')?.classList.add('invi');
+    } else if (valor === '2') {
+      document.getElementById('selectLiUnoProv')?.classList.add('invi');
+      document.getElementById('selectLiDosProv')?.classList.remove('invi');
+    } else {
+      document.getElementById('selectLiDosProv')?.classList.add('invi');
+      document.getElementById('selectLiUnoProv')?.classList.add('invi');
+    }
+  }
+  mostrarProveidoTres(id: string) {
+    const valor = id;
+    console.log(valor);
+    if (valor === '1') {
+      document.getElementById('selectLiUnoProv')?.classList.remove('invi');
+      document.getElementById('selectLiDosProv')?.classList.add('invi');
+    } else if (valor === '2') {
+      document.getElementById('selectLiUnoProv')?.classList.add('invi');
+      document.getElementById('selectLiDosProv')?.classList.remove('invi');
+    } else {
+      document.getElementById('selectLiDosProv')?.classList.add('invi');
+      document.getElementById('selectLiUnoProv')?.classList.add('invi');
+    }
+  }
   mostrarDetalleLicencia(event: any) {
     const valor = event.target.value;
-    if (valor !== "") {
+    if (valor !== '') {
       this.detalleLicenciaService.getDetalleTipo(valor).subscribe(
         (data) => {
-          this.listDetalleLicencia = data.resp
-        }, (error) => {
+          this.listDetalleLicencia = data.resp;
+        },
+        (error) => {
           console.log(error);
         }
-      )
+      );
     } else {
       this.detalleLicenciaService.getDetalleTipo('0').subscribe(
         (data) => {
-          this.listDetalleLicencia = data.resp
-        }, (error) => {
+          this.listDetalleLicencia = data.resp;
+        },
+        (error) => {
           console.log(error);
         }
-      )
+      );
+    }
+  }
+  mostrarDetalleLicenciaDos(id:string) {
+    const valor = id;
+    if (valor !== '') {
+      this.detalleLicenciaService.getDetalleTipo(valor).subscribe(
+        (data) => {
+          this.listDetalleLicencia = data.resp;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      this.detalleLicenciaService.getDetalleTipo('0').subscribe(
+        (data) => {
+          this.listDetalleLicencia = data.resp;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   }
   capturarFileLicencia(event: any) {
@@ -498,16 +884,14 @@ export class ReportesComponent implements OnInit {
         icon: 'warning',
         title: 'El tamaño maximo es de 20MB',
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
       this.reset();
       this.loadLicencia = '';
     } else {
       this.loadLicencia = 'cargado';
     }
-
   }
-
 
   /* Seccion crear Record Vacacional */
 
@@ -522,29 +906,29 @@ export class ReportesComponent implements OnInit {
     formData.append('periodo', this.vacacionalForm.get('periodo')?.value);
     formData.append('numero', this.vacacionalForm.get('numero')?.value);
     formData.append('ano', this.vacacionalForm.get('ano')?.value);
-    formData.append('id_personal', `${this.idpersonal}`)
-    if (tipoDoc === "1") {
+    formData.append('id_personal', `${this.idpersonal}`);
+    if (tipoDoc === '1') {
       if (areauno === '') {
         Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Falta seleccionar el area que genera el documento',
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         return;
       } else {
         formData.append('area', this.vacacionalForm.get('areauno')?.value);
       }
     }
-    if (tipoDoc === "2") {
+    if (tipoDoc === '2') {
       if (areados === '') {
         Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Falta seleccionar el area que genera el documento',
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         return;
       } else {
@@ -557,27 +941,21 @@ export class ReportesComponent implements OnInit {
         icon: 'warning',
         title: 'Seleccione el documento que autoriza',
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-
     } else {
       formData.append('archivo', this.fileVacacional?.nativeElement.files[0]);
       this.vacacionalService.postVacacional(formData).subscribe(
         (data) => {
-          Swal.fire(
-            'Registrado!',
-            data.msg,
-            'success'
-          )
+          Swal.fire('Registrado!', data.msg, 'success');
           this.cancelartres();
           this.reset();
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     }
-
   }
 
   mostrarTipoDocVacional(event: any) {
@@ -589,8 +967,7 @@ export class ReportesComponent implements OnInit {
     } else if (valor === '2') {
       document.getElementById('selectAreaUno')?.classList.add('invi');
       document.getElementById('selectAreaDos')?.classList.remove('invi');
-    }
-    else {
+    } else {
       document.getElementById('selectAreaUno')?.classList.add('invi');
       document.getElementById('selectAreaDos')?.classList.add('invi');
     }
@@ -604,7 +981,7 @@ export class ReportesComponent implements OnInit {
         icon: 'warning',
         title: 'El tamaño maximo es de 20MB',
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
       this.reset();
       this.loadVacacional = '';
@@ -642,7 +1019,7 @@ export class ReportesComponent implements OnInit {
     });
   cancelaruno() {
     this.generalForm.setValue({
-      periodo:'',
+      periodo: '',
       tipodocumento: '',
       numero: '',
       ano: '',
@@ -652,7 +1029,21 @@ export class ReportesComponent implements OnInit {
       dependencia: '',
       cargo: '',
       desde: '',
-      hasta: ''
+      hasta: '',
+    });
+    this.recordEditarForm.setValue({
+      periodo: '',
+      tipodocumento: '',
+      numero: '',
+      ano: '',
+      tiposigla: '0',
+      autoriza: '0',
+      tipodependencia: '',
+      dependencia: '',
+      cargo: '',
+      desde: '',
+      hasta: '',
+      tipo_personal: '',
     });
     this.loadImage = '';
     this.reset();
@@ -666,7 +1057,18 @@ export class ReportesComponent implements OnInit {
       ano: '',
       inicio: '',
       fin: '',
-      detallelicencia: ''
+      detallelicencia: '',
+    });
+    this.licenciaEditarForm.setValue({
+      tipodocumento: '',
+      areauno: '',
+      areados: '',
+      numero: '',
+      ano: '',
+      inicio: '',
+      fin: '',
+      detallelicencia: '',
+      tipo_licencia:''
     });
     this.loadLicencia = '';
     this.reset();
@@ -680,7 +1082,7 @@ export class ReportesComponent implements OnInit {
       ano: '',
       inicio: '',
       fin: '',
-      periodo: ''
+      periodo: '',
     });
     this.loadVacacional = '';
     this.reset();
