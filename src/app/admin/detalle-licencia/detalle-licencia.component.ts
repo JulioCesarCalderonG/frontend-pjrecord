@@ -46,7 +46,7 @@ estado:string='1';
         console.log(data);
       }, (error)=>{
         console.log(error);
-        
+
       }
     )
   }
@@ -64,7 +64,7 @@ estado:string='1';
   registrarDetallelicencia(){
     const formData = new FormData();
     formData.append('nombre', this.detallelicenciaForm.get('nombre')?.value);
-    formData.append('id_tipo_detalle', this.detallelicenciaForm.get('tipo_detalle')?.value);
+    formData.append('id_tipo_licencia', this.detallelicenciaForm.get('tipo_detalle')?.value);
 
     this.detallelicenciaService.postDetalleLicencia(formData).subscribe(
       (data)=>{
@@ -80,7 +80,7 @@ estado:string='1';
   editarDetallelicencia(){
     const formData = new FormData();
     formData.append('nombre', this.detallelicenciaEditarForm.get('nombre')?.value);
-    formData.append('id_tipo_detalle', this.detallelicenciaEditarForm.get('tipo_detalle')?.value);
+    formData.append('id_tipo_licencia', this.detallelicenciaEditarForm.get('tipo_detalle')?.value);
     this.detallelicenciaService.putDetalleLicencia(formData, this.ids!).subscribe(
       (data)=>{
         this.mostrarDetallelicencia();
@@ -127,7 +127,7 @@ estado:string='1';
         })
         this.ids = data.resp.id;
       }, (error)=>{
-        console.log(error);       
+        console.log(error);
       }
     )
   }
@@ -138,7 +138,7 @@ estado:string='1';
     this.mostrarDetallelicencia();
   }
 
-  
+
 
   cancelar(){
     this.detallelicenciaForm.setValue({
