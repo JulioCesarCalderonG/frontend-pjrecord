@@ -14,7 +14,13 @@ export class VacacionalService {
   getVacacionalPersonal(id:string):Observable<any>{
     return this.http.get(`${this.url}/personal/${id}`)
   }
+  getVacacionalId(id:string|number):Observable<any>{
+    return this.http.get(`${this.url}/${id}`)
+  }
   postVacacional(body:FormData):Observable<any>{
     return this.http.post(this.url,body)
+  }
+  putVacacional(body:FormData, id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/${id}`,body)
   }
 }

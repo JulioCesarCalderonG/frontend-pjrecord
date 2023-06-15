@@ -43,7 +43,7 @@
               <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" (change)="filtrarOpcion($event)">
                 <option value="">Seleccionar Opcion</option>
                 <option value="1">Mostrar Record Laboral</option>
-                <option value="2">Nostrar Record Vacacional</option>
+                <option value="2">Mostrar Record Vacacional</option>
                 <option value="3">Mostrar Licencias</option>
                 <option value="4">Mostrar Merito</option>
               </select>
@@ -57,25 +57,26 @@
             <button type="button" class="btn waves-effect waves-light btn-block btn-secondary" (click)="generarReporte()"><i
                 class="fa fa-file-pdf"></i> Generar Reporte</button>
           </div>
+          <!-- Generar report de record laboral-->
           <div class="col-lg-12 invi" id="tableRecord">
             <div class="table-responsive">
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">DOCUMENTO QUE AUTORIZA</th>
-                    <th scope="col">DEPENDENCIA</th>
-                    <th scope="col">CARGO FUNCIONAL</th>
-                    <th scope="col">DESDE</th>
-                    <th scope="col">HASTA</th>
-                    <th scope="col">VER DOCUMENTO</th>
+                    <th scope="col" class="text-center">ID</th>
+                    <th scope="col" class="text-center">DOCUMENTO QUE AUTORIZA</th>
+                    <th scope="col" class="text-center">DEPENDENCIA</th>
+                    <th scope="col" class="text-center">CARGO FUNCIONAL</th>
+                    <th scope="col" class="text-center">DESDE</th>
+                    <th scope="col" class="text-center">HASTA</th>
+                    <th scope="col" class="text-center">VER DOCUMENTO</th>
                     <th>EDITAR</th>
                     <th>ELIMINAR</th>
                     <th>ACTUALIZAR DOCUMENTO</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let general of listRecord">
+                  <tr *ngFor="let general of listRecord" style="font-size: 15px;">
                     <th scope="row">{{general.ids}}</th>
                     <td>{{general.codigo_documento}}</td>
                     <td>{{general.dependencia}}</td>
@@ -87,17 +88,17 @@
                         <i class="fa fa-eye"></i>
                        </a>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarRecordLaboral" data-whatever="@mdo" (click)="obtenerDatosRecordId(general.id)">
                         <i class="fa fa-pencil-alt"></i>
                       </button>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <button type="button" class="btn btn-danger" (click)="eliminarRecord(general.id)">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <button type="button" class="btn btn-warning">
                         <i class="fa fa-file-pdf"></i>
                       </button>
@@ -108,53 +109,50 @@
               </table>
             </div>
           </div>
+          <!-- Generar report de record licencia-->
           <div class="col-lg-12 invi" id="tableLicencia">
             <div class="table-responsive">
               <table class="table" >
                 <thead>
-                  <tr >
-                    <th>ID</th>
-                    <th>DOCUMENTO QUE AUTORIZA</th>
-                    <th>TIPO</th>
-                    <th>DETALLE</th>
-                    <th>N° DIAS</th>
-                    <th>DESDE</th>
-                    <th>HASTA</th>
-                    <th scope="col">VER DOCUMENTO</th>
-                    <th>EDITAR</th>
-                    <th>ELIMINAR</th>
-                    <th>ACTUALIZAR DOCUMENTO</th>
+                  <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">DOCUMENTO QUE AUTORIZA</th>
+                    <th class="text-center">TIPO</th>
+                    <th class="text-center">DETALLE</th>
+                    <th class="text-center">N° DIAS</th>
+                    <th class="text-center">DESDE</th>
+                    <th class="text-center">HASTA</th>
+                    <th scope="col" class="text-center">VER DOCUMENTO</th>
+                    <th class="text-center">EDITAR</th>
+                    <th class="text-center">ELIMINAR</th>
+                    <th class="text-center">ACTUALIZAR DOCUMENTO</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let licencia of listLicencia" style="font-size: 10px;">
+                  <tr *ngFor="let licencia of listLicencia" style="font-size: 15px;">
                     <td>{{licencia.ids}}</td>
                     <td>{{licencia.codigo_documento}}</td>
                     <td>{{licencia.DetalleLicencium.TipoLicencium.nombre}} </td>
                     <td>{{licencia.DetalleLicencium.nombre}} </td>
                     <td>{{licencia.dias}}</td>
-                    <td>
-                      {{licencia.inicio}}
-                    </td>
-                    <td>
-                      {{licencia.fin}}
-                    </td>
+                    <td>{{licencia.inicio}}</td>
+                    <td>{{licencia.fin}}</td>
                     <td class="text-center">
                       <a href="{{url2}}/{{licencia.documento}}" class="btn btn-success" target="_blank">
                         <i class="fa fa-eye"></i>
                        </a>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarLicencia" data-whatever="@mdo" (click)="obtenerLicenciaId(licencia.id)">
                         <i class="fa fa-pencil-alt"></i>
                       </button>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <button type="button" class="btn btn-danger" (click)="eliminarLicencia(licencia.id)">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <button type="button" class="btn btn-warning">
                         <i class="fa fa-file-pdf"></i>
                       </button>
@@ -165,32 +163,51 @@
               </table>
             </div>
           </div>
+          <!-- Generar report de record vacacional-->
           <div class="col-lg-12 invi" id="tableVacacional">
             <div class="table-responsive">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>DOCUMENTO QUE AUTORIZA</th>
-                    <th>PERIODO</th>
-                    <th>INICIO</th>
-                    <th>TERMINO</th>
-                    <th>EJERCICIO EFECTIVO</th>
-                    <th>DOCUMENTO</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">DOCUMENTO QUE AUTORIZA</th>
+                    <th class="text-center">PERIODO</th>
+                    <th class="text-center">INICIO</th>
+                    <th class="text-center">TERMINO</th>
+                    <th class="text-center">EJERCICIO EFECTIVO</th>
+                    <th class="text-center">VER DOCUMENTO</th>
+                    <th class="text-center">EDITAR</th>
+                    <th class="text-center">ELIMINAR</th>
+                    <th class="text-center">ACTUALIZAR DOCUMENTO</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let vacacional of listVacacional">
-                    <td>{{vacacional.id}}</td>
+                  <tr *ngFor="let vacacional of listVacacional" style="font-size: 15px;">
+                    <td>{{vacacional.ids}}</td>
                     <td>{{vacacional.codigo_documento}}</td>
                     <td>{{vacacional.periodo}} </td>
                     <td>{{vacacional.inicio}} </td>
                     <td>{{vacacional.termino}}</td>
                     <td>{{vacacional.dias}}</td>
                     <td class="text-center">
-                      <a href="{{url2}}/{{vacacional.documento}}" class="btn btn-warning" target="_blank">
-                        <i class="fa fa-file-pdf"></i>
+                      <a href="{{url2}}/{{vacacional.documento}}" class="btn btn-success" target="_blank">
+                        <i class="fas fa-eye"></i>
                        </a>
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarVacacional" data-whatever="@mdo" (click)="obtenerVacacionalId(vacacional.id)">
+                        <i class="fa fa-pencil-alt"></i>
+                      </button>
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-danger" >
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-warning" >
+                        <i class="fa fa-file-pdf"></i>
+                      </button>
                     </td>
                   </tr>
 
@@ -907,6 +924,108 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelardos()">Cancelar</button>
           <button type="button" class="btn btn-primary" (click)="editarLicencia()" [disabled]="licenciaEditarForm.invalid">Editar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Editar record vacacional -->
+<div class="modal fade" id="modalEditarVacacional" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Editar Record Vacacional</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="vacacionalEditarForm">
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">GENERAR CODIGO DE DOCUMENTO</h5>
+              <hr>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar Tipo de Documento:</label><br>
+                <select class="form-control custom-select" (change)="mostrarTipoDocVacionalDos($event)" formControlName="tipodocumento"
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="1">Resolucion Administrativa</option>
+                  <option value="2">Memorandum</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-12 invi" id="selectAreaUnoProv">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar el area:</label><br>
+                <select class="form-control custom-select" formControlName="areauno">
+                  <option value="">Seleccionar</option>
+                  <option value="1">PRESIDENCIA</option>
+                  <option value="2">GAD</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-12 invi" id="selectAreaDosProv">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Seleccionar el area:</label><br>
+                <select class="form-control custom-select" formControlName="areados">
+                  <option value="">Seleccionar</option>
+                  <option value="1">GAD</option>
+                  <option value="2">Unidad de Administrativa y Finanzas</option>
+                  <option value="3">Oficina de Administracion</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Numero:</label>
+                <input type="number" class="form-control" id="recipient-name" formControlName="numero">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Año:</label>
+                <input type="number" class="form-control" id="recipient-name" formControlName="ano">
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">INGRESAR PERIODO DE LICENCIA</h5>
+              <hr>
+            </div>
+            <div class="col-lg-5">
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Desde:</label>
+                  <input class="form-control" type="date" id="example-date-input" formControlName="inicio">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Hasta:</label>
+                  <input class="form-control" type="date" id="example-date-input" formControlName="fin">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2">
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Periodo:</label>
+                  <input type="number" class="form-control" id="recipient-name" formControlName="periodo">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelartres()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="editarVacacional()" [disabled]="vacacionalEditarForm.invalid">Editar</button>
         </div>
       </div>
     </div>

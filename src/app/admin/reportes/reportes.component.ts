@@ -38,12 +38,14 @@ export class ReportesComponent implements OnInit {
   vacacionalForm: FormGroup;
   recordEditarForm: FormGroup;
   licenciaEditarForm:FormGroup;
+  vacacionalEditarForm: FormGroup;
   loadImage: string = '';
   loadLicencia: string = '';
   loadVacacional: string = '';
   opcionFiltro: string = '';
   idrecord: string = '';
   idLicencia:string='';
+  idVacacional:string='';
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
   @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
@@ -126,6 +128,16 @@ export class ReportesComponent implements OnInit {
       fin: ['', Validators.required],
       detallelicencia: ['', Validators.required],
       tipo_licencia:['',Validators.required]
+    });
+    this.vacacionalEditarForm = this.fb.group({
+      tipodocumento: ['', Validators.required],
+      areauno: [''],
+      areados: [''],
+      numero: [Number, Validators.required],
+      ano: [Number, Validators.required],
+      inicio: ['', Validators.required],
+      fin: ['', Validators.required],
+      periodo: ['', Validators.required],
     });
   }
 
@@ -958,6 +970,79 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  editarVacacional(){
+    const tipoDoc = this.vacacionalEditarForm.get('tipodocumento')?.value;
+    const areauno = this.vacacionalEditarForm.get('areauno')?.value;
+    const areados = this.vacacionalEditarForm.get('areados')?.value;
+    const formData = new FormData();
+    formData.append('tipo_documento',this.vacacionalEditarForm.get('tipoDoc')?.value);
+    formData.append('inicio', this.vacacionalEditarForm.get('inicio')?.value);
+    formData.append('fin', this.vacacionalEditarForm.get('fin')?.value);
+    formData.append('periodo', this.vacacionalEditarForm.get('periodo')?.value);
+    formData.append('numero', this.vacacionalEditarForm.get('numero')?.value);
+    formData.append('ano', this.vacacionalEditarForm.get('ano')?.value);
+    formData.append('id_personal', `${this.idpersonal}`);
+    if (tipoDoc === '1') {
+      if (areauno === '') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Falta seleccionar el area que genera el documento',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      } else {
+        formData.append('area', this.vacacionalEditarForm.get('areauno')?.value);
+      }
+    }
+    if (tipoDoc === '2') {
+      if (areados === '') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Falta seleccionar el area que genera el documento',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      } else {
+        formData.append('area', this.vacacionalEditarForm.get('areados')?.value);
+      }
+    }
+      this.vacacionalService.putVacacional(formData,this.idVacacional).subscribe(
+        (data) => {
+          Swal.fire('Registrado!', data.msg, 'success');
+          this.cancelartres();
+          this.reset();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  obtenerVacacionalId(id:number){
+    this.idVacacional = `${id}`;
+    this.vacacionalService.getVacacionalId(id).subscribe(
+      (data)=>{
+        console.log(data);
+        this.vacacionalEditarForm.setValue({
+          tipodocumento: `${data.resp.tipo_documento}`,
+          areauno: (data.resp.tipo_documento===1)?`${data.resp.area}`:'',
+          areados: (data.resp.tipo_documento===2)?`${data.resp.area}`:'',
+          numero: data.resp.numero,
+          ano: data.resp.ano,
+          inicio: data.resp.inicio,
+          fin: data.resp.termino,
+          periodo: data.resp.periodo,
+        });
+      }, (error)=>{
+        console.log(error);   
+      }
+    )
+  }
+
   mostrarTipoDocVacional(event: any) {
     const valor = event.target.value;
     console.log(valor);
@@ -972,6 +1057,22 @@ export class ReportesComponent implements OnInit {
       document.getElementById('selectAreaDos')?.classList.add('invi');
     }
   }
+
+  mostrarTipoDocVacionalDos(event: any) {
+    const valor = event.target.value;
+    console.log(valor);
+    if (valor === '1') {
+      document.getElementById('selectAreaUnoProv')?.classList.remove('invi');
+      document.getElementById('selectAreaDosProv')?.classList.add('invi');
+    } else if (valor === '2') {
+      document.getElementById('selectAreaUnoProv')?.classList.add('invi');
+      document.getElementById('selectAreaDosProv')?.classList.remove('invi');
+    } else {
+      document.getElementById('selectAreaUnoProv')?.classList.add('invi');
+      document.getElementById('selectAreaDosPRov')?.classList.add('invi');
+    }
+  }
+
   capturarFileVacacional(event: any) {
     this.uploadVacacional = event.target.files[0];
 
@@ -989,6 +1090,8 @@ export class ReportesComponent implements OnInit {
       this.loadVacacional = 'cargado';
     }
   }
+
+  
 
   /* Funciones Secundarias */
   reset() {
@@ -1075,6 +1178,16 @@ export class ReportesComponent implements OnInit {
   }
   cancelartres() {
     this.vacacionalForm.setValue({
+      tipodocumento: '',
+      areauno: '',
+      areados: '',
+      numero: '',
+      ano: '',
+      inicio: '',
+      fin: '',
+      periodo: '',
+    });
+    this.vacacionalEditarForm.setValue({
       tipodocumento: '',
       areauno: '',
       areados: '',
