@@ -1022,6 +1022,33 @@ export class ReportesComponent implements OnInit {
       );
   }
 
+  eliminarVacacional(id:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: "Este registro sera eliminado de la base de datos!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText:'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.vacacionalService.deleteVacacional(id).subscribe(
+          (data)=>{
+            Swal.fire(
+              'Eliminar!',
+              'Registro eliminado de la base de datos.',
+              'success'
+            )
+          }, (error)=>{
+            console.log(error);
+          }
+        )     
+      }
+    })
+  }
+
   obtenerVacacionalId(id:number){
     this.idVacacional = `${id}`;
     this.vacacionalService.getVacacionalId(id).subscribe(
@@ -1033,10 +1060,11 @@ export class ReportesComponent implements OnInit {
           areados: (data.resp.tipo_documento===2)?`${data.resp.area}`:'',
           numero: data.resp.numero,
           ano: data.resp.ano,
-          inicio: data.resp.inicio,
+          inicio: data.resp.termino,
           fin: data.resp.termino,
           periodo: data.resp.periodo,
         });
+        this.mostrarTipoDocVacionalTres(`${data.resp.tipodocumento}`);
       }, (error)=>{
         console.log(error);   
       }
@@ -1060,6 +1088,21 @@ export class ReportesComponent implements OnInit {
 
   mostrarTipoDocVacionalDos(event: any) {
     const valor = event.target.value;
+    console.log(valor);
+    if (valor === '1') {
+      document.getElementById('selectAreaUnoProv')?.classList.remove('invi');
+      document.getElementById('selectAreaDosProv')?.classList.add('invi');
+    } else if (valor === '2') {
+      document.getElementById('selectAreaUnoProv')?.classList.add('invi');
+      document.getElementById('selectAreaDosProv')?.classList.remove('invi');
+    } else {
+      document.getElementById('selectAreaUnoProv')?.classList.add('invi');
+      document.getElementById('selectAreaDosPRov')?.classList.add('invi');
+    }
+  }
+
+  mostrarTipoDocVacionalTres(id: string) {
+    const valor = id;
     console.log(valor);
     if (valor === '1') {
       document.getElementById('selectAreaUnoProv')?.classList.remove('invi');

@@ -23,4 +23,8 @@ export class VacacionalService {
   putVacacional(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`,body)
   }
+
+  deleteVacacional(id:string|number):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`);
+  }
 }
