@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment.prod';
 })
 export class VacacionalService {
   url=`${environment.backendUrl}/vacacional`
+  url2= `${environment.backendUrl}/uploadgeneral/vacacional`;
   constructor(private http:HttpClient, private router:Router) { }
 
   getVacacionalPersonal(id:string):Observable<any>{
@@ -26,5 +27,8 @@ export class VacacionalService {
 
   deleteVacacional(id:string|number):Observable<any>{
     return this.http.delete(`${this.url}/${id}`);
+  }
+  putDocumentoVacacional(body:FormData,id:string):Observable<any>{
+    return this.http.put(`${this.url2}/${id}`,body);
   }
 }

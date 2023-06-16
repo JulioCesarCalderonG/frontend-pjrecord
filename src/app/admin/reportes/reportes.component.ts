@@ -42,19 +42,24 @@ export class ReportesComponent implements OnInit {
   loadImage: string = '';
   loadLicencia: string = '';
   loadVacacional: string = '';
+  loadDocumentoVacacional:string='';
   opcionFiltro: string = '';
   idrecord: string = '';
   idLicencia:string='';
   idVacacional:string='';
+  idDocumentoVacacional:string='';
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
   @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
+  @ViewChild('fileDocumentoVacacional', { static: false }) fileDocumentoVacacional?: ElementRef;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   url2 = `${environment.backendUrl}/uploadgeneral/licencia`;
+  url4 = `${environment.backendUrl}/uploadgeneral/vacacional`;
   url3 = `${environment.backendUrl}/reporte`;
   uploadFiles?: File;
   uploadLicencia?: File;
   uploadVacacional?: File;
+  uploadDocumentoVacacional?: File;
   constructor(
     private rutaActiva: ActivatedRoute,
     private generalService: GeneralService,
@@ -975,7 +980,7 @@ export class ReportesComponent implements OnInit {
     const areauno = this.vacacionalEditarForm.get('areauno')?.value;
     const areados = this.vacacionalEditarForm.get('areados')?.value;
     const formData = new FormData();
-    formData.append('tipo_documento',this.vacacionalEditarForm.get('tipoDoc')?.value);
+    formData.append('tipo_documento',this.vacacionalEditarForm.get('tipodocumento')?.value);
     formData.append('inicio', this.vacacionalEditarForm.get('inicio')?.value);
     formData.append('fin', this.vacacionalEditarForm.get('fin')?.value);
     formData.append('periodo', this.vacacionalEditarForm.get('periodo')?.value);
@@ -1012,16 +1017,41 @@ export class ReportesComponent implements OnInit {
     }
       this.vacacionalService.putVacacional(formData,this.idVacacional).subscribe(
         (data) => {
-          Swal.fire('Registrado!', data.msg, 'success');
-          this.cancelartres();
-          this.reset();
+          console.log(data);
+
+          Swal.fire('Editado!', data.msg, 'success');
         },
         (error) => {
           console.log(error);
         }
       );
   }
+  editarDocumentoVacacional(){
+    if (this.loadDocumentoVacacional==='') {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Falta seleccionar el documento actualizar',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }else{
+      const formData = new FormData();
+      formData.append('archivo',this.fileDocumentoVacacional?.nativeElement.files[0]);
+      this.vacacionalService.putDocumentoVacacional(formData,this.idDocumentoVacacional).subscribe(
+        (data)=>{
+          Swal.fire('Registrado!', data.msg, 'success');
+        },
+        (error)=>{
+          console.log(error);
 
+        }
+      )
+    }
+  }
+  obtenerIdDocumentoVacacional(id:number){
+    this.idDocumentoVacacional = `${id}`;
+  }
   eliminarVacacional(id:number){
     Swal.fire({
       title: 'Estas seguro?',
@@ -1044,7 +1074,7 @@ export class ReportesComponent implements OnInit {
           }, (error)=>{
             console.log(error);
           }
-        )     
+        )
       }
     })
   }
@@ -1066,7 +1096,7 @@ export class ReportesComponent implements OnInit {
         });
         this.mostrarTipoDocVacionalTres(`${data.resp.tipodocumento}`);
       }, (error)=>{
-        console.log(error);   
+        console.log(error);
       }
     )
   }
@@ -1133,14 +1163,30 @@ export class ReportesComponent implements OnInit {
       this.loadVacacional = 'cargado';
     }
   }
+capturarDocumentoVacacional(event: any) {
+    this.uploadVacacional = event.target.files[0];
+    if (this.uploadVacacional!.size > 2500000) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'El tamaño maximo es de 20MB',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.reset();
+      this.loadDocumentoVacacional = '';
+    } else {
+      this.loadDocumentoVacacional = 'cargado';
+    }
+  }
 
-  
 
   /* Funciones Secundarias */
   reset() {
     this.fileInput!.nativeElement.value = '';
     this.fileLicencia!.nativeElement.value = '';
     this.fileVacacional!.nativeElement.value = '';
+    this.fileDocumentoVacacional!.nativeElement.value='';
   }
   extraserBase64 = async ($event: any) =>
     new Promise((resolve, reject) => {
@@ -1242,5 +1288,6 @@ export class ReportesComponent implements OnInit {
     });
     this.loadVacacional = '';
     this.reset();
+    this.loadDocumentoVacacional='';
   }
 }
