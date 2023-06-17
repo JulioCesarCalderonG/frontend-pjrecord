@@ -24,14 +24,14 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">NOMBRE</th>
-              <th scope="col">APELLIDO</th>
-              <th scope="col">ESCALAFON</th>
-              <th scope="col">FECHA INICIO</th>
-              <th>Editar</th>
-              <th>Eliminar</th>
-              <th>Mostrar Reportes</th>
+              <th scope="col" class="text-center">ID</th>
+              <th scope="col" class="text-center">NOMBRE</th>
+              <th scope="col" class="text-center">APELLIDO</th>
+              <th scope="col" class="text-center">ESCALAFON</th>
+              <th scope="col" class="text-center">FECHA INICIO</th>
+              <th class="text-center">EDITAR</th>
+              <th class="text-center">ELIMINAR</th>
+              <th class="text-center">MOSTRAR REPORTES</th>
             </tr>
           </thead>
           <tbody>
@@ -41,23 +41,23 @@
               <td>{{personal.apellido}}</td>
               <td>{{personal.escalafon}}</td>
               <td>{{personal.fecha_inicio}}</td>
-              <th>
+              <th class="text-center">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarPersonal"
                   data-whatever="@mdo" (click)="obtenerPersonalId(personal.id)">
                   <i class="fa fa-pencil-alt"></i>
                 </button>
               </th>
-              <th *ngIf="personal.estado===0">
+              <th *ngIf="personal.estado===0" class="text-center">
                 <button type="button" class="btn btn-primary" (click)="eliminarPersonal(personal.id, 1)">
                   <i class="fa fa-lock-open"></i>
                 </button>
               </th>
-              <th *ngIf="personal.estado===1">
+              <th *ngIf="personal.estado===1" class="text-center">
                 <button type="button" class="btn btn-primary" (click)="eliminarPersonal(personal.id, 0)">
                   <i class="fa fa-lock"></i>
                 </button>
               </th>
-              <th>
+              <th class="text-center">
                 <button type="button" class="btn btn-warning"
                   (click)="redireccionarCrear(personal.id,personal.nombre, personal.apellido)">
                   <i class="fa fa-eye"></i>

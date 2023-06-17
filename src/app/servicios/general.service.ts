@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment.prod';
 export class GeneralService {
 
   private url = `${environment.backendUrl}/general`
+  url2= `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   constructor(private http:HttpClient, private router:Router) { }
 
   getGeneralPersonal(id:string):Observable<any>{
@@ -32,5 +33,9 @@ export class GeneralService {
   }
   deleteGeneral(id:string|number):Observable<any>{
     return this.http.delete(`${this.url}/${id}`);
+  }
+
+  putDocumentoLaboral(body:FormData, id:string):Observable<any>{
+    return this.http.put(`${this.url2}/${id}`, body);
   }
 }

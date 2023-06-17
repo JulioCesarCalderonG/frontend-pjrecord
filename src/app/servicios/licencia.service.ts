@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment.prod';
 })
 export class LicenciaService {
   url=`${environment.backendUrl}/licencia`
+  url2=`${environment.backendUrl}/uploadgeneral/licencia/`;
   constructor(private http:HttpClient, private router:Router) { }
 
   getLicenciaPersonal(id:string):Observable<any>{
@@ -25,5 +26,9 @@ export class LicenciaService {
   }
   deleteLicencia(id:string|number):Observable<any>{
     return this.http.delete(`${this.url}/${id}`);
+  }
+
+  putDocumentoLicencia(body:FormData, id:string):Observable<any>{
+    return this.http.put(`${this.url2}/${id}`, body)
   }
 }

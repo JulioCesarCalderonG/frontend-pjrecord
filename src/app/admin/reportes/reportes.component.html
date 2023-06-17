@@ -99,7 +99,7 @@
                       </button>
                     </td>
                     <td class="text-center">
-                      <button type="button" class="btn btn-warning">
+                      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarDocumentoLaboral" data-whatever="@mdo" (click)="obtenerIdDocumentoLaboral(general.id)">
                         <i class="fa fa-file-pdf"></i>
                       </button>
                     </td>
@@ -148,12 +148,12 @@
                       </button>
                     </td>
                     <td class="text-center">
-                      <button type="button" class="btn btn-danger" (click)="eliminarLicencia(licencia.id)">
+                      <button type="button" class="btn btn-danger" (click)="eliminarLicencia(licencia.id)" (click)="obtenerIdDocumentoLicencia(licencia.id)">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>
                     <td class="text-center">
-                      <button type="button" class="btn btn-warning">
+                      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarDocumentoLicencia" data-whatever="@mdo">
                         <i class="fa fa-file-pdf"></i>
                       </button>
                     </td>
@@ -654,6 +654,9 @@
 </div>
 
 
+
+
+
 <!-- Editar record laboral -->
 <div class="modal fade" id="modalEditarRecordLaboral" data-backdrop="static" data-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -1033,6 +1036,8 @@
   </div>
 </div>
 
+
+
 <!-- Editar documento vacacional -->
 <div class="modal fade" id="editarDocumentoVacacional" data-backdrop="static" data-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -1064,3 +1069,74 @@
     </div>
   </div>
 </div>
+
+<!-- Editar documento laboral -->
+<div class="modal fade" id="editarDocumentoLaboral" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Editar Documento Laboral</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="col-lg-12">
+            <div class="form-group validate">
+              <h5>Adjuntar Documento <span class="text-danger">*</span></h5>
+              <div class="controls">
+                <input type="file" name="file" id="filesInput" class="form-control" required="" aria-invalid="false"
+                  #fileDocumentoLaboral (change)="capturarDocumentoLaboral($event)" accept="application/pdf">
+                <div class="help-block">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelaruno()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="editarDocumentoLaboral()">Editar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Editar documento licencias -->
+<div class="modal fade" id="editarDocumentoLicencia" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Editar Documento Licencias</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+            <div class="form-group validate">
+              <h5>Adjuntar Documento <span class="text-danger">*</span></h5>
+              <div class="controls">
+                <input type="file" name="file" id="filesInput" class="form-control" required="" aria-invalid="false"
+                  #fileDocumentoLicencia (change)="capturarDocumentoLicencia($event)" accept="application/pdf">
+                <div class="help-block">
+                </div>
+              </div>
+            </div>
+        </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelardos()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="editarDocumentoLicencia()">Editar</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+
+

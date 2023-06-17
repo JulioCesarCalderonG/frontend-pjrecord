@@ -43,15 +43,21 @@ export class ReportesComponent implements OnInit {
   loadLicencia: string = '';
   loadVacacional: string = '';
   loadDocumentoVacacional:string='';
+  loadDocumentoImage: string='';
+  loadDocumentoLicencia:string='';
   opcionFiltro: string = '';
   idrecord: string = '';
   idLicencia:string='';
   idVacacional:string='';
   idDocumentoVacacional:string='';
+  idDocumentoLaboral:string='';
+  idDocumentoLicencia:string='';
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
   @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
   @ViewChild('fileDocumentoVacacional', { static: false }) fileDocumentoVacacional?: ElementRef;
+  @ViewChild('fileDocumentoLaboral', { static: false }) fileDocumentoLaboral?: ElementRef;
+  @ViewChild('fileDocumentoLicencia', { static: false }) fileDocumentoLicencia?: ElementRef;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   url2 = `${environment.backendUrl}/uploadgeneral/licencia`;
   url4 = `${environment.backendUrl}/uploadgeneral/vacacional`;
@@ -60,6 +66,8 @@ export class ReportesComponent implements OnInit {
   uploadLicencia?: File;
   uploadVacacional?: File;
   uploadDocumentoVacacional?: File;
+  uploadDocumentoLaboral?: File;
+  uploadDocumentoLicencia?: File;
   constructor(
     private rutaActiva: ActivatedRoute,
     private generalService: GeneralService,
@@ -315,6 +323,30 @@ export class ReportesComponent implements OnInit {
       }
     );
   }
+
+  editarDocumentoLaboral(){
+    if (this.loadDocumentoImage==='') {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Falta seleccionar el documento actualizar',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }else{
+      const formData = new FormData();
+      formData.append('archivo', this.fileDocumentoLaboral?.nativeElement.files[0])
+      this.generalService.putDocumentoLaboral(formData, this.idDocumentoLaboral).subscribe(
+        (data)=>{
+          Swal.fire('Registrado!', data.msg, 'success');
+        }, (error)=>{
+          console.log(error);
+        }
+      )
+    }
+  }
+
+
   eliminarRecord(id:number){
     Swal.fire({
       title: 'Estas seguro?',
@@ -341,6 +373,11 @@ export class ReportesComponent implements OnInit {
       }
     })
   }
+
+  obtenerIdDocumentoLaboral(id: number){
+    this.idDocumentoLaboral = `${id}`;
+  }
+
   obtenerDatosRecordId(id: number) {
     console.log(id);
     this.idrecord = `${id}`;
@@ -622,6 +659,23 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  capturarDocumentoLaboral(event: any) {
+    this.uploadFiles = event.target.files[0];
+    if (this.uploadFiles!.size > 2500000) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'El tamaño maximo es de 20MB',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.reset();
+      this.loadDocumentoImage = '';
+    } else {
+      this.loadDocumentoImage = 'cargado';
+    }
+  }
+
   /*  Seccion Crear Licencias */
   registrarLicencia() {
     const tipo = this.licenciaForm.get('tipodocumento')?.value;
@@ -754,8 +808,33 @@ export class ReportesComponent implements OnInit {
           console.log(error);
         }
       );
-
   }
+
+
+  editarDocumentoLicencia(){
+    if (this.loadDocumentoLicencia==='') {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Falta seleccionar el documento a actualizar',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }else{
+      const formData = new FormData();
+      formData.append('archivo', this.fileDocumentoLicencia?.nativeElement.files[0]);
+      this.licenciaService.putDocumentoLicencia(formData, this.idDocumentoLicencia).subscribe(
+        (data)=>{
+          Swal.fire('Registrado!', data.msg, 'success');
+        }, (error)=>{
+          console.log(error);
+          
+        }
+      )
+    }
+  }
+
+
   eliminarLicencia(id:number){
     Swal.fire({
       title: 'Estas seguro?',
@@ -782,6 +861,15 @@ export class ReportesComponent implements OnInit {
       }
     })
   }
+
+
+  obtenerIdDocumentoLicencia(id:number){
+    this.idDocumentoLicencia = `${id}`;
+  }
+
+
+
+
   obtenerLicenciaId(id:number){
     this.idLicencia=`${id}`;
     this.licenciaService.getLicenciaId(id).subscribe(
@@ -910,6 +998,23 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  capturarDocumentoLicencia(event: any) {
+    this.uploadLicencia = event.target.files[0];
+    if (this.uploadLicencia!.size > 2500000) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'El tamaño maximo es de 20MB',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.reset();
+      this.loadDocumentoLicencia = '';
+    } else {
+      this.loadDocumentoLicencia = 'cargado';
+    }
+  }
+
   /* Seccion crear Record Vacacional */
 
   registrarVacacional() {
@@ -1026,6 +1131,8 @@ export class ReportesComponent implements OnInit {
         }
       );
   }
+
+
   editarDocumentoVacacional(){
     if (this.loadDocumentoVacacional==='') {
       Swal.fire({
@@ -1049,19 +1156,17 @@ export class ReportesComponent implements OnInit {
       )
     }
   }
-  obtenerIdDocumentoVacacional(id:number){
-    this.idDocumentoVacacional = `${id}`;
-  }
+
   eliminarVacacional(id:number){
     Swal.fire({
       title: 'Estas seguro?',
-      text: "Este registro sera eliminado de la base de datos!",
+      text: "Este registro sera eliminado de la base de datos",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar!',
-      cancelButtonText:'Cancelar'
+      cancelButtonText:  'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.vacacionalService.deleteVacacional(id).subscribe(
@@ -1073,11 +1178,18 @@ export class ReportesComponent implements OnInit {
             )
           }, (error)=>{
             console.log(error);
+            
           }
         )
       }
     })
   }
+
+
+  obtenerIdDocumentoVacacional(id:number){
+    this.idDocumentoVacacional = `${id}`;
+  }
+  
 
   obtenerVacacionalId(id:number){
     this.idVacacional = `${id}`;
@@ -1187,7 +1299,11 @@ capturarDocumentoVacacional(event: any) {
     this.fileLicencia!.nativeElement.value = '';
     this.fileVacacional!.nativeElement.value = '';
     this.fileDocumentoVacacional!.nativeElement.value='';
+    this.fileDocumentoLaboral!.nativeElement.value='';
+    this.fileDocumentoLicencia!.nativeElement.value='';
   }
+
+
   extraserBase64 = async ($event: any) =>
     new Promise((resolve, reject) => {
       try {
@@ -1239,6 +1355,7 @@ capturarDocumentoVacacional(event: any) {
     });
     this.loadImage = '';
     this.reset();
+    this.loadDocumentoImage ='';
   }
   cancelardos() {
     this.licenciaForm.setValue({
@@ -1264,6 +1381,7 @@ capturarDocumentoVacacional(event: any) {
     });
     this.loadLicencia = '';
     this.reset();
+    this.loadDocumentoLicencia='';
   }
   cancelartres() {
     this.vacacionalForm.setValue({
