@@ -834,6 +834,9 @@ export class ReportesComponent implements OnInit {
     }
   }
 
+  obtenerIdDocumentoLicencia(id:number){
+    this.idDocumentoLicencia = `${id}`;
+  }
 
   eliminarLicencia(id:number){
     Swal.fire({
@@ -861,14 +864,6 @@ export class ReportesComponent implements OnInit {
       }
     })
   }
-
-
-  obtenerIdDocumentoLicencia(id:number){
-    this.idDocumentoLicencia = `${id}`;
-  }
-
-
-
 
   obtenerLicenciaId(id:number){
     this.idLicencia=`${id}`;
