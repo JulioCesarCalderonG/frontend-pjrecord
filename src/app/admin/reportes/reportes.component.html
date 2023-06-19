@@ -227,9 +227,9 @@
                     <th class="text-center">DOCUMENTO QUE AUTORIZA</th>
                     <th class="text-center">INSTANCIA</th>
                     <th class="text-center">SANCION</th>
+                    <th class="text-center">FECHA</th>
                     <th class="text-center">ESTADO</th>
                     <th class="text-center">OBSERVACIONES</th>
-                    <th class="text-center">FECHA</th>
                     <th class="text-center">VER DOCUMENTO</th>
                     <th class="text-center">EDITAR</th>
                     <th class="text-center">ELIMINAR</th>
@@ -238,13 +238,13 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let merito of listMerito" style="font-size: 15px;">
-                    <td>{{merito.ids}}</td>
-                    <td>{{merito.codigo_documento}}</td>
-                    <td>{{merito.instancia}} </td>
-                    <td>{{merito.sancion}} </td>
-                    <td>{{merito.estado}}</td>
-                    <td>{{merito.observacion}}</td>
-                    <td>{{merito.fecha}}</td>
+                    <td class="text-center">{{merito.ids}}</td>
+                    <td class="text-center">{{merito.codigo_documento}}</td>
+                    <td class="text-center">{{merito.instancia}} </td>
+                    <td class="text-center">{{merito.sancion}} </td>
+                    <td class="text-center">{{merito.fecha}}</td>
+                    <td class="text-center">{{merito.estado}}</td>
+                    <td class="text-center">{{merito.observacion}}</td>
                     <td class="text-center">
                       <a href="{{url5}}/{{merito.documento}}" class="btn btn-success" target="_blank">
                         <i class="fas fa-eye"></i>
@@ -626,8 +626,8 @@
                 <label for="recipient-name" class="col-form-label">Seleccionar el area:</label><br>
                 <select class="form-control custom-select" formControlName="areauno">
                   <option value="">Seleccionar</option>
-                  <option value="1">PRESIDENCIA</option>
-                  <option value="2">GAD</option>
+                  <option value="1">Presidencia</option>
+                  <option value="2">Gerencia de Administracion Distrital</option>
                 </select>
               </div>
             </div>
@@ -636,7 +636,7 @@
                 <label for="recipient-name" class="col-form-label">Seleccionar el area:</label><br>
                 <select class="form-control custom-select" formControlName="areados">
                   <option value="">Seleccionar</option>
-                  <option value="1">GAD</option>
+                  <option value="1">Gerencia de Administracion Distrital</option>
                   <option value="2">Unidad de Administrativa y Finanzas</option>
                   <option value="3">Oficina de Administracion</option>
                 </select>
@@ -1217,10 +1217,18 @@
                 </select>
               </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-8">
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Ingresar Codigo de documento:</label><br>
                 <input type="text" class="form-control" placeholder="Ingresar codigo" formControlName="cod_documento">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group">
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Fecha:</label>
+                  <input class="form-control" type="date" id="example-date-input" formControlName="fecha">
+                </div>
               </div>
             </div>
             <div class="col-lg-12">
@@ -1273,18 +1281,10 @@
               <h5 style="font-weight: 900;color: rgba(84, 0, 0, 0.91);font-size: 13px;">REGISTRAR OBSERVACION Y FECHA</h5>
               <hr>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-12">
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Ingresar Observacion:</label><br>
                 <textarea class="form-control" rows="5" formControlName="observacion"></textarea>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="form-group">
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Fecha:</label>
-                  <input class="form-control" type="date" id="example-date-input" formControlName="fecha">
-                </div>
               </div>
             </div>
             <div class="col-lg-12">

@@ -33,24 +33,24 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
-      <th scope="col">DOCUMENTO QUE AUTORIZA</th>
-      <th scope="col">DEPENDENCIA</th>
-      <th scope="col">NOMBRES Y APELLIDOS</th>
-      <th scope="col">CARGO FUNCIONAL</th>
-      <th scope="col">DESDE</th>
-      <th scope="col">HASTA</th>
+      <th scope="col" class="text-center">Id</th>
+      <th scope="col" class="text-center">Documento que autoriza</th>
+      <th scope="col" class="text-center">Dependencia</th>
+      <th scope="col" class="text-center">Nombres y Apellidos</th>
+      <th scope="col" class="text-center">Cargo funcional</th>
+      <th scope="col" class="text-center">Desde</th>
+      <th scope="col" class="text-center">Hasta</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let general of listGeneral">
-      <th scope="row">{{general.id}}</th>
-      <td>{{general.codigo_documento}}</td>
-      <td>{{general.dependencia}}</td>
-      <td>{{general.Personal.nombre}} {{general.Personal.apellido}}</td>
-      <td>{{general.Cargo.descripcion}}</td>
-      <td>{{general.inicio}}</td>
-      <td>{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
+      <th scope="row" class="text-center">{{general.id}}</th>
+      <td class="text-center">{{general.codigo_documento}}</td>
+      <td class="text-center">{{general.dependencia}}</td>
+      <td class="text-center">{{general.Personal.nombre}} {{general.Personal.apellido}}</td>
+      <td class="text-center">{{general.Cargo.descripcion}}</td>
+      <td class="text-center">{{general.inicio}}</td>
+      <td class="text-center">{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
     </tr>
 
   </tbody>

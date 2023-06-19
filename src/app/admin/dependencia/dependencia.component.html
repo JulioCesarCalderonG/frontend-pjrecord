@@ -3,12 +3,12 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-<div class="row mb-5">
+<div class="row mb-5 d-flex justify-content-between">
   <div class="col-lg-4">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalDependencia" data-whatever="@mdo">
       <i class="fa fa-plus-square"></i> Agregar</button>
   </div>
-  <div class="col lg-4">
+  <div class="col-lg-3">
     <div class="form-group">
       <select class="form-control custom-select" (change)="mostrarUnidadTipo($event)">
         <option value="1" selected>Habilitados</option>
@@ -21,35 +21,35 @@
 <table class="table">
     <thead>
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">NOMBRE UNIDAD</th>
-        <th scope="col">SIGLA UNIDAD</th>
-        <th scope="col">NOMBRE ORGANO</th>
-        <th scope="col">ESTADO</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
+        <th scope="col" class="text-center">Id</th>
+        <th scope="col" class="text-center">Nombre</th>
+        <th scope="col" class="text-center">Sigla</th>
+        <th scope="col" class="text-center">Nombre Organo Jurisdiccional</th>
+        <th scope="col" class="text-center">Estado</th>
+        <th class="text-center">Editar</th>
+        <th class="text-center">Eliminar</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let unidad of listUnidad">
-        <th scope="row">{{unidad.id}}</th>
+        <th scope="row" class="text-center">{{unidad.id}}</th>
         <td>{{unidad.nombre}}</td>
-        <td>{{unidad.sigla}}</td>
-        <td>{{unidad.Organo.nombre}}</td>
-        <td *ngIf="unidad.estado===1">Activo</td>
-      <td *ngIf="unidad.estado===0">Inactivo</td>
-      <td>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarDependencia" data-whatever="@mdo" (click)="obtenerUnidadId(unidad.id)">
+        <td class="text-center">{{unidad.sigla}}</td>
+        <td class="text-center">{{unidad.Organo.nombre}}</td>
+        <td *ngIf="unidad.estado===1" class="text-center">Activo</td>
+      <td *ngIf="unidad.estado===0" class="text-center">Inactivo</td>
+      <td class="text-center">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modificarDependencia" data-whatever="@mdo" (click)="obtenerUnidadId(unidad.id)">
           <i class="fa fa-edit"></i>
         </button>
       </td>
-      <td *ngIf="unidad.estado===0">
-        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 1)">
+      <td *ngIf="unidad.estado===0" class="text-center">
+        <button type="button" class="btn btn-secondary" (click)="eliminarUnidad(unidad.id, 1)">
           <i class="fa fa-lock-open"></i>
         </button>
       </td>
-      <td *ngIf="unidad.estado===1">
-        <button type="button" class="btn btn-primary" (click)="eliminarUnidad(unidad.id, 0)">
+      <td *ngIf="unidad.estado===1" class="text-center">
+        <button type="button" class="btn btn-secondary" (click)="eliminarUnidad(unidad.id, 0)">
           <i class="fa fa-lock"></i>
         </button>
       </td>

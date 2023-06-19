@@ -1,10 +1,10 @@
 
-<div class="row mb-5">
+<div class="row mb-5 d-flex justify-content-between">
   <div class="col-lg-4">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAdministrador" data-whatever="@mdo">
       <i class="fa fa-plus-square"></i> Agregar</button>
   </div>
-  <div class="col lg-4">
+  <div class="col-lg-3">
     <div class="form-group">
       <select class="form-control custom-select" (change)="mostrarAdminTipo($event)">
         <option value="1" selected>Habilitados</option>
@@ -17,33 +17,33 @@
 <table class="table">
     <thead>
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">USUARIO</th>
-        <th scope="col">PASSWORD</th>
-        <th scope="col">ESTADO</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
+        <th scope="col" class="text-center">ID</th>
+        <th scope="col" class="text-center">Usuario</th>
+        <th scope="col" class="text-center">Password</th>
+        <th scope="col" class="text-center">Estado</th>
+        <th class="text-center">Editar</th>
+        <th class="text-center">Eliminar</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let administrador of listAdministrador">
-        <th scope="row">{{administrador.id}}</th>
-        <td>{{administrador.usuario}}</td>
-        <td>{{administrador.password}}</td>
-        <td *ngIf="administrador.activo===1">Activo</td>
-      <td *ngIf="administrador.activo===0">Inactivo</td>
-        <td>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarAdministrador" data-whatever="@mdo" (click)="obtenerAdministradorId(administrador.id)">
+        <th scope="row" class="text-center">{{administrador.id}}</th>
+        <td class="text-center">{{administrador.usuario}}</td>
+        <td class="text-center">{{administrador.password}}</td>
+        <td *ngIf="administrador.activo===1" class="text-center">Activo</td>
+      <td *ngIf="administrador.activo===0" class="text-center">Inactivo</td>
+        <td class="text-center">
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modificarAdministrador" data-whatever="@mdo" (click)="obtenerAdministradorId(administrador.id)">
             <i class="fa fa-edit"></i>
           </button>
         </td>
-        <td *ngIf="administrador.activo===0">
-          <button type="button" class="btn btn-primary" (click)="eliminarAdministrador(administrador.id, 1)">
+        <td *ngIf="administrador.activo===0" class="text-center">
+          <button type="button" class="btn btn-secondary" (click)="eliminarAdministrador(administrador.id, 1)">
             <i class="fa fa-lock-open"></i>
           </button>
         </td>
-        <td *ngIf="administrador.activo===1">
-          <button type="button" class="btn btn-primary" (click)="eliminarAdministrador(administrador.id,0)">
+        <td *ngIf="administrador.activo===1" class="text-center">
+          <button type="button" class="btn btn-secondary" (click)="eliminarAdministrador(administrador.id,0)">
             <i class="fa fa-lock"></i>
           </button>
         </td>

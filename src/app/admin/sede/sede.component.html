@@ -4,12 +4,12 @@
     <div class="card">
       <div class="card-body">
 
-<div class="row mb-5">
+<div class="row mb-5 d-flex justify-content-between">
   <div class="col-lg-4">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegistrar" data-whatever="@mdo">
       <i class="fa fa-plus-square"></i> Agregar</button>
   </div>
-  <div class="col lg-4">
+  <div class="col-lg-3">
     <div class="form-group">
       <select class="form-control custom-select" (change)="mostrarSedeTipo($event)">
         <option value="1" selected>Habilitados</option>
@@ -22,31 +22,31 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
-      <th scope="col">NOMBRE</th>
-      <th scope="col">ESTADO</th>
-      <th>Editar</th>
-      <th>Eliminar</th>
+      <th scope="col" class="text-center">Id</th>
+      <th scope="col" class="text-center">Nombre</th>
+      <th scope="col" class="text-center">Estado</th>
+      <th class="text-center">Editar</th>
+      <th class="text-center">Eliminar</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let sedes of listSedes">
-      <td>{{sedes.id}}</td>
+      <td class="text-center">{{sedes.id}}</td>
       <td>{{sedes.nombre}}</td>
-      <td *ngIf="sedes.estado===1">Activo</td>
-      <td *ngIf="sedes.estado===0">Inactivo</td>
-      <td>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarSede" data-whatever="@mdo" (click)="obtenerSedeId(sedes.id)">
+      <td *ngIf="sedes.estado===1" class="text-center">Activo</td>
+      <td *ngIf="sedes.estado===0" class="text-center">Inactivo</td>
+      <td class="text-center">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modificarSede" data-whatever="@mdo" (click)="obtenerSedeId(sedes.id)">
           <i class="fa fa-edit"></i>
         </button>
       </td>
-      <td *ngIf="sedes.estado===0">
-        <button type="button" class="btn btn-primary" (click)="eliminarSede(sedes.id, 1)">
+      <td *ngIf="sedes.estado===0" class="text-center">
+        <button type="button" class="btn btn-secondary" (click)="eliminarSede(sedes.id, 1)">
           <i class="fa fa-lock-open"></i>
         </button>
       </td>
-      <td *ngIf="sedes.estado===1">
-        <button type="button" class="btn btn-primary" (click)="eliminarSede(sedes.id, 0)">
+      <td *ngIf="sedes.estado===1" class="text-center">
+        <button type="button" class="btn btn-secondary" (click)="eliminarSede(sedes.id, 0)">
           <i class="fa fa-lock"></i>
         </button>
       </td>

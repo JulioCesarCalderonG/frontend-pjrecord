@@ -24,7 +24,7 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { TipoLicenciaComponent } from './tipo-licencia/tipo-licencia.component';
 import { TipoPersonalComponent } from './tipo-personal/tipo-personal.component';
 import { DetalleLicenciaComponent } from './detalle-licencia/detalle-licencia.component';
-import { LicenciaComponent } from './licencia/licencia.component';
+
 
 
 
@@ -47,8 +47,7 @@ import { LicenciaComponent } from './licencia/licencia.component';
     ReportesComponent,
     TipoLicenciaComponent,
     TipoPersonalComponent,
-    DetalleLicenciaComponent,
-    LicenciaComponent
+    DetalleLicenciaComponent
   ],
   exports:[
     DashboardComponent,
