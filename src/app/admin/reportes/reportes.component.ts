@@ -180,7 +180,7 @@ export class ReportesComponent implements OnInit {
       id_estado:['',Validators.required],
       fecha:['',Validators.required],
       cod_documento:['',Validators.required],
-      observacion:['',Validators.required]
+      observacion:['']
     });
     this.meritoEditarForm= this.fb.group({
       tipodocumento:['',Validators.required],
@@ -190,7 +190,7 @@ export class ReportesComponent implements OnInit {
       id_estado:['',Validators.required],
       fecha:['',Validators.required],
       cod_documento:['',Validators.required],
-      observacion:['',Validators.required]
+      observacion:['']
     })
   }
 
