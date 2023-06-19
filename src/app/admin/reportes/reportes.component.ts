@@ -286,6 +286,15 @@ export class ReportesComponent implements OnInit {
         }
       );
     } else if (this.opcionFiltro === '2') {
+      this.reporteService.postReporteVacacionalId(`${this.idpersonal}`).subscribe(
+        (data) => {
+          const urlreport = `${this.url3}/vacacional/${data.nombre}`;
+          window.open(urlreport, '_blank');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     } else if (this.opcionFiltro === '3') {
       this.reporteService.postReporteLicenciaId(`${this.idpersonal}`).subscribe(
         (data) => {

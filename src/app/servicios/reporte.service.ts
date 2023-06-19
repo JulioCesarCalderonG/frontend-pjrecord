@@ -23,4 +23,7 @@ export class ReporteService {
   postReporteMeritoId(id:string):Observable<any>{
     return this.http.post(`${this.url}/merito/personal/${id}`,{});
   }
+  postReporteVacacionalId(id:string):Observable<any>{
+    return this.http.post(`${this.url}/vacacional/personal/${id}`,{});
+  }
 }

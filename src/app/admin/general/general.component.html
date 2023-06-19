@@ -40,8 +40,6 @@
       <th scope="col">CARGO FUNCIONAL</th>
       <th scope="col">DESDE</th>
       <th scope="col">HASTA</th>
-      <th scope="col">DOCUMENTO</th>
-      <th>Editar</th>
     </tr>
   </thead>
   <tbody>
@@ -53,16 +51,6 @@
       <td>{{general.Cargo.descripcion}}</td>
       <td>{{general.inicio}}</td>
       <td>{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
-      <td class="text-center">
-        <a href="{{url}}/{{general.documento}}" class="btn btn-warning" target="_blank">
-          <i class="fa fa-file-pdf"></i>
-         </a>
-      </td>
-      <td>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modificarGeneral" data-whatever="@mdo" (click)="obtenerGeneralId(general.id)">
-          <i class="fa fa-edit"></i>
-        </button>
-      </td>
     </tr>
 
   </tbody>
@@ -87,7 +75,6 @@
               <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" (change)="funcionReporte($event)" name="tiporeporte" [(ngModel)]="modelReporte.tiporeporte">
                   <option value="" [selected]="true">Seleccionar</option>
                   <option value="1">Dependencia</option>
-                  <option value="2">Personal</option>
               </select>
           </div>
           </div>
