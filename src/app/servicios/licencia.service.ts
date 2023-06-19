@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment.prod';
 })
 export class LicenciaService {
   url=`${environment.backendUrl}/licencia`
-  url2=`${environment.backendUrl}/uploadgeneral/licencia/`;
+  url2=`${environment.backendUrl}/uploadgeneral/licencias`;
   constructor(private http:HttpClient, private router:Router) { }
 
   getLicenciaPersonal(id:string):Observable<any>{
