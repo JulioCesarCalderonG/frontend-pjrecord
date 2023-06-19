@@ -5,10 +5,13 @@ import { AreaService } from 'src/app/servicios/area.service';
 import { CargoService } from 'src/app/servicios/cargo.service';
 import { DependenciaService } from 'src/app/servicios/dependencia.service';
 import { DetalleLicenciaService } from 'src/app/servicios/detalle-licencia.service';
+import { EstadoService } from 'src/app/servicios/estado.service';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { LicenciaService } from 'src/app/servicios/licencia.service';
+import { MeritoService } from 'src/app/servicios/merito.service';
 import { OrganoService } from 'src/app/servicios/organo.service';
 import { ReporteService } from 'src/app/servicios/reporte.service';
+import { SancionService } from 'src/app/servicios/sancion.service';
 import { TipoLicenciaService } from 'src/app/servicios/tipo-licencia.service';
 import { TipoPersonalService } from 'src/app/servicios/tipo-personal.service';
 import { TipodocumentoService } from 'src/app/servicios/tipodocumento.service';
@@ -29,22 +32,30 @@ export class ReportesComponent implements OnInit {
   listTipodocumento?: Array<any>;
   listCargo?: Array<any>;
   listAutoriza?: Array<any>;
+  listInstancia?:Array<any>;
   listDependencia?: Array<any>;
   listTipoPersonal?: Array<any>;
   listTipoLicencia?: Array<any>;
   listDetalleLicencia?: Array<any>;
+  listEstado?:Array<any>;
+  listSancion?:Array<any>;
+  listMerito?:Array<any>;
   generalForm: FormGroup;
   licenciaForm: FormGroup;
   vacacionalForm: FormGroup;
   recordEditarForm: FormGroup;
   licenciaEditarForm:FormGroup;
   vacacionalEditarForm: FormGroup;
+  meritoForm:FormGroup;
+  meritoEditarForm:FormGroup;
   loadImage: string = '';
   loadLicencia: string = '';
   loadVacacional: string = '';
   loadDocumentoVacacional:string='';
   loadDocumentoImage: string='';
   loadDocumentoLicencia:string='';
+  loadMerito:string='';
+  loadDocumentoMerito:string='';
   opcionFiltro: string = '';
   idrecord: string = '';
   idLicencia:string='';
@@ -52,15 +63,19 @@ export class ReportesComponent implements OnInit {
   idDocumentoVacacional:string='';
   idDocumentoLaboral:string='';
   idDocumentoLicencia:string='';
+  idDocumentoMerito:string='';
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
   @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
   @ViewChild('fileDocumentoVacacional', { static: false }) fileDocumentoVacacional?: ElementRef;
   @ViewChild('fileDocumentoLaboral', { static: false }) fileDocumentoLaboral?: ElementRef;
   @ViewChild('fileDocumentoLicencia', { static: false }) fileDocumentoLicencia?: ElementRef;
+  @ViewChild('fileMerito', { static: false }) fileMerito?: ElementRef;
+  @ViewChild('fileDocumentoMerito', { static: false }) fileDocumentoMerito?: ElementRef;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   url2 = `${environment.backendUrl}/uploadgeneral/licencia`;
   url4 = `${environment.backendUrl}/uploadgeneral/vacacional`;
+  url5 = `${environment.backendUrl}/uploadgeneral/merito`;
   url3 = `${environment.backendUrl}/reporte`;
   uploadFiles?: File;
   uploadLicencia?: File;
@@ -68,6 +83,8 @@ export class ReportesComponent implements OnInit {
   uploadDocumentoVacacional?: File;
   uploadDocumentoLaboral?: File;
   uploadDocumentoLicencia?: File;
+  uploadMerito?:File;
+  uploadDocumentoMerito?:File;
   constructor(
     private rutaActiva: ActivatedRoute,
     private generalService: GeneralService,
@@ -82,6 +99,9 @@ export class ReportesComponent implements OnInit {
     private licenciaService: LicenciaService,
     private vacacionalService: VacacionalService,
     private reporteService: ReporteService,
+    private estadoService:EstadoService,
+    private sancionService:SancionService,
+    private meritoService:MeritoService,
     private fb: FormBuilder
   ) {
     this.generalForm = this.fb.group({
@@ -152,6 +172,26 @@ export class ReportesComponent implements OnInit {
       fin: ['', Validators.required],
       periodo: ['', Validators.required],
     });
+    this.meritoForm= this.fb.group({
+      tipodocumento:['',Validators.required],
+      tipoinstancia:['',Validators.required],
+      id_instancia:['',Validators.required],
+      id_sancion:['',Validators.required],
+      id_estado:['',Validators.required],
+      fecha:['',Validators.required],
+      cod_documento:['',Validators.required],
+      observacion:['',Validators.required]
+    });
+    this.meritoEditarForm= this.fb.group({
+      tipodocumento:['',Validators.required],
+      tipoinstancia:['',Validators.required],
+      id_instancia:['',Validators.required],
+      id_sancion:['',Validators.required],
+      id_estado:['',Validators.required],
+      fecha:['',Validators.required],
+      cod_documento:['',Validators.required],
+      observacion:['',Validators.required]
+    })
   }
 
   ngOnInit(): void {
@@ -160,6 +200,8 @@ export class ReportesComponent implements OnInit {
     this.mostrartipodocumento();
     this.mostrarTipoPersonal();
     this.mostrarTipoLicencia();
+    this.mostrarEstado();
+    this.mostrarSancion();
   }
 
   /* Mostrar Tablas */
@@ -169,6 +211,7 @@ export class ReportesComponent implements OnInit {
       document.getElementById('tableRecord')?.classList.remove('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
       document.getElementById('tableVacacional')?.classList.add('invi');
+      document.getElementById('tableMerito')?.classList.add('invi');
       this.generalService.getGeneralPersonal(`${this.idpersonal}`).subscribe(
         (data) => {
           console.log(data);
@@ -182,6 +225,7 @@ export class ReportesComponent implements OnInit {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
       document.getElementById('tableVacacional')?.classList.remove('invi');
+      document.getElementById('tableMerito')?.classList.add('invi');
       this.vacacionalService
         .getVacacionalPersonal(`${this.idpersonal}`)
         .subscribe(
@@ -197,6 +241,7 @@ export class ReportesComponent implements OnInit {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.remove('invi');
       document.getElementById('tableVacacional')?.classList.add('invi');
+      document.getElementById('tableMerito')?.classList.add('invi');
       this.licenciaService.getLicenciaPersonal(`${this.idpersonal}`).subscribe(
         (data) => {
           console.log(data);
@@ -210,10 +255,22 @@ export class ReportesComponent implements OnInit {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
       document.getElementById('tableVacacional')?.classList.add('invi');
+      document.getElementById('tableMerito')?.classList.remove('invi');
+      this.meritoService.getMeritoPersonal(`${this.idpersonal}`).subscribe(
+        (data) => {
+          this.listMerito = data.resp;
+          console.log(this.listMerito);
+
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     } else {
       document.getElementById('tableRecord')?.classList.add('invi');
       document.getElementById('tableLicencia')?.classList.add('invi');
       document.getElementById('tableVacacional')?.classList.add('invi');
+      document.getElementById('tableMerito')?.classList.add('invi');
     }
   }
 
@@ -240,6 +297,15 @@ export class ReportesComponent implements OnInit {
         }
       );
     } else if (this.opcionFiltro === '4') {
+      this.reporteService.postReporteMeritoId(`${this.idpersonal}`).subscribe(
+        (data) => {
+          const urlreport = `${this.url3}/merito/${data.nombre}`;
+          window.open(urlreport, '_blank');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     } else {
     }
   }
@@ -809,8 +875,6 @@ export class ReportesComponent implements OnInit {
         }
       );
   }
-
-
   editarDocumentoLicencia(){
     if (this.loadDocumentoLicencia==='') {
       Swal.fire({
@@ -828,13 +892,11 @@ export class ReportesComponent implements OnInit {
           Swal.fire('Registrado!', data.msg, 'success');
         }, (error)=>{
           console.log(error);
-          
+
         }
       )
     }
   }
-
-
   eliminarLicencia(id:number){
     Swal.fire({
       title: 'Estas seguro?',
@@ -861,15 +923,9 @@ export class ReportesComponent implements OnInit {
       }
     })
   }
-
-
   obtenerIdDocumentoLicencia(id:number){
     this.idDocumentoLicencia = `${id}`;
   }
-
-
-
-
   obtenerLicenciaId(id:number){
     this.idLicencia=`${id}`;
     this.licenciaService.getLicenciaId(id).subscribe(
@@ -997,7 +1053,6 @@ export class ReportesComponent implements OnInit {
       this.loadLicencia = 'cargado';
     }
   }
-
   capturarDocumentoLicencia(event: any) {
     this.uploadLicencia = event.target.files[0];
     if (this.uploadLicencia!.size > 2500000) {
@@ -1131,8 +1186,6 @@ export class ReportesComponent implements OnInit {
         }
       );
   }
-
-
   editarDocumentoVacacional(){
     if (this.loadDocumentoVacacional==='') {
       Swal.fire({
@@ -1178,19 +1231,15 @@ export class ReportesComponent implements OnInit {
             )
           }, (error)=>{
             console.log(error);
-            
+
           }
         )
       }
     })
   }
-
-
   obtenerIdDocumentoVacacional(id:number){
     this.idDocumentoVacacional = `${id}`;
   }
-  
-
   obtenerVacacionalId(id:number){
     this.idVacacional = `${id}`;
     this.vacacionalService.getVacacionalId(id).subscribe(
@@ -1212,7 +1261,6 @@ export class ReportesComponent implements OnInit {
       }
     )
   }
-
   mostrarTipoDocVacional(event: any) {
     const valor = event.target.value;
     console.log(valor);
@@ -1275,7 +1323,7 @@ export class ReportesComponent implements OnInit {
       this.loadVacacional = 'cargado';
     }
   }
-capturarDocumentoVacacional(event: any) {
+  capturarDocumentoVacacional(event: any) {
     this.uploadVacacional = event.target.files[0];
     if (this.uploadVacacional!.size > 2500000) {
       Swal.fire({
@@ -1292,7 +1340,276 @@ capturarDocumentoVacacional(event: any) {
     }
   }
 
+  /* Seccion Merito */
 
+  registrarMerito(){
+    const formData = new FormData();
+    formData.append('tipo_documento',this.meritoForm.get('tipodocumento')?.value);
+    formData.append('tipo_instancia',this.meritoForm.get('tipoinstancia')?.value);
+    formData.append('id_instancia',this.meritoForm.get('id_instancia')?.value);
+    formData.append('id_sancion',this.meritoForm.get('id_sancion')?.value);
+    formData.append('id_estado',this.meritoForm.get('id_estado')?.value);
+    formData.append('fecha',this.meritoForm.get('fecha')?.value);
+    formData.append('cod_documento',this.meritoForm.get('cod_documento')?.value);
+    formData.append('observacion',this.meritoForm.get('observacion')?.value);
+    formData.append('id_personal',`${this.idpersonal}`);
+    if (this.loadMerito === '') {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Seleccione el documento que autoriza',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      formData.append('archivo', this.fileMerito?.nativeElement.files[0]);
+      this.meritoService.postMerito(formData).subscribe(
+        (data) => {
+          Swal.fire('Registrado!', data.msg, 'success');
+          this.cancelarcuatro();
+          this.reset();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+  EditarMerito(){
+    const formData = new FormData();
+    formData.append('tipo_documento',this.meritoEditarForm.get('tipodocumento')?.value);
+    formData.append('tipo_instancia',this.meritoEditarForm.get('tipoinstancia')?.value);
+    formData.append('id_instancia',this.meritoEditarForm.get('id_instancia')?.value);
+    formData.append('id_sancion',this.meritoEditarForm.get('id_sancion')?.value);
+    formData.append('id_estado',this.meritoEditarForm.get('id_estado')?.value);
+    formData.append('fecha',this.meritoEditarForm.get('fecha')?.value);
+    formData.append('cod_documento',this.meritoEditarForm.get('cod_documento')?.value);
+    formData.append('observacion',this.meritoEditarForm.get('observacion')?.value);
+
+      this.meritoService.putMerito(formData,`${this.idpersonal}`).subscribe(
+        (data) => {
+          Swal.fire('Editado!', data.msg, 'success');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+  }
+  editarDocumentoMerito(){
+    if (this.loadDocumentoMerito==='') {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Falta seleccionar el documento actualizar',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }else{
+      const formData = new FormData();
+      formData.append('archivo',this.fileDocumentoMerito?.nativeElement.files[0]);
+      this.meritoService.putDocumentoMerito(formData,this.idDocumentoMerito).subscribe(
+        (data)=>{
+          Swal.fire('Actualizado!', data.msg, 'success');
+        },
+        (error)=>{
+          console.log(error);
+
+        }
+      )
+    }
+  }
+  eliminarMerito(id:number){
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: "Este registro sera eliminado de la base de datos",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText:  'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.meritoService.deleteMerito(id).subscribe(
+          (data)=>{
+            Swal.fire(
+              'Eliminado!',
+              'Registro eliminado de la base de datos.',
+              'success'
+            )
+          }, (error)=>{
+            console.log(error);
+
+          }
+        )
+      }
+    })
+  }
+
+  obtenerMeritoId(id:number){
+    this.meritoService.getMeritoId(id).subscribe(
+      (data)=>{
+        this.buscarSiglaMeritoDos(`${data.resp.tipo_instancia}`)
+        this.meritoEditarForm.setValue({
+          tipodocumento:`${data.resp.tipo_documento}`,
+          tipoinstancia:`${data.resp.tipo_instancia}`,
+          id_instancia:`${data.resp.id_instancia}`,
+          id_sancion:`${data.resp.id_sancion}`,
+          id_estado:`${data.resp.id_estado}`,
+          fecha:data.resp.fecha,
+          cod_documento:data.cod_documento,
+          observacion:data.resp.observacion
+        });
+
+      },(error)=>{
+        console.log(error);
+
+      }
+    )
+  }
+  obtenerIdDocumentoMerito(id:number){
+    this.idDocumentoMerito=`${id}`;
+  }
+  mostrarEstado(){
+    this.estadoService.getEstados().subscribe(
+      (data)=>{
+        console.log(data);
+        this.listEstado=data.resp;
+      },
+      (error)=>{
+        console.log(error);
+
+      }
+    )
+  }
+  mostrarSancion(){
+    this.sancionService.getSancion().subscribe(
+      (data)=>{
+        console.log(data);
+        this.listSancion=data.resp;
+      },
+      (error)=>{
+        console.log(error);
+
+      }
+    )
+  }
+
+  buscarSiglaMerito(event: any) {
+    switch (event.target.value) {
+      case '1':
+        this.organoService.getOrgano().subscribe(
+          (data) => {
+            console.log(data);
+            this.listInstancia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '2':
+        this.unidadService.getUnidad().subscribe(
+          (data) => {
+            console.log(data);
+            this.listInstancia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '3':
+        this.areaService.getAreas().subscribe(
+          (data) => {
+            console.log(data);
+            this.listInstancia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      default:
+        this.listInstancia = [];
+        return;
+    }
+  }
+  buscarSiglaMeritoDos(id: string) {
+    switch (id) {
+      case '1':
+        this.organoService.getOrgano().subscribe(
+          (data) => {
+            console.log(data);
+            this.listInstancia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '2':
+        this.unidadService.getUnidad().subscribe(
+          (data) => {
+            console.log(data);
+            this.listInstancia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      case '3':
+        this.areaService.getAreas().subscribe(
+          (data) => {
+            console.log(data);
+            this.listInstancia = data.resp;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        return;
+      default:
+        this.listInstancia = [];
+        return;
+    }
+  }
+  capturarFileMerito(event: any) {
+    this.uploadMerito = event.target.files[0];
+
+    if (this.uploadMerito!.size > 2500000) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'El tamaño maximo es de 20MB',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.reset();
+      this.loadMerito = '';
+    } else {
+      this.loadMerito = 'cargado';
+    }
+  }
+  capturarDocumentoMerito(event: any) {
+    this.uploadDocumentoMerito = event.target.files[0];
+
+    if (this.uploadDocumentoMerito!.size > 2500000) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'El tamaño maximo es de 20MB',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.reset();
+      this.loadDocumentoMerito = '';
+    } else {
+      this.loadDocumentoMerito = 'cargado';
+    }
+  }
   /* Funciones Secundarias */
   reset() {
     this.fileInput!.nativeElement.value = '';
@@ -1301,6 +1618,7 @@ capturarDocumentoVacacional(event: any) {
     this.fileDocumentoVacacional!.nativeElement.value='';
     this.fileDocumentoLaboral!.nativeElement.value='';
     this.fileDocumentoLicencia!.nativeElement.value='';
+    this.fileMerito!.nativeElement.value='';
   }
 
 
@@ -1407,5 +1725,30 @@ capturarDocumentoVacacional(event: any) {
     this.loadVacacional = '';
     this.reset();
     this.loadDocumentoVacacional='';
+  }
+  cancelarcuatro(){
+    this.meritoForm.setValue({
+      tipodocumento:'',
+      tipoinstancia:'',
+      id_instancia:'',
+      id_sancion:'',
+      id_estado:'',
+      fecha:'',
+      cod_documento:'',
+      observacion:''
+    });
+    this.meritoEditarForm.setValue({
+      tipodocumento:'',
+      tipoinstancia:'',
+      id_instancia:'',
+      id_sancion:'',
+      id_estado:'',
+      fecha:'',
+      cod_documento:'',
+      observacion:''
+    });
+    this.loadMerito='';
+    this.reset();
+
   }
 }
