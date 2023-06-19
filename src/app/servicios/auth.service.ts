@@ -19,4 +19,10 @@ export class AuthService {
   getToken(){
     return sessionStorage.getItem('x-token');
   }
+  loggoud(){
+    sessionStorage.removeItem('x-token');
+    this.router.navigate(['/login']);
+
+  }
+
 }
