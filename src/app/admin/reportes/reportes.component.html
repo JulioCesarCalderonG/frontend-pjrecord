@@ -80,11 +80,11 @@
                 <tbody>
                   <tr *ngFor="let general of listRecord" style="font-size: 15px;">
                     <th scope="row">{{general.ids}}</th>
-                    <td>{{general.codigo_documento}}</td>
-                    <td>{{general.dependencia}}</td>
-                    <td>{{general.Cargo.descripcion}}</td>
-                    <td>{{general.inicio}}</td>
-                    <td>{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
+                    <td class="text-center">{{general.codigo_documento}}</td>
+                    <td class="text-center">{{general.dependencia}}</td>
+                    <td class="text-center">{{general.Cargo.descripcion}}</td>
+                    <td class="text-center">{{general.inicio}}</td>
+                    <td class="text-center">{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
                     <td class="text-center">
                       <a href="{{url}}/{{general.documento}}" class="btn btn-success" target="_blank">
                         <i class="fa fa-eye"></i>
@@ -132,13 +132,13 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let licencia of listLicencia" style="font-size: 15px;">
-                    <td>{{licencia.ids}}</td>
-                    <td>{{licencia.codigo_documento}}</td>
-                    <td>{{licencia.DetalleLicencium.TipoLicencium.nombre}} </td>
-                    <td>{{licencia.DetalleLicencium.nombre}} </td>
-                    <td>{{licencia.dias}}</td>
-                    <td>{{licencia.inicio}}</td>
-                    <td>{{licencia.fin}}</td>
+                    <td class="text-center">{{licencia.ids}}</td>
+                    <td class="text-center">{{licencia.codigo_documento}}</td>
+                    <td class="text-center">{{licencia.DetalleLicencium.TipoLicencium.nombre}} </td>
+                    <td class="text-center">{{licencia.DetalleLicencium.nombre}} </td>
+                    <td class="text-center">{{licencia.dias}}</td>
+                    <td class="text-center">{{licencia.inicio}}</td>
+                    <td class="text-center">{{licencia.fin}}</td>
                     <td class="text-center">
                       <a href="{{url2}}/{{licencia.documento}}" class="btn btn-success" target="_blank">
                         <i class="fa fa-eye"></i>
@@ -185,12 +185,12 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let vacacional of listVacacional" style="font-size: 15px;">
-                    <td>{{vacacional.ids}}</td>
-                    <td>{{vacacional.codigo_documento}}</td>
-                    <td>{{vacacional.periodo}} </td>
-                    <td>{{vacacional.inicio}} </td>
-                    <td>{{vacacional.termino}}</td>
-                    <td>{{vacacional.dias}}</td>
+                    <td class="text-center">{{vacacional.ids}}</td>
+                    <td class="text-center">{{vacacional.codigo_documento}}</td>
+                    <td class="text-center">{{vacacional.periodo}} </td>
+                    <td class="text-center">{{vacacional.inicio}} </td>
+                    <td class="text-center">{{vacacional.termino}}</td>
+                    <td class="text-center">{{vacacional.dias}}</td>
                     <td class="text-center">
                       <a href="{{url4}}/{{vacacional.documento}}" class="btn btn-success" target="_blank">
                         <i class="fas fa-eye"></i>
