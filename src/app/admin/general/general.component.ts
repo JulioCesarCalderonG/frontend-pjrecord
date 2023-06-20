@@ -335,6 +335,8 @@ export class GeneralComponent implements OnInit {
 
         this.reporteService.postReporteRecord(formData).subscribe(
           (data)=>{
+            console.log(data);
+
             const urlreport=`${this.url2}/${data.nombre}`;
             window.open(urlreport,'_blank');
           }
