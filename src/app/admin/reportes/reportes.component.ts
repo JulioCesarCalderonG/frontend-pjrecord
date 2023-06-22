@@ -288,6 +288,8 @@ export class ReportesComponent implements OnInit {
     } else if (this.opcionFiltro === '2') {
       this.reporteService.postReporteVacacionalId(`${this.idpersonal}`).subscribe(
         (data) => {
+          console.log(data);
+
           const urlreport = `${this.url3}/vacacional/${data.nombre}`;
           window.open(urlreport, '_blank');
         },
