@@ -31,7 +31,6 @@
               <th scope="col" class="text-center">Fecha inicio</th>
               <th class="text-center">Editar</th>
               <th class="text-center">Eliminar</th>
-              <th class="text-center">Mostrar reportes</th>
             </tr>
           </thead>
           <tbody>
@@ -55,12 +54,6 @@
               <th *ngIf="personal.estado===1" class="text-center">
                 <button type="button" class="btn btn-secondary" (click)="eliminarPersonal(personal.id, 0)">
                   <i class="fa fa-lock"></i>
-                </button>
-              </th>
-              <th class="text-center">
-                <button type="button" class="btn btn-danger"
-                  (click)="redireccionarCrear(personal.id,personal.nombre, personal.apellido)">
-                  <i class="fa fa-eye"></i>
                 </button>
               </th>
             </tr>

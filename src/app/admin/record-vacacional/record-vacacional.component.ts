@@ -1,12 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PersonalService } from 'src/app/servicios/personal.service';
+
 @Component({
-  selector: 'app-record-laboral',
-  templateUrl: './record-laboral.component.html',
-  styleUrls: ['./record-laboral.component.css']
+  selector: 'app-record-vacacional',
+  templateUrl: './record-vacacional.component.html',
+  styleUrls: ['./record-vacacional.component.css']
 })
-export class RecordLaboralComponent implements OnInit {
+export class RecordVacacionalComponent implements OnInit {
+
 
   listPersonal?:Array<any>
   estado:string='1';
@@ -51,6 +53,7 @@ export class RecordLaboralComponent implements OnInit {
 
   }
   redireccionarCrear(id:number,nombre:string, apellido:string){
-    this.router.navigateByUrl(`admin/reporte-laboral/${id}/${nombre} ${apellido}`);
+    this.router.navigateByUrl(`admin/reporte-vacacional/${id}/${nombre} ${apellido}`);
   }
+
 }

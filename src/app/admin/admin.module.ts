@@ -24,6 +24,13 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { TipoLicenciaComponent } from './tipo-licencia/tipo-licencia.component';
 import { TipoPersonalComponent } from './tipo-personal/tipo-personal.component';
 import { DetalleLicenciaComponent } from './detalle-licencia/detalle-licencia.component';
+import { RecordLicenciasComponent } from './record-licencias/record-licencias.component';
+import { RecordVacacionalComponent } from './record-vacacional/record-vacacional.component';
+import { RecordMeritoComponent } from './record-merito/record-merito.component';
+import { ReporteLaboralComponent } from './reporte-laboral/reporte-laboral.component';
+import { ReporteLicenciasComponent } from './reporte-licencias/reporte-licencias.component';
+import { ReporteMeritoComponent } from './reporte-merito/reporte-merito.component';
+import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacional.component';
 
 
 
@@ -47,7 +54,14 @@ import { DetalleLicenciaComponent } from './detalle-licencia/detalle-licencia.co
     ReportesComponent,
     TipoLicenciaComponent,
     TipoPersonalComponent,
-    DetalleLicenciaComponent
+    DetalleLicenciaComponent,
+    RecordLicenciasComponent,
+    RecordVacacionalComponent,
+    RecordMeritoComponent,
+    ReporteLaboralComponent,
+    ReporteLicenciasComponent,
+    ReporteMeritoComponent,
+    ReporteVacacionalComponent
   ],
   exports:[
     DashboardComponent,

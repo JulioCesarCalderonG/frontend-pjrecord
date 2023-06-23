@@ -1630,6 +1630,7 @@ export class ReportesComponent implements OnInit {
     this.fileDocumentoLaboral!.nativeElement.value='';
     this.fileDocumentoLicencia!.nativeElement.value='';
     this.fileMerito!.nativeElement.value='';
+    this.fileDocumentoMerito!.nativeElement.value='';
   }
 
 

@@ -18,6 +18,13 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { TipoLicenciaComponent} from './tipo-licencia/tipo-licencia.component';
 import { DetalleLicenciaComponent} from './detalle-licencia/detalle-licencia.component';
 import { AdministradorGuard } from '../guards/administrador.guard';
+import { RecordLicenciasComponent } from './record-licencias/record-licencias.component';
+import { RecordVacacionalComponent } from './record-vacacional/record-vacacional.component';
+import { RecordMeritoComponent } from './record-merito/record-merito.component';
+import { ReporteLaboralComponent } from './reporte-laboral/reporte-laboral.component';
+import { ReporteLicenciasComponent } from './reporte-licencias/reporte-licencias.component';
+import { ReporteMeritoComponent } from './reporte-merito/reporte-merito.component';
+import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacional.component';
 
 const routes: Routes = [
     {
@@ -36,10 +43,17 @@ const routes: Routes = [
             { path: 'general', component: GeneralComponent },
             { path: 'organojurisdiccional', component: OrganoComponent },
             { path: 'sede', component: SedeComponent },
-            { path: 'agregar-record', component: RecordLaboralComponent },
             { path: 'reporte-personal/:id/:personal', component: ReportesComponent },
             { path: 'tipo-licencia', component: TipoLicenciaComponent},
             { path: 'detalle-licencia', component: DetalleLicenciaComponent},
+            { path: 'record-laboral', component: RecordLaboralComponent },
+            { path: 'record-licencias', component:RecordLicenciasComponent},
+            { path: 'record-vacacional', component:RecordVacacionalComponent},
+            { path: 'record-merito',component:RecordMeritoComponent},
+            { path: 'reporte-laboral/:id/:personal',component:ReporteLaboralComponent},
+            { path: 'reporte-licencias/:id/:personal',component:ReporteLicenciasComponent},
+            { path: 'reporte-merito/:id/:personal',component:ReporteMeritoComponent},
+            { path: 'reporte-vacacional/:id/:personal', component:ReporteVacacionalComponent},
         ],
         canActivateChild: [
           AdministradorGuard
