@@ -31,6 +31,7 @@ import { ReporteLaboralComponent } from './reporte-laboral/reporte-laboral.compo
 import { ReporteLicenciasComponent } from './reporte-licencias/reporte-licencias.component';
 import { ReporteMeritoComponent } from './reporte-merito/reporte-merito.component';
 import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacional.component';
+import { RegimenLaboralComponent } from './regimen-laboral/regimen-laboral.component';
 
 
 
@@ -61,7 +62,8 @@ import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacio
     ReporteLaboralComponent,
     ReporteLicenciasComponent,
     ReporteMeritoComponent,
-    ReporteVacacionalComponent
+    ReporteVacacionalComponent,
+    RegimenLaboralComponent
   ],
   exports:[
     DashboardComponent,

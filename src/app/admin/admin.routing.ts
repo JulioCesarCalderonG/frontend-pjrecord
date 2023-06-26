@@ -25,6 +25,7 @@ import { ReporteLaboralComponent } from './reporte-laboral/reporte-laboral.compo
 import { ReporteLicenciasComponent } from './reporte-licencias/reporte-licencias.component';
 import { ReporteMeritoComponent } from './reporte-merito/reporte-merito.component';
 import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacional.component';
+import { RegimenLaboralComponent } from './regimen-laboral/regimen-laboral.component';
 
 const routes: Routes = [
     {
@@ -54,6 +55,7 @@ const routes: Routes = [
             { path: 'reporte-licencias/:id/:personal',component:ReporteLicenciasComponent},
             { path: 'reporte-merito/:id/:personal',component:ReporteMeritoComponent},
             { path: 'reporte-vacacional/:id/:personal', component:ReporteVacacionalComponent},
+            { path: 'regimen-laboral',component:RegimenLaboralComponent},
         ],
         canActivateChild: [
           AdministradorGuard
