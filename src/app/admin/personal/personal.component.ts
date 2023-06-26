@@ -60,6 +60,7 @@ export class PersonalComponent implements OnInit {
     this.personalService.postPersonal(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro el personal con exito', 'success');
         this.mostrarPersonal();
         this.cancelar();
       }, (error)=>{
@@ -79,6 +80,7 @@ export class PersonalComponent implements OnInit {
     this.personalService.putPersonal(formData, this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito el personal con exito', 'success');
         this.mostrarPersonal();
 
       }, (error)=>{

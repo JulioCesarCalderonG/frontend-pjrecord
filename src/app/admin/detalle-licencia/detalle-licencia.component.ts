@@ -69,6 +69,7 @@ estado:string='1';
     this.detallelicenciaService.postDetalleLicencia(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro el detalle licencia con exito', 'success');
         this.mostrarDetallelicencia();
         this.cancelar();
       }, (error)=>{
@@ -83,6 +84,7 @@ estado:string='1';
     formData.append('id_tipo_licencia', this.detallelicenciaEditarForm.get('tipo_detalle')?.value);
     this.detallelicenciaService.putDetalleLicencia(formData, this.ids!).subscribe(
       (data)=>{
+        Swal.fire('Editado!', 'Se edito el detalle licencia con exito', 'success');
         this.mostrarDetallelicencia();
       }, (error)=>{
         console.log(error);

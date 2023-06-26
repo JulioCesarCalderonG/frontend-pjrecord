@@ -76,6 +76,7 @@ export class OrganoComponent implements OnInit {
     this.organoService.postOrgano(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro el organo con exito', 'success');
         this.mostrarOrgano();
         this.cancelar();
       },(error)=>{
@@ -92,6 +93,7 @@ export class OrganoComponent implements OnInit {
     this.organoService.putOrgano(formData, this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito el organo con exito', 'success');
         this.mostrarOrgano();
       },(error)=>{
         console.log(error);

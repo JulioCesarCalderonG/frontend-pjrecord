@@ -53,6 +53,7 @@ export class TipodocumentoComponent implements OnInit {
     this.tipodocumentoService.postTipodocumento(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro el tipo licencia con exito', 'success');
         this.mostrartipodocumento();
         this.cancelar();
       }, (error)=>{
@@ -70,6 +71,7 @@ export class TipodocumentoComponent implements OnInit {
     this.tipodocumentoService.putTipodocumento(formData, this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito el tipo licencia con exito', 'success');
         this.mostrartipodocumento();
       }, (error)=>{
         console.log(error);

@@ -74,6 +74,7 @@ export class AreaComponent implements OnInit {
     this.areaService.postAreas(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro el area con exito', 'success');
         this.mostrarAreas();
         this.cancelar();
       }, (error)=>{
@@ -91,6 +92,7 @@ export class AreaComponent implements OnInit {
     this.areaService.putAreas(formData,this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito el area con exito', 'success');
         this.mostrarAreas();
       },(error)=>{
         console.log(error);

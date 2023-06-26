@@ -70,6 +70,7 @@ export class CargoComponent implements OnInit {
     this.cargoService.postCargos(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro el cargo con exito', 'success');
         this.mostrarCargos();
         this.cancelar();
       }, (error)=>{
@@ -85,6 +86,7 @@ export class CargoComponent implements OnInit {
     this.cargoService.putCargo(formData,this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito el cargo con exito', 'success');
         this.mostrarCargos();
       }, (error)=>{
         console.log(error);

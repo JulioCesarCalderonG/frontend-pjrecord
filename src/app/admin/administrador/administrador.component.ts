@@ -52,7 +52,7 @@ export class AdministradorComponent implements OnInit {
 
     this.administradorService.postAdministrador(formData).subscribe(
       (data)=>{
-        console.log(data);
+        Swal.fire('Registrado!', 'Se registro el administrador con exito', 'success');
         this.mostrarAdministrador();
         this.cancelar();
       }, (error)=>{
@@ -66,10 +66,11 @@ export class AdministradorComponent implements OnInit {
     const formData = new FormData();
     formData.append('usuario', this.administradorEditarForm.get('usuario')?.value);
     formData.append('password', this.administradorEditarForm.get('password')?.value);
+    
     this.administradorService.putAdministrador(formData,this.ids!).subscribe(
       (data)=>{
-        console.log(data);
         this.mostrarAdministrador();
+        Swal.fire('Editado!', 'Se edito el administrador con exito', 'success');
       },(error)=>{
         console.log(error);   
       }

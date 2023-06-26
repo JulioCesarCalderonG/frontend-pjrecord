@@ -77,6 +77,7 @@ export class DependenciaComponent implements OnInit {
     this.dependenciaService.postUnidad(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro la unidad organica con exito', 'success');
         this.mostrarUnidadOrganica();
         this.cancelar();
       },(error)=>{
@@ -95,6 +96,7 @@ export class DependenciaComponent implements OnInit {
     this.dependenciaService.putUnidad(formData, this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito la unidad organica con exito', 'success');
         this.mostrarUnidadOrganica();
       }, (error)=>{
         console.log(error);

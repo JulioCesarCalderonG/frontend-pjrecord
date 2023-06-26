@@ -54,6 +54,7 @@ export class SedeComponent implements OnInit {
     this.sedeService.postSede(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro la sede con exito', 'success');
         this.mostrarSede();
         this.cancelar();
       },(error)=>{
@@ -71,6 +72,7 @@ export class SedeComponent implements OnInit {
     this.sedeService.putSede(formData, this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito la sede con exito', 'success');
         this.mostrarSede();
       },
       (error)=>{error}

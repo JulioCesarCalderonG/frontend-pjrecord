@@ -50,6 +50,7 @@ estado:string='1';
     this.tipolicenciaService.postTipolicencia(formData).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Registrado!', 'Se registro el tipo de licencia con exito', 'success');
         this.mostrarTipolicencia();
         this.cancelar();
       }, (error)=>{
@@ -65,6 +66,7 @@ estado:string='1';
     this.tipolicenciaService.putTipolicencia(formData, this.ids!).subscribe(
       (data)=>{
         console.log(data);
+        Swal.fire('Editado!', 'Se edito el tipo de licencia con exito', 'success');
         this.mostrarTipolicencia();
       }, (error)=>{
         console.log(error);
