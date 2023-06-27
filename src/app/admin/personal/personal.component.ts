@@ -43,7 +43,18 @@ export class PersonalComponent implements OnInit {
   mostrarPersonal(){
     this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
       (data)=>{
-        this.listPersonal = data.resp;
+        
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listPersonal = data.resp;
+        }});
       },(error)=>{
         console.log(error);
       }

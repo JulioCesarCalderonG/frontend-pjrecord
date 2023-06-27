@@ -88,7 +88,18 @@ export class GeneralComponent implements OnInit {
   mostrarGeneral() {
     this.generalService.getGeneral(this.tipofiltro, this.datobuscar).subscribe(
       (data) => {
-        this.listGeneral = data.resp;
+        
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listGeneral = data.resp;
+        }});
       },
       (error) => {
         console.log(error);

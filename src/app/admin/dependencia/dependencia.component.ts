@@ -47,8 +47,18 @@ export class DependenciaComponent implements OnInit {
   mostrarUnidadOrganica(){
     this.dependenciaService.getUnidad(this.estado).subscribe(
       (data)=>{
-        this.listUnidad = data.resp;
         console.log(this.listUnidad);
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listUnidad = data.resp;
+        }});
       },(error)=>{
         console.log(error);
       }

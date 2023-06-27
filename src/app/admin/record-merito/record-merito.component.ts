@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PersonalService } from 'src/app/servicios/personal.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-record-merito',
@@ -25,7 +26,17 @@ export class RecordMeritoComponent implements OnInit {
   mostrarPersonal(){
     this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
       (data)=>{
-        this.listPersonal = data.resp;
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listPersonal = data.resp;
+        }});
       },(error)=>{
         console.log(error);
       }

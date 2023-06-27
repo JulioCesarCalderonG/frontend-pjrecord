@@ -38,7 +38,18 @@ export class TipodocumentoComponent implements OnInit {
   mostrartipodocumento(){
     this.tipodocumentoService.getTipodocumento(this.estado).subscribe(
       (data)=>{
-        this.listTipodocumento = data.resp;
+        
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listTipodocumento = data.resp;
+        }});
       }, (error)=>{
         console.log(error);
       }

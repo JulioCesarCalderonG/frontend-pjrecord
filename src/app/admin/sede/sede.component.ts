@@ -38,8 +38,18 @@ export class SedeComponent implements OnInit {
   mostrarSede(){
     this.sedeService.getSedes(this.estado).subscribe(
       (data:ResultSede)=>{
-        this.listSedes = data.resp;
         console.log(this.listSedes);
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listSedes = data.resp;
+        }});
       },
       (error)=>{
         console.log(error);

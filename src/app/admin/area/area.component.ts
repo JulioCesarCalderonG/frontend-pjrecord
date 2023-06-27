@@ -45,7 +45,28 @@ export class AreaComponent implements OnInit {
   mostrarAreas(){
     this.areaService.getAreas(this.estado).subscribe(
       (data)=>{
-        this.listArea = data.resp;
+        
+        let timerInterval:any;
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen:()=>{
+          Swal.showLoading();
+          const b = Swal.getHtmlContainer()?.querySelector('b')
+          timerInterval = setInterval(()=>{
+          }, 100)
+        }, 
+        willClose:() =>{
+          clearInterval(timerInterval)
+        }
+      }).then ((result)=>{
+        if (result.dismiss === Swal.DismissReason.timer) {  
+          this.listArea = data.resp;
+        }
+        })
+
       },(error)=>{
         console.log(error);
       }

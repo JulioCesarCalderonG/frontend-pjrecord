@@ -42,8 +42,18 @@ export class CargoComponent implements OnInit {
 
   mostrarCargos(){
     this.cargoService.getCargos(this.estado).subscribe(
-      (data)=>{
-        this.listCargo = data.resp;
+      (data)=>{  
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listCargo = data.resp;
+        }});
       }, (error)=>{
         console.log(error);
 

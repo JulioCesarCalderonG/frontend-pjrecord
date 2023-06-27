@@ -48,8 +48,18 @@ export class OrganoComponent implements OnInit {
   mostrarOrgano(){
     this.organoService.getOrgano(this.estado).subscribe(
       (data:ResultOrgano)=>{
-        this.listOrgano = data.resp;
         console.log(this.listOrgano);
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listOrgano = data.resp;
+        }});
       },(error)=>{
         console.log(error);
       })

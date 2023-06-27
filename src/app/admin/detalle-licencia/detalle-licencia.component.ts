@@ -42,8 +42,18 @@ estado:string='1';
   mostrarDetallelicencia(){
     this.detallelicenciaService.getDetalleLicencia(this.estado).subscribe(
       (data)=>{
-        this.listDetallelicencia = data.resp;
         console.log(data);
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listDetallelicencia = data.resp;
+        }});
       }, (error)=>{
         console.log(error);
 

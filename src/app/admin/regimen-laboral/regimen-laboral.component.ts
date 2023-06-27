@@ -59,7 +59,18 @@ export class RegimenLaboralComponent implements OnInit {
   mostrarRegimenLaboral(){
     this.regimenLaboralService.getRegimenlaboral(this.estado,this.buscar).subscribe(
       (data)=>{
-        this.listRegimenLaboral=data.resp;
+        
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listRegimenLaboral=data.resp;
+        }});
       },(error)=>{
         console.log(error);
 

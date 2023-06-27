@@ -37,7 +37,18 @@ estado:string='1';
   mostrarTipolicencia(){
     this.tipolicenciaService.getTipoLicencia(this.estado).subscribe(
       (data)=>{
-        this.listTipolicencia = data.resp;
+        
+        Swal.fire({
+          title: 'Cargando datos!',
+          html: 'Por favor espere.',
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen:()=>{
+            Swal.showLoading();
+          }}).then ((result)=>{
+            if (result.dismiss === Swal.DismissReason.timer) { 
+              this.listTipolicencia = data.resp;
+        }});
       }, (error)=>{
         console.log(error);
       }
