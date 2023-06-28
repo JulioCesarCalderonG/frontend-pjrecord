@@ -8,174 +8,190 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-dependencia',
   templateUrl: './dependencia.component.html',
-  styleUrls: ['./dependencia.component.css']
+  styleUrls: ['./dependencia.component.css'],
 })
 export class DependenciaComponent implements OnInit {
-
-  listUnidad?:Array<any>;
-  listOrgano?:Array<any>;
-  unidadForm:FormGroup;
-  unidadEditarForm:FormGroup;
-  ids?:string|number;
-  estado:string='1;'
+  listUnidad?: Array<any>;
+  listOrgano?: Array<any>;
+  unidadForm: FormGroup;
+  unidadEditarForm: FormGroup;
+  ids?: string | number;
+  estado: string = '1';
+  carga: boolean = false;
 
   constructor(
-    private dependenciaService:DependenciaService,
-    private organoService:OrganoService,
-    private fb:FormBuilder
+    private dependenciaService: DependenciaService,
+    private organoService: OrganoService,
+    private fb: FormBuilder
   ) {
     this.unidadForm = this.fb.group({
-      nombre:['',Validators.required],
-      sigla:['',Validators.required],
-      organo:['',Validators.required]
+      nombre: ['', Validators.required],
+      sigla: ['', Validators.required],
+      organo: ['', Validators.required],
     });
     this.unidadEditarForm = this.fb.group({
-      nombre:['',Validators.required],
-      sigla:['',Validators.required],
-      organo:['',Validators.required]
-    })
+      nombre: ['', Validators.required],
+      sigla: ['', Validators.required],
+      organo: ['', Validators.required],
+    });
   }
-
-
 
   ngOnInit(): void {
     this.mostrarUnidadOrganica();
     this.mostrarOrgano();
   }
 
-
-  mostrarUnidadOrganica(){
+  mostrarUnidadOrganica() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.dependenciaService.getUnidad(this.estado).subscribe(
-      (data)=>{
+      (data) => {
+        this.listUnidad = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(this.listUnidad);
-        Swal.fire({
-          title: 'Cargando datos!',
-          html: 'Por favor espere.',
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen:()=>{
-            Swal.showLoading();
-          }}).then ((result)=>{
-            if (result.dismiss === Swal.DismissReason.timer) { 
-              this.listUnidad = data.resp;
-        }});
-      },(error)=>{
+      },
+      (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
-    )
+    );
   }
 
-
-  mostrarOrgano(){
+  mostrarOrgano() {
     this.organoService.getOrgano().subscribe(
-      (data:ResultOrgano)=>{
+      (data: ResultOrgano) => {
         this.listOrgano = data.resp;
         console.log(this.listOrgano);
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  registrarUnidadOrganica(){
+  registrarUnidadOrganica() {
     const formData = new FormData();
-    formData.append('nombre',this.unidadForm.get('nombre')?.value);
-    formData.append('sigla',this.unidadForm.get('sigla')?.value);
-    formData.append('id_organo',this.unidadForm.get('organo')?.value);
+    formData.append('nombre', this.unidadForm.get('nombre')?.value);
+    formData.append('sigla', this.unidadForm.get('sigla')?.value);
+    formData.append('id_organo', this.unidadForm.get('organo')?.value);
 
     this.dependenciaService.postUnidad(formData).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
-        Swal.fire('Registrado!', 'Se registro la unidad organica con exito', 'success');
+        Swal.fire(
+          'Registrado!',
+          'Se registro la unidad organica con exito',
+          'success'
+        );
         this.mostrarUnidadOrganica();
         this.cancelar();
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  editarUnidadOrganica(){
+  editarUnidadOrganica() {
     const formData = new FormData();
     formData.append('nombre', this.unidadEditarForm.get('nombre')?.value);
     formData.append('sigla', this.unidadEditarForm.get('sigla')?.value);
     formData.append('id_organo', this.unidadEditarForm.get('organo')?.value);
 
     this.dependenciaService.putUnidad(formData, this.ids!).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
-        Swal.fire('Editado!', 'Se edito la unidad organica con exito', 'success');
+        Swal.fire(
+          'Editado!',
+          'Se edito la unidad organica con exito',
+          'success'
+        );
         this.mostrarUnidadOrganica();
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  eliminarUnidad(id:number, estado:number){
+  eliminarUnidad(id: number, estado: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: (estado===1)?"La Unidad sera habilitado":"La Unidad sera deshabilitado",
+      text:
+        estado === 1
+          ? 'La Unidad sera habilitado'
+          : 'La Unidad sera deshabilitado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'si, estoy seguro!'
+      confirmButtonText: 'si, estoy seguro!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.dependenciaService.deleteUnidad(id,estado).subscribe(
-          (data)=>{
+        this.dependenciaService.deleteUnidad(id, estado).subscribe(
+          (data) => {
             this.mostrarUnidadOrganica();
             Swal.fire(
-              (estado===1)?'Habilitado':'Deshabilitado',
+              estado === 1 ? 'Habilitado' : 'Deshabilitado',
               'Correcto',
               'success'
-            )
-          }, (error)=>{
+            );
+          },
+          (error) => {
             console.log(error);
-            
           }
-        )
+        );
       }
-    })
+    });
   }
 
-
-  mostrarUnidadTipo(event:any){
+  mostrarUnidadTipo(event: any) {
     console.log(event.target.value);
     this.estado = event.target.value;
     this.mostrarUnidadOrganica();
-    
   }
-  
-  obtenerUnidadId(id:number){
+
+  obtenerUnidadId(id: number) {
     this.dependenciaService.getUnidadId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.unidadEditarForm.setValue({
-          nombre:data.resp.nombre,
-          sigla:data.resp.sigla,
-          organo:data.resp.id_organo,
-        })  
+          nombre: data.resp.nombre,
+          sigla: data.resp.sigla,
+          organo: data.resp.id_organo,
+        });
         this.ids = data.resp.id;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  cancelar(){
+  cancelar() {
     this.unidadForm.setValue({
-      nombre:'',
-      sigla:'',
-      organo:''
-    })
+      nombre: '',
+      sigla: '',
+      organo: '',
+    });
     this.unidadEditarForm.setValue({
-      nombre:'',
-      sigla:'',
-      organo:''
-    })
+      nombre: '',
+      sigla: '',
+      organo: '',
+    });
   }
 }

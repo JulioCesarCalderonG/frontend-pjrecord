@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-reporte-laboral',
   templateUrl: './reporte-laboral.component.html',
-  styleUrls: ['./reporte-laboral.component.css']
+  styleUrls: ['./reporte-laboral.component.css'],
 })
 export class ReporteLaboralComponent implements OnInit {
   idpersonal?: string | number;
@@ -32,12 +32,14 @@ export class ReporteLaboralComponent implements OnInit {
   listTipodocumento?: Array<any>;
   idrecord: string = '';
   loadImage: string = '';
-  loadDocumentoImage: string='';
-  idDocumentoLaboral:string='';
+  loadDocumentoImage: string = '';
+  idDocumentoLaboral: string = '';
+  carga: boolean = false;
   url3 = `${environment.backendUrl}/reporte`;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
-  @ViewChild('fileDocumentoLaboral', { static: false }) fileDocumentoLaboral?: ElementRef;
+  @ViewChild('fileDocumentoLaboral', { static: false })
+  fileDocumentoLaboral?: ElementRef;
   uploadFiles?: File;
   uploadDocumentoLaboral?: File;
   constructor(
@@ -89,30 +91,69 @@ export class ReporteLaboralComponent implements OnInit {
     this.mostrartipodocumento();
     this.mostrarTipoPersonal();
   }
+
   mostrarTablas() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.generalService.getGeneralPersonal(`${this.idpersonal}`).subscribe(
       (data) => {
-        console.log(data);
         this.listRecord = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
+        console.log(data);
       },
       (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
     );
   }
 
   generarReporte() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Generando reporte!',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.reporteService.postReporteRecordId(`${this.idpersonal}`).subscribe(
       (data) => {
         const urlreport = `${this.url3}/recordlaboral/${data.nombre}`;
         window.open(urlreport, '_blank');
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
       },
       (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
     );
-
   }
+
   registrarGeneral() {
     const formData = new FormData();
     formData.append(
@@ -165,13 +206,19 @@ export class ReporteLaboralComponent implements OnInit {
     formData.append('periodo', this.recordEditarForm.get('periodo')?.value);
     formData.append('numero', this.recordEditarForm.get('numero')?.value);
     formData.append('ano', this.recordEditarForm.get('ano')?.value);
-    formData.append('tipo_sigla', this.recordEditarForm.get('tiposigla')?.value);
+    formData.append(
+      'tipo_sigla',
+      this.recordEditarForm.get('tiposigla')?.value
+    );
     formData.append('autoriza', this.recordEditarForm.get('autoriza')?.value);
     formData.append(
       'tipo_dependencia',
       this.recordEditarForm.get('tipodependencia')?.value
     );
-    formData.append('dependencia', this.recordEditarForm.get('dependencia')?.value);
+    formData.append(
+      'dependencia',
+      this.recordEditarForm.get('dependencia')?.value
+    );
     formData.append('id_cargo', this.recordEditarForm.get('cargo')?.value);
     formData.append('desde', this.recordEditarForm.get('desde')?.value);
     formData.append('hasta', this.recordEditarForm.get('hasta')?.value);
@@ -187,8 +234,8 @@ export class ReporteLaboralComponent implements OnInit {
       }
     );
   }
-  editarDocumentoLaboral(){
-    if (this.loadDocumentoImage==='') {
+  editarDocumentoLaboral() {
+    if (this.loadDocumentoImage === '') {
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
@@ -196,48 +243,55 @@ export class ReporteLaboralComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500,
       });
-    }else{
+    } else {
       const formData = new FormData();
-      formData.append('archivo', this.fileDocumentoLaboral?.nativeElement.files[0])
-      this.generalService.putDocumentoLaboral(formData, this.idDocumentoLaboral).subscribe(
-        (data)=>{
-          Swal.fire('Registrado!', data.msg, 'success');
-          this.mostrarTablas();
-        }, (error)=>{
-          console.log(error);
-        }
-      )
+      formData.append(
+        'archivo',
+        this.fileDocumentoLaboral?.nativeElement.files[0]
+      );
+      this.generalService
+        .putDocumentoLaboral(formData, this.idDocumentoLaboral)
+        .subscribe(
+          (data) => {
+            Swal.fire('Registrado!', data.msg, 'success');
+            this.mostrarTablas();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   }
-  eliminarRecord(id:number){
+  eliminarRecord(id: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: "Este registro sera eliminado de la base de datos!",
+      text: 'Este registro sera eliminado de la base de datos!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar!',
-      cancelButtonText:'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.generalService.deleteGeneral(id).subscribe(
-          (data)=>{
+          (data) => {
             Swal.fire(
               'Eliminar!',
               'Registro eliminado de la base de datos.',
               'success'
-            )
+            );
             this.mostrarTablas();
-          },(error)=>{
+          },
+          (error) => {
             console.log(error);
           }
-        )
+        );
       }
-    })
+    });
   }
 
-  obtenerIdDocumentoLaboral(id: number){
+  obtenerIdDocumentoLaboral(id: number) {
     this.idDocumentoLaboral = `${id}`;
   }
 
@@ -537,62 +591,62 @@ export class ReporteLaboralComponent implements OnInit {
       this.loadDocumentoImage = 'cargado';
     }
   }
-    /* Funciones Secundarias */
+  /* Funciones Secundarias */
   reset() {
-      this.fileInput!.nativeElement.value = '';
-      this.fileDocumentoLaboral!.nativeElement.value='';
+    this.fileInput!.nativeElement.value = '';
+    this.fileDocumentoLaboral!.nativeElement.value = '';
   }
   extraserBase64 = async ($event: any) =>
-      new Promise((resolve, reject) => {
-        try {
-          /* const unsafeImg = window.URL.createObjectURL($event);
+    new Promise((resolve, reject) => {
+      try {
+        /* const unsafeImg = window.URL.createObjectURL($event);
         const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg); */
-          const reader = new FileReader();
-          reader.readAsDataURL($event);
-          reader.onload = () => {
-            resolve({
-              base: reader.result,
-            });
-          };
-          reader.onerror = (error) => {
-            resolve({
-              base: null,
-            });
-          };
-        } catch (e) {
-          reject(e);
-        }
-  });
+        const reader = new FileReader();
+        reader.readAsDataURL($event);
+        reader.onload = () => {
+          resolve({
+            base: reader.result,
+          });
+        };
+        reader.onerror = (error) => {
+          resolve({
+            base: null,
+          });
+        };
+      } catch (e) {
+        reject(e);
+      }
+    });
   cancelaruno() {
-      this.generalForm.setValue({
-        periodo: '',
-        tipodocumento: '',
-        numero: '',
-        ano: '',
-        tiposigla: '0',
-        autoriza: '0',
-        tipodependencia: '',
-        dependencia: '',
-        cargo: '',
-        desde: '',
-        hasta: '',
-      });
-      this.recordEditarForm.setValue({
-        periodo: '',
-        tipodocumento: '',
-        numero: '',
-        ano: '',
-        tiposigla: '0',
-        autoriza: '0',
-        tipodependencia: '',
-        dependencia: '',
-        cargo: '',
-        desde: '',
-        hasta: '',
-        tipo_personal: '',
-      });
-      this.loadImage = '';
-      this.reset();
-      this.loadDocumentoImage ='';
+    this.generalForm.setValue({
+      periodo: '',
+      tipodocumento: '',
+      numero: '',
+      ano: '',
+      tiposigla: '0',
+      autoriza: '0',
+      tipodependencia: '',
+      dependencia: '',
+      cargo: '',
+      desde: '',
+      hasta: '',
+    });
+    this.recordEditarForm.setValue({
+      periodo: '',
+      tipodocumento: '',
+      numero: '',
+      ano: '',
+      tiposigla: '0',
+      autoriza: '0',
+      tipodependencia: '',
+      dependencia: '',
+      cargo: '',
+      desde: '',
+      hasta: '',
+      tipo_personal: '',
+    });
+    this.loadImage = '';
+    this.reset();
+    this.loadDocumentoImage = '';
   }
 }

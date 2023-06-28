@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-reporte-licencias',
   templateUrl: './reporte-licencias.component.html',
-  styleUrls: ['./reporte-licencias.component.css']
+  styleUrls: ['./reporte-licencias.component.css'],
 })
 export class ReporteLicenciasComponent implements OnInit {
   idpersonal?: string | number;
@@ -19,13 +19,15 @@ export class ReporteLicenciasComponent implements OnInit {
   listTipoLicencia?: Array<any>;
   listDetalleLicencia?: Array<any>;
   licenciaForm: FormGroup;
-  licenciaEditarForm:FormGroup;
+  licenciaEditarForm: FormGroup;
   loadLicencia: string = '';
-  loadDocumentoLicencia:string='';
-  idLicencia:string='';
-  idDocumentoLicencia:string='';
+  loadDocumentoLicencia: string = '';
+  idLicencia: string = '';
+  idDocumentoLicencia: string = '';
+  carga: boolean = false;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
-  @ViewChild('fileDocumentoLicencia', { static: false }) fileDocumentoLicencia?: ElementRef;
+  @ViewChild('fileDocumentoLicencia', { static: false })
+  fileDocumentoLicencia?: ElementRef;
   url2 = `${environment.backendUrl}/uploadgeneral/licencia`;
   url3 = `${environment.backendUrl}/reporte`;
   uploadLicencia?: File;
@@ -57,7 +59,7 @@ export class ReporteLicenciasComponent implements OnInit {
       inicio: ['', Validators.required],
       fin: ['', Validators.required],
       detallelicencia: ['', Validators.required],
-      tipo_licencia:['',Validators.required]
+      tipo_licencia: ['', Validators.required],
     });
   }
 
@@ -70,6 +72,17 @@ export class ReporteLicenciasComponent implements OnInit {
 
   /*  Seccion Crear Licencias */
   mostrarTablas() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     document.getElementById('tableRecord')?.classList.add('invi');
     document.getElementById('tableLicencia')?.classList.remove('invi');
     document.getElementById('tableVacacional')?.classList.add('invi');
@@ -78,12 +91,21 @@ export class ReporteLicenciasComponent implements OnInit {
       (data) => {
         console.log(data);
         this.listLicencia = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
       },
       (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
     );
   }
+
   mostrarTipoLicencia() {
     this.tipoLicenciaService.getTipoLicencia().subscribe(
       (data) => {
@@ -95,21 +117,36 @@ export class ReporteLicenciasComponent implements OnInit {
     );
   }
 
-
   generarReporte() {
-      this.reporteService.postReporteLicenciaId(`${this.idpersonal}`).subscribe(
-        (data) => {
-          const urlreport = `${this.url3}/licencia/${data.nombre}`;
-          window.open(urlreport, '_blank');
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Generando reporte!',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
         },
-        (error) => {
-          console.log(error);
-        }
-      );
+      });
     }
-
-
-
+    this.reporteService.postReporteLicenciaId(`${this.idpersonal}`).subscribe(
+      (data) => {
+        const urlreport = `${this.url3}/licencia/${data.nombre}`;
+        window.open(urlreport, '_blank');
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
+      },
+      (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
+        console.log(error);
+      }
+    );
+  }
 
   registrarLicencia() {
     const tipo = this.licenciaForm.get('tipodocumento')?.value;
@@ -180,7 +217,7 @@ export class ReporteLicenciasComponent implements OnInit {
       );
     }
   }
-  editarLicencia(){
+  editarLicencia() {
     const tipo = this.licenciaEditarForm.get('tipodocumento')?.value;
     console.log(tipo);
 
@@ -213,7 +250,6 @@ export class ReporteLicenciasComponent implements OnInit {
       } else {
         formData.append('area', this.licenciaEditarForm.get('areauno')?.value);
         console.log(areauno);
-
       }
     }
     if (tipo === '2') {
@@ -229,23 +265,21 @@ export class ReporteLicenciasComponent implements OnInit {
       } else {
         formData.append('area', this.licenciaEditarForm.get('areados')?.value);
         console.log(areados);
-
       }
     }
 
-      this.licenciaService.putLicencia(formData,this.idLicencia).subscribe(
-        (data) => {
-          Swal.fire('Registrado!', data.msg, 'success');
-          this.mostrarTablas();
-
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.licenciaService.putLicencia(formData, this.idLicencia).subscribe(
+      (data) => {
+        Swal.fire('Registrado!', data.msg, 'success');
+        this.mostrarTablas();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
-  editarDocumentoLicencia(){
-    if (this.loadDocumentoLicencia==='') {
+  editarDocumentoLicencia() {
+    if (this.loadDocumentoLicencia === '') {
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
@@ -253,72 +287,80 @@ export class ReporteLicenciasComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500,
       });
-    }else{
+    } else {
       const formData = new FormData();
-      formData.append('archivo', this.fileDocumentoLicencia?.nativeElement.files[0]);
-      this.licenciaService.putDocumentoLicencia(formData, this.idDocumentoLicencia).subscribe(
-        (data)=>{
-          Swal.fire('Registrado!', data.msg, 'success');
-          this.mostrarTablas();
-        }, (error)=>{
-          console.log(error);
-
-        }
-      )
+      formData.append(
+        'archivo',
+        this.fileDocumentoLicencia?.nativeElement.files[0]
+      );
+      this.licenciaService
+        .putDocumentoLicencia(formData, this.idDocumentoLicencia)
+        .subscribe(
+          (data) => {
+            Swal.fire('Registrado!', data.msg, 'success');
+            this.mostrarTablas();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   }
-  eliminarLicencia(id:number){
+  eliminarLicencia(id: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: "Este registro sera eliminado de la base de datos!",
+      text: 'Este registro sera eliminado de la base de datos!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar!',
-      cancelButtonText:'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.licenciaService.deleteLicencia(id).subscribe(
-          (data)=>{
+          (data) => {
             Swal.fire(
               'Eliminar!',
               'Registro eliminado de la base de datos.',
               'success'
             );
             this.mostrarTablas();
-          },(error)=>{
+          },
+          (error) => {
             console.log(error);
           }
-        )
+        );
       }
-    })
+    });
   }
-  obtenerIdDocumentoLicencia(id:number){
+  obtenerIdDocumentoLicencia(id: number) {
     this.idDocumentoLicencia = `${id}`;
   }
-  obtenerLicenciaId(id:number){
-    this.idLicencia=`${id}`;
+  obtenerLicenciaId(id: number) {
+    this.idLicencia = `${id}`;
     this.licenciaService.getLicenciaId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.licenciaEditarForm.setValue({
           tipodocumento: `${data.resp.tipo_documento}`,
-          areauno: (data.resp.tipo_documento===1)?`${data.resp.area}`:'',
-          areados: (data.resp.tipo_documento===2)?`${data.resp.area}`:'',
+          areauno: data.resp.tipo_documento === 1 ? `${data.resp.area}` : '',
+          areados: data.resp.tipo_documento === 2 ? `${data.resp.area}` : '',
           numero: data.resp.numero,
           ano: data.resp.ano,
           inicio: data.resp.inicio,
           fin: data.resp.fin,
           detallelicencia: `${data.resp.id_detalle_licencia}`,
-          tipo_licencia:`${data.resp.DetalleLicencium.TipoLicencium.id}`
+          tipo_licencia: `${data.resp.DetalleLicencium.TipoLicencium.id}`,
         });
-        this.mostrarDetalleLicenciaDos(`${data.resp.DetalleLicencium.TipoLicencium.id}`);
+        this.mostrarDetalleLicenciaDos(
+          `${data.resp.DetalleLicencium.TipoLicencium.id}`
+        );
         this.mostrarProveidoTres(`${data.resp.tipo_documento}`);
-
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
   mostrarProveido(event: any) {
     const valor = event.target.value;
@@ -384,7 +426,7 @@ export class ReporteLicenciasComponent implements OnInit {
       );
     }
   }
-  mostrarDetalleLicenciaDos(id:string) {
+  mostrarDetalleLicenciaDos(id: string) {
     const valor = id;
     if (valor !== '') {
       this.detalleLicenciaService.getDetalleTipo(valor).subscribe(
@@ -443,9 +485,8 @@ export class ReporteLicenciasComponent implements OnInit {
   /* Funciones Secundarias */
   reset() {
     this.fileLicencia!.nativeElement.value = '';
-    this.fileDocumentoLicencia!.nativeElement.value='';
+    this.fileDocumentoLicencia!.nativeElement.value = '';
   }
-
 
   extraserBase64 = async ($event: any) =>
     new Promise((resolve, reject) => {
@@ -489,12 +530,10 @@ export class ReporteLicenciasComponent implements OnInit {
       inicio: '',
       fin: '',
       detallelicencia: '',
-      tipo_licencia:''
+      tipo_licencia: '',
     });
     this.loadLicencia = '';
     this.reset();
-    this.loadDocumentoLicencia='';
+    this.loadDocumentoLicencia = '';
   }
-
-
 }

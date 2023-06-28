@@ -6,146 +6,164 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-tipodocumento',
   templateUrl: './tipodocumento.component.html',
-  styleUrls: ['./tipodocumento.component.css']
+  styleUrls: ['./tipodocumento.component.css'],
 })
 export class TipodocumentoComponent implements OnInit {
-
-
-  listTipodocumento?:Array<any>
-  tipodocumentoform:FormGroup;
-  tipodocumentoEditarform:FormGroup;
-  ids?:string|number;
-  estado:string='1';
+  listTipodocumento?: Array<any>;
+  tipodocumentoform: FormGroup;
+  tipodocumentoEditarform: FormGroup;
+  ids?: string | number;
+  estado: string = '1';
+  carga: boolean = false;
 
   constructor(
-    private tipodocumentoService:TipodocumentoService,
-    private fb:FormBuilder
-    ) {
-      this.tipodocumentoform = this.fb.group({
-        descripcion:['',Validators.required]
-      });
-      this.tipodocumentoEditarform = this.fb.group({
-        descripcion:['',Validators.required]
-      })
-    }
-
+    private tipodocumentoService: TipodocumentoService,
+    private fb: FormBuilder
+  ) {
+    this.tipodocumentoform = this.fb.group({
+      descripcion: ['', Validators.required],
+    });
+    this.tipodocumentoEditarform = this.fb.group({
+      descripcion: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.mostrartipodocumento();
   }
 
-
-  mostrartipodocumento(){
+  mostrartipodocumento() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.tipodocumentoService.getTipodocumento(this.estado).subscribe(
-      (data)=>{
-        
-        Swal.fire({
-          title: 'Cargando datos!',
-          html: 'Por favor espere.',
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen:()=>{
-            Swal.showLoading();
-          }}).then ((result)=>{
-            if (result.dismiss === Swal.DismissReason.timer) { 
-              this.listTipodocumento = data.resp;
-        }});
-      }, (error)=>{
+      (data) => {
+        this.listTipodocumento = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
+      },
+      (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
-    )
+    );
   }
 
-
-  registrarTipodocumento(){
+  registrarTipodocumento() {
     const formData = new FormData();
-    formData.append('descripcion', this.tipodocumentoform.get('descripcion')?.value)
+    formData.append(
+      'descripcion',
+      this.tipodocumentoform.get('descripcion')?.value
+    );
 
     this.tipodocumentoService.postTipodocumento(formData).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
-        Swal.fire('Registrado!', 'Se registro el tipo licencia con exito', 'success');
+        Swal.fire(
+          'Registrado!',
+          'Se registro el tipo licencia con exito',
+          'success'
+        );
         this.mostrartipodocumento();
         this.cancelar();
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  editarTipodocumento(){
+  editarTipodocumento() {
     const formData = new FormData();
 
-    formData.append('descripcion', this.tipodocumentoEditarform.get('descripcion')?.value);
+    formData.append(
+      'descripcion',
+      this.tipodocumentoEditarform.get('descripcion')?.value
+    );
 
     this.tipodocumentoService.putTipodocumento(formData, this.ids!).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
         Swal.fire('Editado!', 'Se edito el tipo licencia con exito', 'success');
         this.mostrartipodocumento();
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
-        
       }
-    )
+    );
   }
 
-  eliminarTipodocumento(id:number, estado:number){
+  eliminarTipodocumento(id: number, estado: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: (estado===1)?"El tipo de documento sera habilitado":"El tipo de documento sera deshabilitado",
+      text:
+        estado === 1
+          ? 'El tipo de documento sera habilitado'
+          : 'El tipo de documento sera deshabilitado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro!'
+      confirmButtonText: 'Si, estoy seguro!',
     }).then((result) => {
       if (result.isConfirmed) {
         this.tipodocumentoService.deleteTipodocumento(id, estado).subscribe(
-          (data)=>{
+          (data) => {
             this.mostrartipodocumento();
             Swal.fire(
-              (estado===1)?'Habilitado':'Deshabilitado',
+              estado === 1 ? 'Habilitado' : 'Deshabilitado',
               'Correcto',
               'success'
-            )          
-          }, (error)=>{
-            console.log(error); 
-          })    
+            );
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       }
-    })
+    });
   }
 
-
-  mostrarTipodocTipo(event:any){
+  mostrarTipodocTipo(event: any) {
     console.log(event.target.value);
     this.estado = event.target.value;
     this.mostrartipodocumento();
   }
 
-
-  obtenerTipodocumentoId(id:number){
+  obtenerTipodocumentoId(id: number) {
     this.tipodocumentoService.getTipodocumentoId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.tipodocumentoEditarform.setValue({
-          descripcion:data.resp.descripcion,
-        })
+          descripcion: data.resp.descripcion,
+        });
         this.ids = data.resp.id;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  cancelar(){
+  cancelar() {
     this.tipodocumentoform.setValue({
-      descripcion:''
-    })
+      descripcion: '',
+    });
     this.tipodocumentoEditarform.setValue({
-      descripcion:''
-    })
+      descripcion: '',
+    });
   }
-
 }

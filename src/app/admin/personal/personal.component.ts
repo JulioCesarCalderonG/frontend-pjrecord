@@ -7,186 +7,205 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-personal',
   templateUrl: './personal.component.html',
-  styleUrls: ['./personal.component.css']
+  styleUrls: ['./personal.component.css'],
 })
 export class PersonalComponent implements OnInit {
-
-  listPersonal?:Array<any>
-  personalForm:FormGroup;
-  personalEditarForm:FormGroup;
-  ids?:string|number;
-  estado:string='1';
-  inputBuscar:string="";
+  listPersonal?: Array<any>;
+  personalForm: FormGroup;
+  personalEditarForm: FormGroup;
+  ids?: string | number;
+  estado: string = '1';
+  inputBuscar: string = '';
+  carga: boolean = false;
   constructor(
-    private personalService:PersonalService,
-    private fb:FormBuilder,
-    private router:Router
-    ) {
-      this.personalForm = this.fb.group({
-        nombre:['', Validators.required],
-        apellido:['',Validators.required],
-        escalafon:['',Validators.required],
-        fecha_inicio:['',Validators.required]
-      });
-      this.personalEditarForm = this.fb.group({
-        nombre:['', Validators.required],
-        apellido:['',Validators.required],
-        escalafon:['',Validators.required],
-        fecha_inicio:['',Validators.required]
-      })
-    }
+    private personalService: PersonalService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {
+    this.personalForm = this.fb.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      escalafon: ['', Validators.required],
+      fecha_inicio: ['', Validators.required],
+    });
+    this.personalEditarForm = this.fb.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      escalafon: ['', Validators.required],
+      fecha_inicio: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.mostrarPersonal();
   }
 
-  mostrarPersonal(){
+  mostrarPersonal() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
-      (data)=>{
-        
-        Swal.fire({
-          title: 'Cargando datos!',
-          html: 'Por favor espere.',
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen:()=>{
-            Swal.showLoading();
-          }}).then ((result)=>{
-            if (result.dismiss === Swal.DismissReason.timer) { 
-              this.listPersonal = data.resp;
-        }});
-      },(error)=>{
+      (data) => {
+        this.listPersonal = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
+      },
+      (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
-    )
+    );
   }
 
-  registrarPersonal(){
+  registrarPersonal() {
     const formData = new FormData();
     formData.append('nombre', this.personalForm.get('nombre')?.value);
     formData.append('apellido', this.personalForm.get('apellido')?.value);
     formData.append('escalafon', this.personalForm.get('escalafon')?.value);
-    formData.append('fechainicio', this.personalForm.get('fecha_inicio')?.value);
+    formData.append(
+      'fechainicio',
+      this.personalForm.get('fecha_inicio')?.value
+    );
 
     this.personalService.postPersonal(formData).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
-        Swal.fire('Registrado!', 'Se registro el personal con exito', 'success');
+        Swal.fire(
+          'Registrado!',
+          'Se registro el personal con exito',
+          'success'
+        );
         this.mostrarPersonal();
         this.cancelar();
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  editarPersonal(){
+  editarPersonal() {
     const formData = new FormData();
     formData.append('nombre', this.personalEditarForm.get('nombre')?.value);
     formData.append('apellido', this.personalEditarForm.get('apellido')?.value);
-    formData.append('escalafon', this.personalEditarForm.get('escalafon')?.value);
-    formData.append('fechainicio', this.personalEditarForm.get('fecha_inicio')?.value);
+    formData.append(
+      'escalafon',
+      this.personalEditarForm.get('escalafon')?.value
+    );
+    formData.append(
+      'fechainicio',
+      this.personalEditarForm.get('fecha_inicio')?.value
+    );
 
     this.personalService.putPersonal(formData, this.ids!).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
         Swal.fire('Editado!', 'Se edito el personal con exito', 'success');
         this.mostrarPersonal();
-
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
-
+    );
   }
 
-
-  eliminarPersonal(id:number, estado:number){
+  eliminarPersonal(id: number, estado: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: (estado===1)?"El personal sera habilitado":"El personal sera deshabilitado",
+      text:
+        estado === 1
+          ? 'El personal sera habilitado'
+          : 'El personal sera deshabilitado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, estoy seguro!'
+      confirmButtonText: 'Si, estoy seguro!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.personalService.deletePersonal(id,estado).subscribe(
-          (data)=>{
+        this.personalService.deletePersonal(id, estado).subscribe(
+          (data) => {
             this.mostrarPersonal();
             Swal.fire(
-              (estado===1)?'Habilitado':'Deshabilitado',
+              estado === 1 ? 'Habilitado' : 'Deshabilitado',
               'Correcto',
               'success'
-            )
-          }, (error)=>{
+            );
+          },
+          (error) => {
             console.log(error);
-
           }
-        )
+        );
       }
-    })
+    });
   }
 
-  mostrarPersonalTipo(event:any){
+  mostrarPersonalTipo(event: any) {
     console.log(event.target.value);
     this.estado = event.target.value;
     this.mostrarPersonal();
-
   }
 
-
-
-
-  obtenerPersonalId(id:number){
+  obtenerPersonalId(id: number) {
     this.personalService.getPersonalId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.personalEditarForm.setValue({
-          nombre:data.resp.nombre,
-          apellido:data.resp.apellido,
-          escalafon:data.resp.escalafon,
-          fecha_inicio:data.resp.fecha_inicio,
-        })
+          nombre: data.resp.nombre,
+          apellido: data.resp.apellido,
+          escalafon: data.resp.escalafon,
+          fecha_inicio: data.resp.fecha_inicio,
+        });
         this.ids = data.resp.id;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  redireccionarCrear(id:number,nombre:string, apellido:string){
-    this.router.navigateByUrl(`admin/reporte-personal/${id}/${nombre} ${apellido}`);
+  redireccionarCrear(id: number, nombre: string, apellido: string) {
+    this.router.navigateByUrl(
+      `admin/reporte-personal/${id}/${nombre} ${apellido}`
+    );
   }
-  buscar(event:string){
+  buscar(event: string) {
     this.inputBuscar = event;
-    if (this.inputBuscar.length>=0) {
-      this.personalService.getPersonal(this.estado,this.inputBuscar).subscribe(
-        (data)=>{
-          this.listPersonal=data.resp
-        },(error)=>{
+    if (this.inputBuscar.length >= 0) {
+      this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
+        (data) => {
+          this.listPersonal = data.resp;
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     }
-
   }
-  cancelar(){
+  cancelar() {
     this.personalForm.setValue({
-      nombre:'',
-      apellido:'',
-      escalafon:'',
-      fecha_inicio:''
-    })
+      nombre: '',
+      apellido: '',
+      escalafon: '',
+      fecha_inicio: '',
+    });
     this.personalEditarForm.setValue({
-      nombre:'',
-      apellido:'',
-      escalafon:'',
-      fecha_inicio:''
-    })
+      nombre: '',
+      apellido: '',
+      escalafon: '',
+      fecha_inicio: '',
+    });
   }
-
 }

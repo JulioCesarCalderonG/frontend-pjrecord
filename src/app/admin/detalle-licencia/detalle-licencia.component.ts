@@ -7,161 +7,192 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-detalle-licencia',
   templateUrl: './detalle-licencia.component.html',
-  styleUrls: ['./detalle-licencia.component.css']
+  styleUrls: ['./detalle-licencia.component.css'],
 })
 export class DetalleLicenciaComponent implements OnInit {
-listDetallelicencia?:Array<any>;
-listTipoLicencia?:Array<any>;
-detallelicenciaForm:FormGroup;
-detallelicenciaEditarForm:FormGroup;
-ids?:string|number;
-estado:string='1';
+  listDetallelicencia?: Array<any>;
+  listTipoLicencia?: Array<any>;
+  detallelicenciaForm: FormGroup;
+  detallelicenciaEditarForm: FormGroup;
+  ids?: string | number;
+  estado: string = '1';
+  carga: boolean = false;
 
   constructor(
-    private detallelicenciaService : DetalleLicenciaService,
-    private tipodetalle:TipoLicenciaService,
-    private fb:FormBuilder
+    private detallelicenciaService: DetalleLicenciaService,
+    private tipodetalle: TipoLicenciaService,
+    private fb: FormBuilder
   ) {
     this.detallelicenciaForm = this.fb.group({
-      nombre:['', Validators.required],
-      tipo_detalle:['', Validators.required]
+      nombre: ['', Validators.required],
+      tipo_detalle: ['', Validators.required],
     });
     this.detallelicenciaEditarForm = this.fb.group({
-      nombre:['', Validators.required],
-      tipo_detalle:['', Validators.required]
-    })
+      nombre: ['', Validators.required],
+      tipo_detalle: ['', Validators.required],
+    });
   }
-
 
   ngOnInit(): void {
     this.mostrarDetallelicencia();
     this.mostrarTipoDetalle();
   }
 
-
-  mostrarDetallelicencia(){
+  mostrarDetallelicencia() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.detallelicenciaService.getDetalleLicencia(this.estado).subscribe(
-      (data)=>{
+      (data) => {
+        this.listDetallelicencia = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(data);
-        Swal.fire({
-          title: 'Cargando datos!',
-          html: 'Por favor espere.',
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen:()=>{
-            Swal.showLoading();
-          }}).then ((result)=>{
-            if (result.dismiss === Swal.DismissReason.timer) { 
-              this.listDetallelicencia = data.resp;
-        }});
-      }, (error)=>{
+      },
+      (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
-
       }
-    )
+    );
   }
 
-  mostrarTipoDetalle(){
+  mostrarTipoDetalle() {
     this.tipodetalle.getTipoLicencia('1').subscribe(
-      (data)=>{
+      (data) => {
         this.listTipoLicencia = data.resp;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  registrarDetallelicencia(){
+  registrarDetallelicencia() {
     const formData = new FormData();
     formData.append('nombre', this.detallelicenciaForm.get('nombre')?.value);
-    formData.append('id_tipo_licencia', this.detallelicenciaForm.get('tipo_detalle')?.value);
+    formData.append(
+      'id_tipo_licencia',
+      this.detallelicenciaForm.get('tipo_detalle')?.value
+    );
 
     this.detallelicenciaService.postDetalleLicencia(formData).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
-        Swal.fire('Registrado!', 'Se registro el detalle licencia con exito', 'success');
+        Swal.fire(
+          'Registrado!',
+          'Se registro el detalle licencia con exito',
+          'success'
+        );
         this.mostrarDetallelicencia();
         this.cancelar();
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  editarDetallelicencia(){
+  editarDetallelicencia() {
     const formData = new FormData();
-    formData.append('nombre', this.detallelicenciaEditarForm.get('nombre')?.value);
-    formData.append('id_tipo_licencia', this.detallelicenciaEditarForm.get('tipo_detalle')?.value);
-    this.detallelicenciaService.putDetalleLicencia(formData, this.ids!).subscribe(
-      (data)=>{
-        Swal.fire('Editado!', 'Se edito el detalle licencia con exito', 'success');
-        this.mostrarDetallelicencia();
-      }, (error)=>{
-        console.log(error);
-      }
-    )
+    formData.append(
+      'nombre',
+      this.detallelicenciaEditarForm.get('nombre')?.value
+    );
+    formData.append(
+      'id_tipo_licencia',
+      this.detallelicenciaEditarForm.get('tipo_detalle')?.value
+    );
+    this.detallelicenciaService
+      .putDetalleLicencia(formData, this.ids!)
+      .subscribe(
+        (data) => {
+          Swal.fire(
+            'Editado!',
+            'Se edito el detalle licencia con exito',
+            'success'
+          );
+          this.mostrarDetallelicencia();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
-  eliminarDetallelicencia(id:number, estado:number){
+  eliminarDetallelicencia(id: number, estado: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: (estado===1)?"El detalle licencia sera habilitado":"El detalle licencia sera deshabilitado",
+      text:
+        estado === 1
+          ? 'El detalle licencia sera habilitado'
+          : 'El detalle licencia sera deshabilitado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, estoy seguro!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.detallelicenciaService.deleteDetalleLicencia(id, estado).subscribe(
-          (data)=>{
+          (data) => {
             this.mostrarDetallelicencia();
             Swal.fire(
-              (estado===1)?'Habilitado':'Deshabilitado',
+              estado === 1 ? 'Habilitado' : 'Deshabilitado',
               'Correcto',
               'success'
-            )
-          }, (error)=>{
+            );
+          },
+          (error) => {
             console.log(error);
           }
-        )
+        );
       }
-    })
+    });
   }
 
-  obtenerDetallelicId(id:number){
+  obtenerDetallelicId(id: number) {
     this.detallelicenciaService.getDetalleLicenciaId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.detallelicenciaEditarForm.setValue({
-          nombre:data.resp.nombre,
-          tipo_detalle:data.resp.id_tipo_detalle
-        })
+          nombre: data.resp.nombre,
+          tipo_detalle: data.resp.id_tipo_detalle,
+        });
         this.ids = data.resp.id;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  mostrarDetallelictipo(event:any){
+  mostrarDetallelictipo(event: any) {
     console.log(event?.target.value);
     this.estado = event.target.value;
     this.mostrarDetallelicencia();
   }
 
-
-
-  cancelar(){
+  cancelar() {
     this.detallelicenciaForm.setValue({
-      nombre:'',
-      tipo_detalle:''
+      nombre: '',
+      tipo_detalle: '',
     });
     this.detallelicenciaEditarForm.setValue({
-      nombre:'',
-      tipo_detalle:''
-    })
+      nombre: '',
+      tipo_detalle: '',
+    });
   }
-
-
 }

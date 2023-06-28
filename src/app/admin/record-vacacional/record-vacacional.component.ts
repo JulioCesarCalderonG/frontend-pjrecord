@@ -22,7 +22,7 @@ export class RecordVacacionalComponent implements OnInit {
     this.mostrarPersonal();
   }
   mostrarPersonal() {
-    this.carga=true;
+    this.carga = true;
     if (this.carga) {
       Swal.fire({
         title: 'Cargando datos!',
@@ -36,13 +36,13 @@ export class RecordVacacionalComponent implements OnInit {
     this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
       (data) => {
         this.listPersonal = data.resp;
-        this.carga=false;
+        this.carga = false;
         if (!this.carga) {
           Swal.close();
         }
       },
       (error) => {
-        this.carga=false;
+        this.carga = false;
         if (!this.carga) {
           Swal.close();
         }

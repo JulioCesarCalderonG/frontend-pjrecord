@@ -2,188 +2,185 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AreaService } from 'src/app/servicios/area.service';
 import { DependenciaService } from 'src/app/servicios/dependencia.service';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-area',
   templateUrl: './area.component.html',
-  styleUrls: ['./area.component.css']
+  styleUrls: ['./area.component.css'],
 })
 export class AreaComponent implements OnInit {
+  listArea?: Array<any>;
+  listUnidad?: Array<any>;
+  areaForm: FormGroup;
+  areaEditarForm: FormGroup;
+  ids?: string | number;
+  estado: string = '1';
+  carga: boolean = false;
 
-  listArea?:Array<any>;
-  listUnidad?:Array<any>;
-  areaForm:FormGroup;
-  areaEditarForm:FormGroup;
-  ids?:string|number;
-  estado:string="1";
   constructor(
-    private areaService:AreaService,
-    private dependenciaService:DependenciaService,
-    private fb:FormBuilder
-    ) {
-      this.areaForm = this.fb.group({
-        nombre:['',Validators.required],
-        sigla:['',Validators.required],
-        unidad:['',Validators.required]
-      });
-      this.areaEditarForm = this.fb.group({
-        nombre:['',Validators.required],
-        sigla:['',Validators.required],
-        unidad:['',Validators.required]
-      })
-    }
-
-
-
+    private areaService: AreaService,
+    private dependenciaService: DependenciaService,
+    private fb: FormBuilder
+  ) {
+    this.areaForm = this.fb.group({
+      nombre: ['', Validators.required],
+      sigla: ['', Validators.required],
+      unidad: ['', Validators.required],
+    });
+    this.areaEditarForm = this.fb.group({
+      nombre: ['', Validators.required],
+      sigla: ['', Validators.required],
+      unidad: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.mostrarAreas();
     this.mostrarUnidadOrganica();
   }
 
-  mostrarAreas(){
-    this.areaService.getAreas(this.estado).subscribe(
-      (data)=>{
-        
-        let timerInterval:any;
+  mostrarAreas() {
+    this.carga = true;
+    if (this.carga) {
       Swal.fire({
         title: 'Cargando datos!',
         html: 'Por favor espere.',
-        timer: 1500,
         timerProgressBar: true,
-        didOpen:()=>{
+        didOpen: () => {
           Swal.showLoading();
-          const b = Swal.getHtmlContainer()?.querySelector('b')
-          timerInterval = setInterval(()=>{
-          }, 100)
-        }, 
-        willClose:() =>{
-          clearInterval(timerInterval)
+        },
+      });
+    }
+    this.areaService.getAreas(this.estado).subscribe(
+      (data) => {
+        this.listArea = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
         }
-      }).then ((result)=>{
-        if (result.dismiss === Swal.DismissReason.timer) {  
-          this.listArea = data.resp;
+      },
+      (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
         }
-        })
-
-      },(error)=>{
         console.log(error);
       }
-    )
+    );
   }
 
-  mostrarUnidadOrganica(){
+  mostrarUnidadOrganica() {
     this.dependenciaService.getUnidad().subscribe(
-      (data)=>{
+      (data) => {
         this.listUnidad = data.resp;
         console.log(this.listUnidad);
-
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
 
-  registrarAreas(){
+  registrarAreas() {
     const formData = new FormData();
     formData.append('nombre', this.areaForm.get('nombre')?.value);
     formData.append('sigla', this.areaForm.get('sigla')?.value);
     formData.append('id_unidad_organica', this.areaForm.get('unidad')?.value);
 
     this.areaService.postAreas(formData).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
         Swal.fire('Registrado!', 'Se registro el area con exito', 'success');
         this.mostrarAreas();
         this.cancelar();
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-  editarAreas(){
+  editarAreas() {
     const formData = new FormData();
-    formData.append('nombre',this.areaEditarForm.get('nombre')?.value);
-    formData.append('sigla',this.areaEditarForm.get('sigla')?.value);
-    formData.append('id_unidad_organica',this.areaEditarForm.get('unidad')?.value);
+    formData.append('nombre', this.areaEditarForm.get('nombre')?.value);
+    formData.append('sigla', this.areaEditarForm.get('sigla')?.value);
+    formData.append(
+      'id_unidad_organica',
+      this.areaEditarForm.get('unidad')?.value
+    );
 
-    this.areaService.putAreas(formData,this.ids!).subscribe(
-      (data)=>{
+    this.areaService.putAreas(formData, this.ids!).subscribe(
+      (data) => {
         console.log(data);
         Swal.fire('Editado!', 'Se edito el area con exito', 'success');
         this.mostrarAreas();
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
-
+    );
   }
-  eliminarArea(id:number,estado:number){
+  eliminarArea(id: number, estado: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: (estado===1)?"El area sera habilitado":"El area sera deshabilitado",
+      text:
+        estado === 1 ? 'El area sera habilitado' : 'El area sera deshabilitado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, estoy seguro!',
-      cancelButtonText:'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.areaService.deleteAreas(id,estado).subscribe(
-          (data)=>{
+        this.areaService.deleteAreas(id, estado).subscribe(
+          (data) => {
             this.mostrarAreas();
             Swal.fire(
-              (estado===1)?'Habilitado':'Deshabilitado',
+              estado === 1 ? 'Habilitado' : 'Deshabilitado',
               'Correcto',
               'success'
-            )
-          },(error)=>{
+            );
+          },
+          (error) => {
             console.log(error);
-
           }
-        )
-
+        );
       }
-    })
+    });
   }
-  mostrarAreaTipo(event:any){
+  mostrarAreaTipo(event: any) {
     console.log(event.target.value);
     this.estado = event.target.value;
     this.mostrarAreas();
   }
-  obtenerDatosId(id:number){
+  obtenerDatosId(id: number) {
     this.areaService.getAreaId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.areaEditarForm.setValue({
-          nombre:data.resp.nombre,
-          sigla:data.resp.sigla,
-          unidad:data.resp.id_unidad_organica,
-        })
+          nombre: data.resp.nombre,
+          sigla: data.resp.sigla,
+          unidad: data.resp.id_unidad_organica,
+        });
         this.ids = data.resp.id;
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
 
-  cancelar(){
+  cancelar() {
     this.areaForm.setValue({
-      nombre:'',
-      sigla:'',
-      unidad:'',
-    })
+      nombre: '',
+      sigla: '',
+      unidad: '',
+    });
     this.areaEditarForm.setValue({
-      nombre:'',
-      sigla:'',
-      unidad:'',
-    })
+      nombre: '',
+      sigla: '',
+      unidad: '',
+    });
   }
-
-
 }

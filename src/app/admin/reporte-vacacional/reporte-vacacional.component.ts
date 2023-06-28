@@ -10,35 +10,38 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-reporte-vacacional',
   templateUrl: './reporte-vacacional.component.html',
-  styleUrls: ['./reporte-vacacional.component.css']
+  styleUrls: ['./reporte-vacacional.component.css'],
 })
 export class ReporteVacacionalComponent implements OnInit {
   idpersonal?: string | number;
   personal = '';
   listVacacional?: Array<any>;
   vacacionalForm: FormGroup;
-  regimenForm:FormGroup;
+  regimenForm: FormGroup;
   vacacionalEditarForm: FormGroup;
   loadVacacional: string = '';
-  loadDocumentoVacacional:string='';
-  idVacacional:string='';
-  idDocumentoVacacional:string='';
+  loadDocumentoVacacional: string = '';
+  idVacacional: string = '';
+  idDocumentoVacacional: string = '';
+  carga: boolean = false;
+
   @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
-  @ViewChild('fileDocumentoVacacional', { static: false }) fileDocumentoVacacional?: ElementRef;
+  @ViewChild('fileDocumentoVacacional', { static: false })
+  fileDocumentoVacacional?: ElementRef;
   url3 = `${environment.backendUrl}/reporte`;
   url4 = `${environment.backendUrl}/uploadgeneral/vacacional`;
   uploadVacacional?: File;
   uploadDocumentoVacacional?: File;
-  listRegimenLaboral?:Array<any>;
+  listRegimenLaboral?: Array<any>;
   constructor(
     private rutaActiva: ActivatedRoute,
     private vacacionalService: VacacionalService,
     private reporteService: ReporteService,
-    private regimenService:RegimenLaboralService,
+    private regimenService: RegimenLaboralService,
     private fb: FormBuilder
   ) {
     this.vacacionalForm = this.fb.group({
-      regimen:['',Validators.required],
+      regimen: ['', Validators.required],
       tipodocumento: ['', Validators.required],
       areauno: [''],
       areados: [''],
@@ -49,7 +52,7 @@ export class ReporteVacacionalComponent implements OnInit {
       periodo: ['', Validators.required],
     });
     this.vacacionalEditarForm = this.fb.group({
-      regimen:['',Validators.required],
+      regimen: ['', Validators.required],
       tipodocumento: ['', Validators.required],
       areauno: [''],
       areados: [''],
@@ -59,9 +62,9 @@ export class ReporteVacacionalComponent implements OnInit {
       fin: ['', Validators.required],
       periodo: ['', Validators.required],
     });
-    this.regimenForm=this.fb.group({
-      regimen:['',Validators.required]
-    })
+    this.regimenForm = this.fb.group({
+      regimen: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
@@ -72,52 +75,71 @@ export class ReporteVacacionalComponent implements OnInit {
   }
 
   mostrarTablas() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Generando reporte',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.vacacionalService
-        .getVacacionalPersonal(`${this.idpersonal}`)
+      .getVacacionalPersonal(`${this.idpersonal}`)
+      .subscribe(
+        (data) => {
+          console.log(data);
+          this.listVacacional = data.resp;
+          this.carga = false;
+          if (!this.carga) {
+            Swal.close();
+          }
+        },
+        (error) => {
+          this.carga = false;
+          if (!this.carga) {
+            Swal.close();
+          }
+          console.log(error);
+        }
+      );
+  }
+
+  mostrarRegimenLaboral() {
+    this.regimenService.getRegimenPersonalId(this.idpersonal!).subscribe(
+      (data) => {
+        this.listRegimenLaboral = data.resp;
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  generarReporte() {
+    const id_regimen_laboral = this.regimenForm.get('regimen')?.value;
+    if (id_regimen_laboral !== '') {
+      this.reporteService
+        .postReporteVacacionalId(`${this.idpersonal}`, { id_regimen_laboral })
         .subscribe(
           (data) => {
             console.log(data);
-            this.listVacacional = data.resp;
+            const urlreport = `${this.url3}/vacacional/${data.nombre}`;
+            window.open(urlreport, '_blank');
           },
           (error) => {
             console.log(error);
           }
         );
-  }
-  mostrarRegimenLaboral(){
-    this.regimenService.getRegimenPersonalId(this.idpersonal!).subscribe(
-      (data)=>{
-        this.listRegimenLaboral=data.resp;
-        console.log(data);
-
-      },(error)=>{
-        console.log(error);
-
-      }
-    )
-  }
-  generarReporte() {
-    const id_regimen_laboral = this.regimenForm.get('regimen')?.value;
-    if (id_regimen_laboral!=='') {
-      this.reporteService.postReporteVacacionalId(`${this.idpersonal}`,{id_regimen_laboral}).subscribe(
-        (data) => {
-          console.log(data);
-          const urlreport = `${this.url3}/vacacional/${data.nombre}`;
-          window.open(urlreport, '_blank');
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    }else{
+    } else {
       Swal.fire({
-        icon:'warning',
-        title:'Seleccionar el tipo de regimen'
-      })
+        icon: 'warning',
+        title: 'Seleccionar el tipo de regimen',
+      });
     }
-
   }
-
 
   registrarVacacional() {
     const tipoDoc = this.vacacionalForm.get('tipodocumento')?.value;
@@ -130,7 +152,10 @@ export class ReporteVacacionalComponent implements OnInit {
     formData.append('periodo', this.vacacionalForm.get('periodo')?.value);
     formData.append('numero', this.vacacionalForm.get('numero')?.value);
     formData.append('ano', this.vacacionalForm.get('ano')?.value);
-    formData.append('id_regimen_laboral', this.vacacionalForm.get('regimen')?.value);
+    formData.append(
+      'id_regimen_laboral',
+      this.vacacionalForm.get('regimen')?.value
+    );
     if (tipoDoc === '1') {
       if (areauno === '') {
         Swal.fire({
@@ -183,12 +208,15 @@ export class ReporteVacacionalComponent implements OnInit {
     }
   }
 
-  editarVacacional(){
+  editarVacacional() {
     const tipoDoc = this.vacacionalEditarForm.get('tipodocumento')?.value;
     const areauno = this.vacacionalEditarForm.get('areauno')?.value;
     const areados = this.vacacionalEditarForm.get('areados')?.value;
     const formData = new FormData();
-    formData.append('tipo_documento',this.vacacionalEditarForm.get('tipodocumento')?.value);
+    formData.append(
+      'tipo_documento',
+      this.vacacionalEditarForm.get('tipodocumento')?.value
+    );
     formData.append('inicio', this.vacacionalEditarForm.get('inicio')?.value);
     formData.append('fin', this.vacacionalEditarForm.get('fin')?.value);
     formData.append('periodo', this.vacacionalEditarForm.get('periodo')?.value);
@@ -206,7 +234,10 @@ export class ReporteVacacionalComponent implements OnInit {
         });
         return;
       } else {
-        formData.append('area', this.vacacionalEditarForm.get('areauno')?.value);
+        formData.append(
+          'area',
+          this.vacacionalEditarForm.get('areauno')?.value
+        );
       }
     }
     if (tipoDoc === '2') {
@@ -220,23 +251,26 @@ export class ReporteVacacionalComponent implements OnInit {
         });
         return;
       } else {
-        formData.append('area', this.vacacionalEditarForm.get('areados')?.value);
+        formData.append(
+          'area',
+          this.vacacionalEditarForm.get('areados')?.value
+        );
       }
     }
-      this.vacacionalService.putVacacional(formData,this.idVacacional).subscribe(
-        (data) => {
-          console.log(data);
-          this.mostrarTablas();
-          Swal.fire('Editado!', data.msg, 'success');
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.vacacionalService.putVacacional(formData, this.idVacacional).subscribe(
+      (data) => {
+        console.log(data);
+        this.mostrarTablas();
+        Swal.fire('Editado!', data.msg, 'success');
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
-  editarDocumentoVacacional(){
-    if (this.loadDocumentoVacacional==='') {
+  editarDocumentoVacacional() {
+    if (this.loadDocumentoVacacional === '') {
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
@@ -244,74 +278,79 @@ export class ReporteVacacionalComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500,
       });
-    }else{
+    } else {
       const formData = new FormData();
-      formData.append('archivo',this.fileDocumentoVacacional?.nativeElement.files[0]);
-      this.vacacionalService.putDocumentoVacacional(formData,this.idDocumentoVacacional).subscribe(
-        (data)=>{
-          Swal.fire('Registrado!', data.msg, 'success');
-          this.mostrarTablas();
-        },
-        (error)=>{
-          console.log(error);
-
-        }
-      )
+      formData.append(
+        'archivo',
+        this.fileDocumentoVacacional?.nativeElement.files[0]
+      );
+      this.vacacionalService
+        .putDocumentoVacacional(formData, this.idDocumentoVacacional)
+        .subscribe(
+          (data) => {
+            Swal.fire('Registrado!', data.msg, 'success');
+            this.mostrarTablas();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   }
 
-  eliminarVacacional(id:number){
+  eliminarVacacional(id: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: "Este registro sera eliminado de la base de datos",
+      text: 'Este registro sera eliminado de la base de datos',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar!',
-      cancelButtonText:  'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.vacacionalService.deleteVacacional(id).subscribe(
-          (data)=>{
+          (data) => {
             Swal.fire(
               'Eliminar!',
               'Registro eliminado de la base de datos.',
               'success'
             );
             this.mostrarTablas();
-          }, (error)=>{
+          },
+          (error) => {
             console.log(error);
-
           }
-        )
+        );
       }
-    })
+    });
   }
-  obtenerIdDocumentoVacacional(id:number){
+  obtenerIdDocumentoVacacional(id: number) {
     this.idDocumentoVacacional = `${id}`;
   }
-  obtenerVacacionalId(id:number){
+  obtenerVacacionalId(id: number) {
     this.idVacacional = `${id}`;
     this.vacacionalService.getVacacionalId(id).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
         this.vacacionalEditarForm.setValue({
           tipodocumento: `${data.resp.tipo_documento}`,
-          areauno: (data.resp.tipo_documento===1)?`${data.resp.area}`:'',
-          areados: (data.resp.tipo_documento===2)?`${data.resp.area}`:'',
+          areauno: data.resp.tipo_documento === 1 ? `${data.resp.area}` : '',
+          areados: data.resp.tipo_documento === 2 ? `${data.resp.area}` : '',
           numero: data.resp.numero,
           ano: data.resp.ano,
           inicio: data.resp.termino,
           fin: data.resp.termino,
           periodo: data.resp.periodo,
-          regimen:`${data.resp.id_regimen_laboral}`
+          regimen: `${data.resp.id_regimen_laboral}`,
         });
         this.mostrarTipoDocVacionalTres(`${data.resp.tipo_documento}`);
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
   mostrarTipoDocVacional(event: any) {
     const valor = event.target.value;
@@ -394,7 +433,7 @@ export class ReporteVacacionalComponent implements OnInit {
 
   reset() {
     this.fileVacacional!.nativeElement.value = '';
-    this.fileDocumentoVacacional!.nativeElement.value='';
+    this.fileDocumentoVacacional!.nativeElement.value = '';
   }
 
   extraserBase64 = async ($event: any) =>
@@ -419,33 +458,31 @@ export class ReporteVacacionalComponent implements OnInit {
       }
     });
 
-    cancelartres() {
-      this.vacacionalForm.setValue({
-        tipodocumento: '',
-        areauno: '',
-        areados: '',
-        numero: '',
-        ano: '',
-        inicio: '',
-        fin: '',
-        periodo: '',
-        regimen: '',
-      });
-      this.vacacionalEditarForm.setValue({
-        tipodocumento: '',
-        areauno: '',
-        areados: '',
-        numero: '',
-        ano: '',
-        inicio: '',
-        fin: '',
-        periodo: '',
-        regimen: '',
-      });
-      this.loadVacacional = '';
-      this.reset();
-      this.loadDocumentoVacacional='';
-    }
-
-
+  cancelartres() {
+    this.vacacionalForm.setValue({
+      tipodocumento: '',
+      areauno: '',
+      areados: '',
+      numero: '',
+      ano: '',
+      inicio: '',
+      fin: '',
+      periodo: '',
+      regimen: '',
+    });
+    this.vacacionalEditarForm.setValue({
+      tipodocumento: '',
+      areauno: '',
+      areados: '',
+      numero: '',
+      ano: '',
+      inicio: '',
+      fin: '',
+      periodo: '',
+      regimen: '',
+    });
+    this.loadVacacional = '';
+    this.reset();
+    this.loadDocumentoVacacional = '';
+  }
 }

@@ -14,58 +14,60 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-reporte-merito',
   templateUrl: './reporte-merito.component.html',
-  styleUrls: ['./reporte-merito.component.css']
+  styleUrls: ['./reporte-merito.component.css'],
 })
 export class ReporteMeritoComponent implements OnInit {
   idpersonal?: string | number;
   personal = '';
-  listEstado?:Array<any>;
-  listSancion?:Array<any>;
-  listMerito?:Array<any>;
-  listInstancia?:Array<any>;
-  meritoForm:FormGroup;
-  meritoEditarForm:FormGroup;
-  loadMerito:string='';
-  loadDocumentoMerito:string='';
-  idDocumentoMerito:string='';
+  listEstado?: Array<any>;
+  listSancion?: Array<any>;
+  listMerito?: Array<any>;
+  listInstancia?: Array<any>;
+  meritoForm: FormGroup;
+  meritoEditarForm: FormGroup;
+  loadMerito: string = '';
+  loadDocumentoMerito: string = '';
+  idDocumentoMerito: string = '';
+  carga: boolean = false;
 
   @ViewChild('fileMerito', { static: false }) fileMerito?: ElementRef;
-  @ViewChild('fileDocumentoMerito', { static: false }) fileDocumentoMerito?: ElementRef;
-  uploadMerito?:File;
-  uploadDocumentoMerito?:File;
+  @ViewChild('fileDocumentoMerito', { static: false })
+  fileDocumentoMerito?: ElementRef;
+  uploadMerito?: File;
+  uploadDocumentoMerito?: File;
   url3 = `${environment.backendUrl}/reporte`;
   url5 = `${environment.backendUrl}/uploadgeneral/merito`;
   constructor(
     private rutaActiva: ActivatedRoute,
-    private estadoService:EstadoService,
-    private sancionService:SancionService,
-    private meritoService:MeritoService,
+    private estadoService: EstadoService,
+    private sancionService: SancionService,
+    private meritoService: MeritoService,
     private organoService: OrganoService,
     private unidadService: DependenciaService,
     private areaService: AreaService,
     private reporteService: ReporteService,
     private fb: FormBuilder
   ) {
-    this.meritoForm= this.fb.group({
-      tipodocumento:['',Validators.required],
-      tipoinstancia:['',Validators.required],
-      id_instancia:['',Validators.required],
-      id_sancion:['',Validators.required],
-      id_estado:['',Validators.required],
-      fecha:['',Validators.required],
-      cod_documento:['',Validators.required],
-      observacion:['']
+    this.meritoForm = this.fb.group({
+      tipodocumento: ['', Validators.required],
+      tipoinstancia: ['', Validators.required],
+      id_instancia: ['', Validators.required],
+      id_sancion: ['', Validators.required],
+      id_estado: ['', Validators.required],
+      fecha: ['', Validators.required],
+      cod_documento: ['', Validators.required],
+      observacion: [''],
     });
-    this.meritoEditarForm= this.fb.group({
-      tipodocumento:['',Validators.required],
-      tipoinstancia:['',Validators.required],
-      id_instancia:['',Validators.required],
-      id_sancion:['',Validators.required],
-      id_estado:['',Validators.required],
-      fecha:['',Validators.required],
-      cod_documento:['',Validators.required],
-      observacion:['']
-    })
+    this.meritoEditarForm = this.fb.group({
+      tipodocumento: ['', Validators.required],
+      tipoinstancia: ['', Validators.required],
+      id_instancia: ['', Validators.required],
+      id_sancion: ['', Validators.required],
+      id_estado: ['', Validators.required],
+      fecha: ['', Validators.required],
+      cod_documento: ['', Validators.required],
+      observacion: [''],
+    });
   }
 
   ngOnInit(): void {
@@ -75,18 +77,38 @@ export class ReporteMeritoComponent implements OnInit {
     this.mostrarEstado();
     this.mostrarSancion();
   }
+
   mostrarTablas() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Generando reporte!',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.meritoService.getMeritoPersonal(`${this.idpersonal}`).subscribe(
       (data) => {
         this.listMerito = data.resp;
         console.log(this.listMerito);
-
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
       },
       (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
-      );
+    );
   }
+
   generarReporte() {
     this.reporteService.postReporteMeritoId(`${this.idpersonal}`).subscribe(
       (data) => {
@@ -97,19 +119,27 @@ export class ReporteMeritoComponent implements OnInit {
         console.log(error);
       }
     );
-
   }
-  registrarMerito(){
+  registrarMerito() {
     const formData = new FormData();
-    formData.append('tipo_documento',this.meritoForm.get('tipodocumento')?.value);
-    formData.append('tipo_instancia',this.meritoForm.get('tipoinstancia')?.value);
-    formData.append('id_instancia',this.meritoForm.get('id_instancia')?.value);
-    formData.append('id_sancion',this.meritoForm.get('id_sancion')?.value);
-    formData.append('id_estado',this.meritoForm.get('id_estado')?.value);
-    formData.append('fecha',this.meritoForm.get('fecha')?.value);
-    formData.append('cod_documento',this.meritoForm.get('cod_documento')?.value);
-    formData.append('observacion',this.meritoForm.get('observacion')?.value);
-    formData.append('id_personal',`${this.idpersonal}`);
+    formData.append(
+      'tipo_documento',
+      this.meritoForm.get('tipodocumento')?.value
+    );
+    formData.append(
+      'tipo_instancia',
+      this.meritoForm.get('tipoinstancia')?.value
+    );
+    formData.append('id_instancia', this.meritoForm.get('id_instancia')?.value);
+    formData.append('id_sancion', this.meritoForm.get('id_sancion')?.value);
+    formData.append('id_estado', this.meritoForm.get('id_estado')?.value);
+    formData.append('fecha', this.meritoForm.get('fecha')?.value);
+    formData.append(
+      'cod_documento',
+      this.meritoForm.get('cod_documento')?.value
+    );
+    formData.append('observacion', this.meritoForm.get('observacion')?.value);
+    formData.append('id_personal', `${this.idpersonal}`);
     if (this.loadMerito === '') {
       Swal.fire({
         position: 'top-end',
@@ -133,30 +163,47 @@ export class ReporteMeritoComponent implements OnInit {
       );
     }
   }
-  EditarMerito(){
+  EditarMerito() {
     const formData = new FormData();
-    formData.append('tipo_documento',this.meritoEditarForm.get('tipodocumento')?.value);
-    formData.append('tipo_instancia',this.meritoEditarForm.get('tipoinstancia')?.value);
-    formData.append('id_instancia',this.meritoEditarForm.get('id_instancia')?.value);
-    formData.append('id_sancion',this.meritoEditarForm.get('id_sancion')?.value);
-    formData.append('id_estado',this.meritoEditarForm.get('id_estado')?.value);
-    formData.append('fecha',this.meritoEditarForm.get('fecha')?.value);
-    formData.append('cod_documento',this.meritoEditarForm.get('cod_documento')?.value);
-    formData.append('observacion',this.meritoEditarForm.get('observacion')?.value);
+    formData.append(
+      'tipo_documento',
+      this.meritoEditarForm.get('tipodocumento')?.value
+    );
+    formData.append(
+      'tipo_instancia',
+      this.meritoEditarForm.get('tipoinstancia')?.value
+    );
+    formData.append(
+      'id_instancia',
+      this.meritoEditarForm.get('id_instancia')?.value
+    );
+    formData.append(
+      'id_sancion',
+      this.meritoEditarForm.get('id_sancion')?.value
+    );
+    formData.append('id_estado', this.meritoEditarForm.get('id_estado')?.value);
+    formData.append('fecha', this.meritoEditarForm.get('fecha')?.value);
+    formData.append(
+      'cod_documento',
+      this.meritoEditarForm.get('cod_documento')?.value
+    );
+    formData.append(
+      'observacion',
+      this.meritoEditarForm.get('observacion')?.value
+    );
 
-      this.meritoService.putMerito(formData,`${this.idpersonal}`).subscribe(
-        (data) => {
-          Swal.fire('Editado!', data.msg, 'success');
-          this.mostrarTablas();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-
+    this.meritoService.putMerito(formData, `${this.idpersonal}`).subscribe(
+      (data) => {
+        Swal.fire('Editado!', data.msg, 'success');
+        this.mostrarTablas();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
-  editarDocumentoMerito(){
-    if (this.loadDocumentoMerito==='') {
+  editarDocumentoMerito() {
+    if (this.loadDocumentoMerito === '') {
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
@@ -164,97 +211,98 @@ export class ReporteMeritoComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500,
       });
-    }else{
+    } else {
       const formData = new FormData();
-      formData.append('archivo',this.fileDocumentoMerito?.nativeElement.files[0]);
-      this.meritoService.putDocumentoMerito(formData,this.idDocumentoMerito).subscribe(
-        (data)=>{
-          Swal.fire('Actualizado!', data.msg, 'success');
-          this.mostrarTablas();
-        },
-        (error)=>{
-          console.log(error);
-
-        }
-      )
+      formData.append(
+        'archivo',
+        this.fileDocumentoMerito?.nativeElement.files[0]
+      );
+      this.meritoService
+        .putDocumentoMerito(formData, this.idDocumentoMerito)
+        .subscribe(
+          (data) => {
+            Swal.fire('Actualizado!', data.msg, 'success');
+            this.mostrarTablas();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   }
-  eliminarMerito(id:number){
+  eliminarMerito(id: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: "Este registro sera eliminado de la base de datos",
+      text: 'Este registro sera eliminado de la base de datos',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar!',
-      cancelButtonText:  'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.meritoService.deleteMerito(id).subscribe(
-          (data)=>{
+          (data) => {
             Swal.fire(
               'Eliminado!',
               'Registro eliminado de la base de datos.',
               'success'
             );
             this.mostrarTablas();
-          }, (error)=>{
+          },
+          (error) => {
             console.log(error);
-
           }
-        )
+        );
       }
-    })
+    });
   }
 
-  obtenerMeritoId(id:number){
+  obtenerMeritoId(id: number) {
     this.meritoService.getMeritoId(id).subscribe(
-      (data)=>{
-        this.buscarSiglaMeritoDos(`${data.resp.tipo_instancia}`)
+      (data) => {
+        this.buscarSiglaMeritoDos(`${data.resp.tipo_instancia}`);
         this.meritoEditarForm.setValue({
-          tipodocumento:`${data.resp.tipo_documento}`,
-          tipoinstancia:`${data.resp.tipo_instancia}`,
-          id_instancia:`${data.resp.id_instancia}`,
-          id_sancion:`${data.resp.id_sancion}`,
-          id_estado:`${data.resp.id_estado}`,
-          fecha:data.resp.fecha,
-          cod_documento:data.cod_documento,
-          observacion:data.resp.observacion
+          tipodocumento: `${data.resp.tipo_documento}`,
+          tipoinstancia: `${data.resp.tipo_instancia}`,
+          id_instancia: `${data.resp.id_instancia}`,
+          id_sancion: `${data.resp.id_sancion}`,
+          id_estado: `${data.resp.id_estado}`,
+          fecha: data.resp.fecha,
+          cod_documento: data.cod_documento,
+          observacion: data.resp.observacion,
         });
-
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
-  obtenerIdDocumentoMerito(id:number){
-    this.idDocumentoMerito=`${id}`;
+  obtenerIdDocumentoMerito(id: number) {
+    this.idDocumentoMerito = `${id}`;
   }
-  mostrarEstado(){
+  mostrarEstado() {
     this.estadoService.getEstados().subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
-        this.listEstado=data.resp;
+        this.listEstado = data.resp;
       },
-      (error)=>{
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
-  mostrarSancion(){
+  mostrarSancion() {
     this.sancionService.getSancion().subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
-        this.listSancion=data.resp;
+        this.listSancion = data.resp;
       },
-      (error)=>{
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
 
   buscarSiglaMerito(event: any) {
@@ -373,55 +421,53 @@ export class ReporteMeritoComponent implements OnInit {
   }
   /* Funciones Secundarias */
   reset() {
-    this.fileMerito!.nativeElement.value='';
-    this.fileDocumentoMerito!.nativeElement.value='';
+    this.fileMerito!.nativeElement.value = '';
+    this.fileDocumentoMerito!.nativeElement.value = '';
   }
 
-
   extraserBase64 = async ($event: any) =>
-  new Promise((resolve, reject) => {
-    try {
-      /* const unsafeImg = window.URL.createObjectURL($event);
+    new Promise((resolve, reject) => {
+      try {
+        /* const unsafeImg = window.URL.createObjectURL($event);
     const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg); */
-      const reader = new FileReader();
-      reader.readAsDataURL($event);
-      reader.onload = () => {
-        resolve({
-          base: reader.result,
-        });
-      };
-      reader.onerror = (error) => {
-        resolve({
-          base: null,
-        });
-      };
-    } catch (e) {
-      reject(e);
-    }
-  });
-    cancelarcuatro(){
-      this.meritoForm.setValue({
-        tipodocumento:'',
-        tipoinstancia:'',
-        id_instancia:'',
-        id_sancion:'',
-        id_estado:'',
-        fecha:'',
-        cod_documento:'',
-        observacion:''
-      });
-      this.meritoEditarForm.setValue({
-        tipodocumento:'',
-        tipoinstancia:'',
-        id_instancia:'',
-        id_sancion:'',
-        id_estado:'',
-        fecha:'',
-        cod_documento:'',
-        observacion:''
-      });
-      this.loadMerito='';
-      this.reset();
-
-    }
+        const reader = new FileReader();
+        reader.readAsDataURL($event);
+        reader.onload = () => {
+          resolve({
+            base: reader.result,
+          });
+        };
+        reader.onerror = (error) => {
+          resolve({
+            base: null,
+          });
+        };
+      } catch (e) {
+        reject(e);
+      }
+    });
+  cancelarcuatro() {
+    this.meritoForm.setValue({
+      tipodocumento: '',
+      tipoinstancia: '',
+      id_instancia: '',
+      id_sancion: '',
+      id_estado: '',
+      fecha: '',
+      cod_documento: '',
+      observacion: '',
+    });
+    this.meritoEditarForm.setValue({
+      tipodocumento: '',
+      tipoinstancia: '',
+      id_instancia: '',
+      id_sancion: '',
+      id_estado: '',
+      fecha: '',
+      cod_documento: '',
+      observacion: '',
+    });
+    this.loadMerito = '';
+    this.reset();
+  }
 }

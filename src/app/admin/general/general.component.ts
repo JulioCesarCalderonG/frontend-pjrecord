@@ -28,8 +28,9 @@ export class GeneralComponent implements OnInit {
   ids?: string | number;
   tipofiltro: string = '';
   datobuscar: string = '';
+  carga: boolean = false;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
-  url2 = `${environment.backendUrl}/reporte/recordlaboral`
+  url2 = `${environment.backendUrl}/reporte/recordlaboral`;
   modelReporte = {
     personal: '',
     tiporeporte: '',
@@ -47,7 +48,7 @@ export class GeneralComponent implements OnInit {
     private unidadService: DependenciaService,
     private areaService: AreaService,
     private personalService: PersonalService,
-    private reporteService:ReporteService,
+    private reporteService: ReporteService,
     private fb: FormBuilder
   ) {
     this.generalForm = this.fb.group({
@@ -86,22 +87,30 @@ export class GeneralComponent implements OnInit {
   }
 
   mostrarGeneral() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.generalService.getGeneral(this.tipofiltro, this.datobuscar).subscribe(
       (data) => {
-        
-        Swal.fire({
-          title: 'Cargando datos!',
-          html: 'Por favor espere.',
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen:()=>{
-            Swal.showLoading();
-          }}).then ((result)=>{
-            if (result.dismiss === Swal.DismissReason.timer) { 
-              this.listGeneral = data.resp;
-        }});
+        this.listGeneral = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
       },
       (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
     );
@@ -318,7 +327,11 @@ export class GeneralComponent implements OnInit {
     if (this.modelReporte.tiporeporte === '1') {
       console.log(this.modelReporte);
 
-      if (this.modelReporte.tipodependencia === '' || this.modelReporte.dependencia === '' || this.modelReporte.inicio === '') {
+      if (
+        this.modelReporte.tipodependencia === '' ||
+        this.modelReporte.dependencia === '' ||
+        this.modelReporte.inicio === ''
+      ) {
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -340,22 +353,19 @@ export class GeneralComponent implements OnInit {
         formData.append('tipofiltro', this.modelReporte.tiporeporte);
         formData.append('tipodependencia', this.modelReporte.tipodependencia);
         formData.append('dependencia', this.modelReporte.dependencia);
-        formData.append('fechainicio',this.modelReporte.inicio);
-        formData.append('fechafin',this.modelReporte.fin);
-        formData.append('personal','');
+        formData.append('fechainicio', this.modelReporte.inicio);
+        formData.append('fechafin', this.modelReporte.fin);
+        formData.append('personal', '');
 
-        this.reporteService.postReporteRecord(formData).subscribe(
-          (data)=>{
-            console.log(data);
+        this.reporteService.postReporteRecord(formData).subscribe((data) => {
+          console.log(data);
 
-            const urlreport=`${this.url2}/${data.nombre}`;
-            window.open(urlreport,'_blank');
-          }
-        )
-
+          const urlreport = `${this.url2}/${data.nombre}`;
+          window.open(urlreport, '_blank');
+        });
       }
-    }else if (this.modelReporte.tiporeporte === '2') {
-      if (this.modelReporte.personal==="") {
+    } else if (this.modelReporte.tiporeporte === '2') {
+      if (this.modelReporte.personal === '') {
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -372,20 +382,18 @@ export class GeneralComponent implements OnInit {
           icon: 'warning',
           title: 'Completa los datos',
         });
-      }else{
+      } else {
         const formData = new FormData();
-        formData.append('tipofiltro', "");
-        formData.append('tipodependencia', "");
-        formData.append('dependencia', "");
-        formData.append('fechainicio',"");
-        formData.append('fechafin',"");
-        formData.append('personal',this.modelReporte.personal);
-        this.reporteService.postReporteRecord(formData).subscribe(
-          (data)=>{
-            const urlreport=`${this.url2}/${data.nombre}`;
-            window.open(urlreport,'_blank');
-          }
-        )
+        formData.append('tipofiltro', '');
+        formData.append('tipodependencia', '');
+        formData.append('dependencia', '');
+        formData.append('fechainicio', '');
+        formData.append('fechafin', '');
+        formData.append('personal', this.modelReporte.personal);
+        this.reporteService.postReporteRecord(formData).subscribe((data) => {
+          const urlreport = `${this.url2}/${data.nombre}`;
+          window.open(urlreport, '_blank');
+        });
       }
     } else {
       const Toast = Swal.mixin({

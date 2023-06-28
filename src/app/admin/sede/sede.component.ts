@@ -7,144 +7,149 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-sede',
   templateUrl: './sede.component.html',
-  styleUrls: ['./sede.component.css']
+  styleUrls: ['./sede.component.css'],
 })
 export class SedeComponent implements OnInit {
+  listSedes?: Array<Resp>;
+  sedeForm: FormGroup;
+  sedeEditarForm: FormGroup;
+  ids?: string | number;
+  estado: string = '1';
+  carga: boolean = false;
 
-  listSedes?:Array<Resp>;
-  sedeForm:FormGroup;
-  sedeEditarForm:FormGroup;
-  ids?:string|number;
-  estado:string='1';
-
-  constructor(
-    private sedeService:SedeService,
-    private fb:FormBuilder
-  ) {
+  constructor(private sedeService: SedeService, private fb: FormBuilder) {
     this.sedeForm = this.fb.group({
-      nombre:['',Validators.required]
+      nombre: ['', Validators.required],
     });
     this.sedeEditarForm = this.fb.group({
-      nombre:['',Validators.required]
-    })
+      nombre: ['', Validators.required],
+    });
   }
-
 
   ngOnInit(): void {
     this.mostrarSede();
   }
 
-
-  mostrarSede(){
+  mostrarSede() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.sedeService.getSedes(this.estado).subscribe(
-      (data:ResultSede)=>{
+      (data: ResultSede) => {
+        this.listSedes = data.resp;
         console.log(this.listSedes);
-        Swal.fire({
-          title: 'Cargando datos!',
-          html: 'Por favor espere.',
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen:()=>{
-            Swal.showLoading();
-          }}).then ((result)=>{
-            if (result.dismiss === Swal.DismissReason.timer) { 
-              this.listSedes = data.resp;
-        }});
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
       },
-      (error)=>{
+      (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
-    )
+    );
   }
 
-
-  registrarSede(){
+  registrarSede() {
     const formData = new FormData();
-    formData.append('nombre',this.sedeForm.get('nombre')?.value);
+    formData.append('nombre', this.sedeForm.get('nombre')?.value);
     this.sedeService.postSede(formData).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
         Swal.fire('Registrado!', 'Se registro la sede con exito', 'success');
         this.mostrarSede();
         this.cancelar();
-      },(error)=>{
+      },
+      (error) => {
         console.log(error);
-
       }
-    )
+    );
   }
 
-
-  editarSede(){
+  editarSede() {
     const formData = new FormData();
     formData.append('nombre', this.sedeEditarForm.get('nombre')?.value);
 
     this.sedeService.putSede(formData, this.ids!).subscribe(
-      (data)=>{
+      (data) => {
         console.log(data);
         Swal.fire('Editado!', 'Se edito la sede con exito', 'success');
         this.mostrarSede();
       },
-      (error)=>{error}
-    )
-
+      (error) => {
+        error;
+      }
+    );
   }
 
-
-  eliminarSede(id:number, estado:number){
+  eliminarSede(id: number, estado: number) {
     Swal.fire({
       title: 'Estas seguro?',
-      text: (estado===1)?"La sede sera habilitado":"La sede sera deshabilitado",
+      text:
+        estado === 1 ? 'La sede sera habilitado' : 'La sede sera deshabilitado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, estoy seguro!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.sedeService.deleteSede(id,estado).subscribe(
-          (data)=>{
+        this.sedeService.deleteSede(id, estado).subscribe(
+          (data) => {
             this.mostrarSede();
             Swal.fire(
-              (estado===1)?'Habilitado':'Deshabilitado',
+              estado === 1 ? 'Habilitado' : 'Deshabilitado',
               'Correcto',
               'success'
-            )
-          }, (error)=>{
+            );
+          },
+          (error) => {
             console.log(error);
           }
-        )
+        );
       }
-    })
+    });
   }
 
-  mostrarSedeTipo(event:any){
+  mostrarSedeTipo(event: any) {
     console.log(event.target.value);
     this.estado = event.target.value;
     this.mostrarSede();
   }
 
-  obtenerSedeId(id:number){
+  obtenerSedeId(id: number) {
     this.sedeService.getSedeId(id).subscribe(
-      (data)=>{
+      (data) => {
         this.sedeEditarForm.setValue({
-          nombre:data.resp.nombre,
-        })
+          nombre: data.resp.nombre,
+        });
         this.ids = data.resp.id;
-      }, (error)=>{
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
-
-  cancelar(){
+  cancelar() {
     this.sedeForm.setValue({
-      nombre:''
-    })
+      nombre: '',
+    });
     this.sedeEditarForm.setValue({
-      nombre:''
-    })
+      nombre: '',
+    });
   }
 }
