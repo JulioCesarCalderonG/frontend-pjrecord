@@ -6,65 +6,71 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-record-vacacional',
   templateUrl: './record-vacacional.component.html',
-  styleUrls: ['./record-vacacional.component.css']
+  styleUrls: ['./record-vacacional.component.css'],
 })
 export class RecordVacacionalComponent implements OnInit {
-
-
-  listPersonal?:Array<any>
-  estado:string='1';
-  inputBuscar:string="";
+  listPersonal?: Array<any>;
+  estado: string = '1';
+  inputBuscar: string = '';
+  carga: boolean = false;
   constructor(
-    private personalService:PersonalService,
-    private router:Router
-  ) {
-
-  }
+    private personalService: PersonalService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.mostrarPersonal();
   }
-  mostrarPersonal(){
+  mostrarPersonal() {
+    this.carga=true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere.',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
-      (data)=>{
-        Swal.fire({
-          title: 'Cargando datos!',
-          html: 'Por favor espere.',
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen:()=>{
-            Swal.showLoading();
-          }}).then ((result)=>{
-            if (result.dismiss === Swal.DismissReason.timer) { 
-              this.listPersonal = data.resp;
-        }});
-      },(error)=>{
+      (data) => {
+        this.listPersonal = data.resp;
+        this.carga=false;
+        if (!this.carga) {
+          Swal.close();
+        }
+      },
+      (error) => {
+        this.carga=false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
-    )
+    );
   }
-  buscar(event:string){
+  buscar(event: string) {
     this.inputBuscar = event;
-    if (this.inputBuscar.length>=0) {
-      this.personalService.getPersonal(this.estado,this.inputBuscar).subscribe(
-        (data)=>{
-          this.listPersonal=data.resp
-        },(error)=>{
+    if (this.inputBuscar.length >= 0) {
+      this.personalService.getPersonal(this.estado, this.inputBuscar).subscribe(
+        (data) => {
+          this.listPersonal = data.resp;
+        },
+        (error) => {
           console.log(error);
-
         }
-      )
+      );
     }
-
   }
-  mostrarPersonalTipo(event:any){
+  mostrarPersonalTipo(event: any) {
     console.log(event.target.value);
     this.estado = event.target.value;
     this.mostrarPersonal();
-
   }
-  redireccionarCrear(id:number,nombre:string, apellido:string){
-    this.router.navigateByUrl(`admin/reporte-vacacional/${id}/${nombre} ${apellido}`);
+  redireccionarCrear(id: number, nombre: string, apellido: string) {
+    this.router.navigateByUrl(
+      `admin/reporte-vacacional/${id}/${nombre} ${apellido}`
+    );
   }
-
 }

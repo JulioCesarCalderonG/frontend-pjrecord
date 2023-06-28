@@ -27,6 +27,8 @@ export class RegimenLaboralService {
   putRegimenlaboral(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`, body);
   }
-
+  getRegimenPersonalId(id:string| number):Observable<any>{
+    return this.http.get(`${this.url}/personal/${id}`);
+  }
 
 }

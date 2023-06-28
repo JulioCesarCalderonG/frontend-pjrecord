@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { RegimenLaboralService } from 'src/app/servicios/regimen-laboral.service';
 import { ReporteService } from 'src/app/servicios/reporte.service';
 import { VacacionalService } from 'src/app/servicios/vacacional.service';
 import { environment } from 'src/environments/environment.prod';
@@ -16,6 +17,7 @@ export class ReporteVacacionalComponent implements OnInit {
   personal = '';
   listVacacional?: Array<any>;
   vacacionalForm: FormGroup;
+  regimenForm:FormGroup;
   vacacionalEditarForm: FormGroup;
   loadVacacional: string = '';
   loadDocumentoVacacional:string='';
@@ -27,14 +29,16 @@ export class ReporteVacacionalComponent implements OnInit {
   url4 = `${environment.backendUrl}/uploadgeneral/vacacional`;
   uploadVacacional?: File;
   uploadDocumentoVacacional?: File;
-
+  listRegimenLaboral?:Array<any>;
   constructor(
     private rutaActiva: ActivatedRoute,
     private vacacionalService: VacacionalService,
     private reporteService: ReporteService,
+    private regimenService:RegimenLaboralService,
     private fb: FormBuilder
   ) {
     this.vacacionalForm = this.fb.group({
+      regimen:['',Validators.required],
       tipodocumento: ['', Validators.required],
       areauno: [''],
       areados: [''],
@@ -45,6 +49,7 @@ export class ReporteVacacionalComponent implements OnInit {
       periodo: ['', Validators.required],
     });
     this.vacacionalEditarForm = this.fb.group({
+      regimen:['',Validators.required],
       tipodocumento: ['', Validators.required],
       areauno: [''],
       areados: [''],
@@ -54,12 +59,16 @@ export class ReporteVacacionalComponent implements OnInit {
       fin: ['', Validators.required],
       periodo: ['', Validators.required],
     });
+    this.regimenForm=this.fb.group({
+      regimen:['',Validators.required]
+    })
   }
 
   ngOnInit(): void {
     this.idpersonal = this.rutaActiva.snapshot.params.id;
     this.personal = this.rutaActiva.snapshot.params.personal;
     this.mostrarTablas();
+    this.mostrarRegimenLaboral();
   }
 
   mostrarTablas() {
@@ -75,19 +84,38 @@ export class ReporteVacacionalComponent implements OnInit {
           }
         );
   }
-
-  generarReporte() {
-    this.reporteService.postReporteVacacionalId(`${this.idpersonal}`).subscribe(
-      (data) => {
+  mostrarRegimenLaboral(){
+    this.regimenService.getRegimenPersonalId(this.idpersonal!).subscribe(
+      (data)=>{
+        this.listRegimenLaboral=data.resp;
         console.log(data);
 
-        const urlreport = `${this.url3}/vacacional/${data.nombre}`;
-        window.open(urlreport, '_blank');
-      },
-      (error) => {
+      },(error)=>{
         console.log(error);
+
       }
-    );
+    )
+  }
+  generarReporte() {
+    const id_regimen_laboral = this.regimenForm.get('regimen')?.value;
+    if (id_regimen_laboral!=='') {
+      this.reporteService.postReporteVacacionalId(`${this.idpersonal}`,{id_regimen_laboral}).subscribe(
+        (data) => {
+          console.log(data);
+          const urlreport = `${this.url3}/vacacional/${data.nombre}`;
+          window.open(urlreport, '_blank');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }else{
+      Swal.fire({
+        icon:'warning',
+        title:'Seleccionar el tipo de regimen'
+      })
+    }
+
   }
 
 
@@ -102,7 +130,7 @@ export class ReporteVacacionalComponent implements OnInit {
     formData.append('periodo', this.vacacionalForm.get('periodo')?.value);
     formData.append('numero', this.vacacionalForm.get('numero')?.value);
     formData.append('ano', this.vacacionalForm.get('ano')?.value);
-    formData.append('id_personal', `${this.idpersonal}`);
+    formData.append('id_regimen_laboral', this.vacacionalForm.get('regimen')?.value);
     if (tipoDoc === '1') {
       if (areauno === '') {
         Swal.fire({
@@ -277,6 +305,7 @@ export class ReporteVacacionalComponent implements OnInit {
           inicio: data.resp.termino,
           fin: data.resp.termino,
           periodo: data.resp.periodo,
+          regimen:`${data.resp.id_regimen_laboral}`
         });
         this.mostrarTipoDocVacionalTres(`${data.resp.tipo_documento}`);
       }, (error)=>{
@@ -400,6 +429,7 @@ export class ReporteVacacionalComponent implements OnInit {
         inicio: '',
         fin: '',
         periodo: '',
+        regimen: '',
       });
       this.vacacionalEditarForm.setValue({
         tipodocumento: '',
@@ -410,6 +440,7 @@ export class ReporteVacacionalComponent implements OnInit {
         inicio: '',
         fin: '',
         periodo: '',
+        regimen: '',
       });
       this.loadVacacional = '';
       this.reset();

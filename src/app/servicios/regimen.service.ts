@@ -14,4 +14,5 @@ export class RegimenService {
   getRegimen():Observable<any>{
     return this.http.get(this.url);
   }
+
 }
