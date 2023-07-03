@@ -32,6 +32,7 @@ import { ReporteLicenciasComponent } from './reporte-licencias/reporte-licencias
 import { ReporteMeritoComponent } from './reporte-merito/reporte-merito.component';
 import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacional.component';
 import { RegimenLaboralComponent } from './regimen-laboral/regimen-laboral.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -77,7 +78,8 @@ import { RegimenLaboralComponent } from './regimen-laboral/regimen-laboral.compo
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxPaginationModule
   ]
 })
 export class AdminModule { }

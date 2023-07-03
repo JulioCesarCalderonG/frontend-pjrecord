@@ -110,16 +110,37 @@ export class ReporteMeritoComponent implements OnInit {
   }
 
   generarReporte() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Generando reporte!',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     this.reporteService.postReporteMeritoId(`${this.idpersonal}`).subscribe(
       (data) => {
         const urlreport = `${this.url3}/merito/${data.nombre}`;
         window.open(urlreport, '_blank');
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
       },
       (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
     );
   }
+
+
   registrarMerito() {
     const formData = new FormData();
     formData.append(

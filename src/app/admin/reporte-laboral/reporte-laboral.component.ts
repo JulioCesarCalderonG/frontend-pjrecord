@@ -6,6 +6,7 @@ import { CargoService } from 'src/app/servicios/cargo.service';
 import { DependenciaService } from 'src/app/servicios/dependencia.service';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { OrganoService } from 'src/app/servicios/organo.service';
+import { RegimenLaboralService } from 'src/app/servicios/regimen-laboral.service';
 import { ReporteService } from 'src/app/servicios/reporte.service';
 import { TipoLicenciaService } from 'src/app/servicios/tipo-licencia.service';
 import { TipoPersonalService } from 'src/app/servicios/tipo-personal.service';
@@ -28,8 +29,10 @@ export class ReporteLaboralComponent implements OnInit {
   listTipoPersonal?: Array<any>;
   generalForm: FormGroup;
   recordEditarForm: FormGroup;
+  regimenForm: FormGroup;
   listDependencia?: Array<any>;
   listTipodocumento?: Array<any>;
+  listRegimenLaboral?: Array<any>;
   idrecord: string = '';
   loadImage: string = '';
   loadDocumentoImage: string = '';
@@ -53,6 +56,7 @@ export class ReporteLaboralComponent implements OnInit {
     private tipoLicenciaService: TipoLicenciaService,
     private tipoPersonalServicie: TipoPersonalService,
     private tipodocumentoService: TipodocumentoService,
+    private regimenService: RegimenLaboralService,
     private fb: FormBuilder
   ) {
     this.generalForm = this.fb.group({
@@ -82,6 +86,9 @@ export class ReporteLaboralComponent implements OnInit {
       hasta: [''],
       tipo_personal: [''],
     });
+    this.regimenForm = this.fb.group({
+      regimen: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
@@ -90,6 +97,7 @@ export class ReporteLaboralComponent implements OnInit {
     this.mostrarTablas();
     this.mostrartipodocumento();
     this.mostrarTipoPersonal();
+    this.mostrarRegimenLaboral();
   }
 
   mostrarTablas() {
@@ -118,6 +126,17 @@ export class ReporteLaboralComponent implements OnInit {
         if (!this.carga) {
           Swal.close();
         }
+        console.log(error);
+      }
+    );
+  }
+  mostrarRegimenLaboral() {
+    this.regimenService.getRegimenPersonalId(this.idpersonal!).subscribe(
+      (data) => {
+        this.listRegimenLaboral = data.resp;
+        console.log(data);
+      },
+      (error) => {
         console.log(error);
       }
     );
@@ -174,17 +193,8 @@ export class ReporteLaboralComponent implements OnInit {
     formData.append('desde', this.generalForm.get('desde')?.value);
     formData.append('hasta', this.generalForm.get('hasta')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
-    if (this.loadImage === '') {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'warning',
-        title: 'Seleccione el documento que autoriza',
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } else {
-      formData.append('archivo', this.fileInput?.nativeElement.files[0]);
-      this.generalService.postGeneral(formData).subscribe(
+    formData.append('archivo', this.fileInput?.nativeElement.files[0]);
+    this.generalService.postGeneral(formData).subscribe(
         (data) => {
           Swal.fire('Registrado!', data.msg, 'success');
           this.cancelaruno();
@@ -193,9 +203,16 @@ export class ReporteLaboralComponent implements OnInit {
         },
         (error) => {
           console.log(error);
+         Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: 'Seleccione el documento que autoriza',
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       );
-    }
+
   }
   actualizarGeneral() {
     const formData = new FormData();

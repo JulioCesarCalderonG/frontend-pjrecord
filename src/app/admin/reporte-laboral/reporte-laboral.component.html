@@ -5,16 +5,38 @@
         <h4 class="card-title">Registrar Datos del personal: {{personal}}</h4>
         <h6 class="card-subtitle">Por favor seleccione una opcion para ingresar sus datos</h6>
         <div class="row">
-          <div class="col-lg-6 mb-4">
-            <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-primary" data-toggle="modal"
-              data-target="#modalRecordLaboral">
-              <i class="fa fa-user-graduate"></i>
-              Registrar Record Laboral</button>
+          <div class="col-lg-12 mb-4 mt-2">
+            <div class="row">
+              <div class="col-lg-6">
+                <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-primary mb-2" data-toggle="modal"
+                data-target="#modalRecordLaboral">
+                <i class="fa fa-user-graduate"></i>
+                Registrar Record Laboral</button>
+              </div>
+              <div class="col-lg-6">
+                <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-secondary"
+                (click)="generarReporte()"><i class="fa fa-file-pdf"></i> Generar Reporte</button>
+              </div>
+            </div>
           </div>
-          <div class="col-lg-6">
-            <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-secondary" (click)="generarReporte()"><i
-                class="fa fa-file-pdf"></i> Generar Reporte</button>
-          </div>
+          <!-- <div class="col-lg-6 mb-4">
+            <form [formGroup]="regimenForm">
+              <label for="exampleFormControlSelect2">Seleccionar Regimen Laboral</label>
+              <select multiple class="form-control" id="exampleFormControlSelect2" formControlName="regimen">
+                <option value="0" class="mb-1 text-center" style="border-radius: 10px; color: black; background-color: rgb(212, 211, 211);">Todos</option>
+                <option
+                  *ngFor="let regimen of listRegimenLaboral"
+                  value="{{regimen.id}}" class="mb-1 text-center"
+                  style="border-radius: 10px; color: black"
+                  [ngStyle]="{'background-color': regimen.estado===1?'rgb(124, 220, 115)':'rgb(255, 116, 116)'}"
+                  >
+                    {{regimen.Condicion.Regimen.nombre}} -
+                  {{regimen.Condicion.nombre}} -
+                 {{regimen.estado===1?'Activo':'Inactivo'}}
+                  </option>
+              </select>
+            </form>
+          </div> -->
         </div>
       </div>
     </div>
@@ -23,56 +45,60 @@
   <div class="col-lg-12" id="tableRecord">
     <div class="card">
       <div class="card-body">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">ID</th>
-            <th scope="col" class="text-center">DOCUMENTO QUE AUTORIZA</th>
-            <th scope="col" class="text-center">DEPENDENCIA</th>
-            <th scope="col" class="text-center">CARGO FUNCIONAL</th>
-            <th scope="col" class="text-center">DESDE</th>
-            <th scope="col" class="text-center">HASTA</th>
-            <th scope="col" class="text-center">VER DOCUMENTO</th>
-            <th>EDITAR</th>
-            <th>ELIMINAR</th>
-            <th>ACTUALIZAR DOCUMENTO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let general of listRecord" style="font-size: 15px;">
-            <th scope="row">{{general.ids}}</th>
-            <td class="text-center">{{general.codigo_documento}}</td>
-            <td class="text-center">{{general.dependencia}}</td>
-            <td class="text-center">{{general.Cargo.descripcion}}</td>
-            <td class="text-center">{{general.inicio}}</td>
-            <td class="text-center">{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
-            <td class="text-center">
-              <a href="{{url}}/{{general.documento}}" class="btn btn-success" target="_blank">
-                <i class="fa fa-eye"></i>
-               </a>
-            </td>
-            <td class="text-center">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarRecordLaboral" data-whatever="@mdo" (click)="obtenerDatosRecordId(general.id)">
-                <i class="fa fa-pencil-alt"></i>
-              </button>
-            </td>
-            <td class="text-center">
-              <button type="button" class="btn btn-danger" (click)="eliminarRecord(general.id)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </td>
-            <td class="text-center">
-              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarDocumentoLaboral" data-whatever="@mdo" (click)="obtenerIdDocumentoLaboral(general.id)">
-                <i class="fa fa-file-pdf"></i>
-              </button>
-            </td>
-          </tr>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" class="text-center">ID</th>
+                <th scope="col" class="text-center">DOCUMENTO QUE AUTORIZA</th>
+                <th scope="col" class="text-center">DEPENDENCIA</th>
+                <th scope="col" class="text-center">CARGO FUNCIONAL</th>
+                <th scope="col" class="text-center">DESDE</th>
+                <th scope="col" class="text-center">HASTA</th>
+                <th scope="col" class="text-center">VER DOCUMENTO</th>
+                <th>EDITAR</th>
+                <th>ELIMINAR</th>
+                <th>ACTUALIZAR DOCUMENTO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let general of listRecord" style="font-size: 15px;">
+                <th scope="row">{{general.ids}}</th>
+                <td class="text-center">{{general.codigo_documento}}</td>
+                <td class="text-center">{{general.dependencia}}</td>
+                <td class="text-center">{{general.Cargo.descripcion}}</td>
+                <td class="text-center">{{general.inicio}}</td>
+                <td class="text-center">{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
+                <td class="text-center">
+                  <a href="{{url}}/{{general.documento}}" class="btn btn-success" target="_blank">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#modalEditarRecordLaboral" data-whatever="@mdo"
+                    (click)="obtenerDatosRecordId(general.id)">
+                    <i class="fa fa-pencil-alt"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-danger" (click)="eliminarRecord(general.id)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-warning" data-toggle="modal"
+                    data-target="#editarDocumentoLaboral" data-whatever="@mdo"
+                    (click)="obtenerIdDocumentoLaboral(general.id)">
+                    <i class="fa fa-file-pdf"></i>
+                  </button>
+                </td>
+              </tr>
 
-        </tbody>
-      </table>
-    </div>
-  </div>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -122,13 +148,13 @@
             <div class="col-lg-3">
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Numero:</label>
-                <input type="text" class="form-control" id="recipient-name" formControlName="numero">
+                <input type="number" class="form-control" id="recipient-name" formControlName="numero">
               </div>
             </div>
             <div class="col-lg-3">
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Año:</label>
-                <input type="text" class="form-control" id="recipient-name" formControlName="ano">
+                <input type="text" class="form-control" id="recipient-name" formControlName="ano" maxlength="4">
               </div>
             </div>
             <div class="col-lg-6">

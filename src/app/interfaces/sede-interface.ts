@@ -8,6 +8,7 @@ export interface ResultSede {
 
 export interface Resp {
   id:     number;
+  ids:    number;
   nombre: string;
   estado: number;
 }

@@ -30,8 +30,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let sedes of listSedes">
-      <td class="text-center">{{sedes.id}}</td>
+    <!-- COMPLETAMOS LOS VALORES -->
+    <tr *ngFor="let sedes of listSedes! | paginate: { itemsPerPage: 10, currentPage: p }">
+      <td class="text-center">{{sedes.ids}}</td>
       <td>{{sedes.nombre}}</td>
       <td *ngIf="sedes.estado===1" class="text-center">Activo</td>
       <td *ngIf="sedes.estado===0" class="text-center">Inactivo</td>
@@ -53,6 +54,8 @@
     </tr>
   </tbody>
 </table>
+<!-- ACA COLOCO LA PAGINACION -->
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
       </div>
     </div>
 

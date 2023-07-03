@@ -7,6 +7,7 @@ export interface ResultOrgano {
 }
 
 export interface Resp {
+  ids:  number;
   id:      number;
   nombre:  string;
   sigla:   string;
