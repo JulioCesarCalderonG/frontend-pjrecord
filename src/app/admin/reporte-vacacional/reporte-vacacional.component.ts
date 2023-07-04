@@ -119,6 +119,17 @@ export class ReporteVacacionalComponent implements OnInit {
     );
   }
   generarReporte() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Generando reporte!',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
     const id_regimen_laboral = this.regimenForm.get('regimen')?.value;
     if (id_regimen_laboral !== '') {
       this.reporteService
@@ -128,8 +139,15 @@ export class ReporteVacacionalComponent implements OnInit {
             console.log(data);
             const urlreport = `${this.url3}/vacacional/${data.nombre}`;
             window.open(urlreport, '_blank');
+            this.carga = false;
+            if (!this.carga) {
+              Swal.close();
+            }
           },
           (error) => {
+            if (!this.carga) {
+              Swal.close();
+            }
             console.log(error);
           }
         );

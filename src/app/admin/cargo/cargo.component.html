@@ -31,7 +31,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let cargo of listCargo">
+      <tr *ngFor="let cargo of listCargo! | paginate: { itemsPerPage: 10, currentPage: p }">
         <th scope="row" class="text-center">{{cargo.id}}</th>
         <td >{{cargo.descripcion}}</td>
         <td class="text-center">{{cargo.TipoPersonal.titulo}}</td>
@@ -55,6 +55,7 @@
       </tr>
     </tbody>
   </table>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
       </div>
     </div>
 

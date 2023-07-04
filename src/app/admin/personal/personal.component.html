@@ -34,7 +34,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let personal of listPersonal">
+              <tr *ngFor="let personal of listPersonal! | paginate: { itemsPerPage: 10, currentPage: p}">
                 <td scope="row" class="text-center">{{personal.ids}}</td>
                 <td >{{personal.nombre}}</td>
                 <td >{{personal.apellido}}</td>
@@ -59,6 +59,7 @@
               </tr>
             </tbody>
           </table>
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
       </div>
     </div>

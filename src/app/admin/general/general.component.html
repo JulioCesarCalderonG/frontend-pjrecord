@@ -52,7 +52,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let general of listGeneral">
+            <tr *ngFor="let general of listGeneral! | paginate: { itemsPerPage: 10, currentPage: p }">
               <th scope="row" class="text-center">{{general.id}}</th>
               <td class="text-center">{{general.codigo_documento}}</td>
               <td class="text-center">{{general.dependencia}}</td>
@@ -61,9 +61,9 @@
               <td class="text-center">{{general.inicio}}</td>
               <td class="text-center">{{(general.fin==='2030-12-30')?'ACTUALIDAD':general.fin}}</td>
             </tr>
-
           </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
       </div>
     </div>
   </div>

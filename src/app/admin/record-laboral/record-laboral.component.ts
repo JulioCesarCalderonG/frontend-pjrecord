@@ -12,6 +12,8 @@ export class RecordLaboralComponent implements OnInit {
   estado: string = '1';
   inputBuscar: string = '';
   carga: boolean = false;
+  p: number = 1;
+  
   constructor(
     private personalService: PersonalService,
     private router: Router

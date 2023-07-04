@@ -32,7 +32,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let organo of listOrgano">
+            <tr *ngFor="let organo of listOrgano! | paginate: { itemsPerPage: 10, currentPage: p }">
               <th scope="row" class="text-center">{{organo.ids}}</th>
               <td>{{organo.nombre}}</td>
               <td class="text-center">{{organo.sigla}}</td>
@@ -58,6 +58,7 @@
             </tr>
           </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
       </div>
     </div>
 

@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let detalle_licencia of listDetallelicencia">
+        <tr *ngFor="let detalle_licencia of listDetallelicencia! | paginate: { itemsPerPage: 10, currentPage: p }">
           <th scope="row" class="text-center">{{detalle_licencia.id}}</th>
           <td>{{detalle_licencia.nombre}}</td>
           <td class="text-center">{{detalle_licencia.TipoLicencium.nombre}}</td>
@@ -54,6 +54,7 @@
         </tr>
       </tbody>
     </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
       </div>
   

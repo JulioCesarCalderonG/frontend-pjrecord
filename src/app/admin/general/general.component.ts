@@ -29,6 +29,8 @@ export class GeneralComponent implements OnInit {
   tipofiltro: string = '';
   datobuscar: string = '';
   carga: boolean = false;
+  p: number = 1;
+  
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   url2 = `${environment.backendUrl}/reporte/recordlaboral`;
   modelReporte = {

@@ -17,6 +17,7 @@ export class DetalleLicenciaComponent implements OnInit {
   ids?: string | number;
   estado: string = '1';
   carga: boolean = false;
+  p: number = 1;
 
   constructor(
     private detallelicenciaService: DetalleLicenciaService,
