@@ -31,7 +31,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let detalle_licencia of listDetallelicencia! | paginate: { itemsPerPage: 10, currentPage: p }">
-          <th scope="row" class="text-center">{{detalle_licencia.id}}</th>
+          <th scope="row" class="text-center">{{detalle_licencia.ids}}</th>
           <td>{{detalle_licencia.nombre}}</td>
           <td class="text-center">{{detalle_licencia.TipoLicencium.nombre}}</td>
           <td *ngIf="detalle_licencia.estado===1" class="text-center">Activo</td>

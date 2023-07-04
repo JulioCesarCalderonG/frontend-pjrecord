@@ -32,7 +32,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let cargo of listCargo! | paginate: { itemsPerPage: 10, currentPage: p }">
-        <th scope="row" class="text-center">{{cargo.id}}</th>
+        <th scope="row" class="text-center">{{cargo.ids}}</th>
         <td >{{cargo.descripcion}}</td>
         <td class="text-center">{{cargo.TipoPersonal.titulo}}</td>
         <td *ngIf="cargo.estado===1" class="text-center">Activo</td>

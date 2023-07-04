@@ -30,7 +30,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let tipodocumento of listTipodocumento">
-              <th scope="row" class="text-center">{{tipodocumento.id}}</th>
+              <th scope="row" class="text-center">{{tipodocumento.ids}}</th>
               <td>{{tipodocumento.descripcion}}</td>
               <td *ngIf="tipodocumento.estado===1" class="text-center">Activo</td>
               <td *ngIf="tipodocumento.estado===0" class="text-center">Inactivo</td>

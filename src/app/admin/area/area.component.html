@@ -32,7 +32,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let area of listArea! | paginate: { itemsPerPage: 10, currentPage: p }">
-      <th scope="row" class="text-center">{{area.id}}</th>
+      <th scope="row" class="text-center">{{area.ids}}</th>
       <td>{{area.nombre}}</td>
       <td class="text-center">{{area.sigla}}</td>
       <td class="text-center">{{area.UnidadOrganica.nombre}}</td>
