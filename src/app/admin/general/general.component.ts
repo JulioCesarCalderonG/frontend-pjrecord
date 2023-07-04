@@ -139,11 +139,30 @@ export class GeneralComponent implements OnInit {
     );
   }
   mostrarPersonal() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Cargando datos!',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      })
+    }
     this.personalService.getPersonal().subscribe(
       (data) => {
         this.listPersonal = data.resp;
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
       },
       (error) => {
+        this.carga = false;
+        if (!this.carga) {
+          Swal.close();
+        }
         console.log(error);
       }
     );
@@ -325,7 +344,20 @@ export class GeneralComponent implements OnInit {
       document.getElementById('seleOne')?.classList.add('invi');
     }
   }
+
+
   generarReporte() {
+    this.carga = true;
+    if (this.carga) {
+      Swal.fire({
+        title: 'Generando reporte!',
+        html: 'Por favor espere',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      })
+    }
     if (this.modelReporte.tiporeporte === '1') {
       console.log(this.modelReporte);
 
@@ -364,7 +396,19 @@ export class GeneralComponent implements OnInit {
 
           const urlreport = `${this.url2}/${data.nombre}`;
           window.open(urlreport, '_blank');
-        });
+          this.carga= false;
+          if (!this.carga) {
+            Swal.close();
+          }
+        },
+        (error)=>{
+          this.carga = false;
+          if (!this.carga) {
+            Swal.close();
+          }
+          console.log(error);
+        }
+        );
       }
     } else if (this.modelReporte.tiporeporte === '2') {
       if (this.modelReporte.personal === '') {
