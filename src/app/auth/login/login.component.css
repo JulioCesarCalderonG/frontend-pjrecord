@@ -43,9 +43,18 @@
   margin-top: 10px;
 }
 .titlegeneral {
-  font-family: 'Anton', sans-serif;
+  /*font-family: 'Anton', sans-serif;*/
   color: black;
 }
 .subtitle {
+  color: black;
+}
+
+.titulo2 {
+  margin-top: 150px;
+  color: black;
+}
+
+.titlegeneral2 {
   color: black;
 }
