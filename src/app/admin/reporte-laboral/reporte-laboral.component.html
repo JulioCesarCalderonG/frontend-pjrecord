@@ -2,24 +2,39 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title" style="font-weight: 600;">Registrar Datos del personal: {{personal}}</h4>
-        <h6 class="card-subtitle">Por favor seleccione una opcion para ingresar sus datos</h6>
+        <!-- <h4 class="card-title" style="font-weight: 600;">Registrar Datos del personal: {{personal}}</h4>
+        <h6 class="card-subtitle">Por favor seleccione una opcion para ingresar sus datos</h6> -->
+
         <div class="row">
-          <div class="col-lg-12 mb-4 mt-2">
-            <div class="row">
-              <div class="col-lg-6">
-                <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-primary mb-2" data-toggle="modal"
-                data-target="#modalRecordLaboral">
-                <i class="fa fa-user-graduate"></i>
-                Registrar Record Laboral</button>
-              </div>
-              <div class="col-lg-6">
-                <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-secondary"
-                (click)="generarReporte()"><i class="fa fa-file-pdf"></i> Generar Reporte</button>
-              </div>
-            </div>
+          <div class="col lg-12">
+            <h5 class="card-title" style="font-weight: 600;">Datos del personal: {{personal}}</h5>
+            <h6 class="card-subtitle">Por favor seleccione una opcion para ingresar sus datos</h6>
           </div>
-          <!-- <div class="col-lg-6 mb-4">
+
+          <div class="col lg-12 text-right">
+            <button type="button" class="btn btn-light" onclick="history.back();"><i
+                class="fa fa-arrow-left"></i></button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 mb-4">
+            <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-primary mb-2"
+              data-toggle="modal" data-target="#modalRecordLaboral">
+              <i class="fa fa-user-graduate"></i>
+              Registrar Record Laboral</button>
+          </div>
+          <div class="col-lg-6">
+            <button type="button" class="btn waves-effect waves-light btn-lg btn-block btn-secondary"
+              (click)="generarReporte()"><i class="fa fa-file-pdf"></i> Generar Reporte</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div class="col-lg-6 mb-4">
             <form [formGroup]="regimenForm">
               <label for="exampleFormControlSelect2">Seleccionar Regimen Laboral</label>
               <select multiple class="form-control" id="exampleFormControlSelect2" formControlName="regimen">
@@ -37,11 +52,9 @@
               </select>
             </form>
           </div> -->
-        </div>
-      </div>
-    </div>
-  </div>
 
+
+  <!-- Generar reporte de record laboral -->
   <div class="col-lg-12" id="tableRecord">
     <div class="card">
       <div class="card-body">
@@ -102,6 +115,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Agregar record laboral -->
 <div class="modal fade" id="modalRecordLaboral" data-backdrop="static" data-keyboard="false" tabindex="-1"
@@ -283,6 +297,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Editar record laboral -->
 <div class="modal fade" id="modalEditarRecordLaboral" data-backdrop="static" data-keyboard="false" tabindex="-1"
