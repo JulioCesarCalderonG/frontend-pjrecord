@@ -184,15 +184,13 @@ export class ReporteLaboralComponent implements OnInit {
     formData.append('ano', this.generalForm.get('ano')?.value);
     formData.append('tipo_sigla', this.generalForm.get('tiposigla')?.value);
     formData.append('autoriza', this.generalForm.get('autoriza')?.value);
-    formData.append(
-      'tipo_dependencia',
-      this.generalForm.get('tipodependencia')?.value
-    );
+    formData.append('tipo_dependencia',this.generalForm.get('tipodependencia')?.value);
     formData.append('dependencia', this.generalForm.get('dependencia')?.value);
     formData.append('id_cargo', this.generalForm.get('cargo')?.value);
     formData.append('desde', this.generalForm.get('desde')?.value);
     formData.append('hasta', this.generalForm.get('hasta')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
+    formData.append('personal',`${this.personal}`);
     formData.append('archivo', this.fileInput?.nativeElement.files[0]);
     this.generalService.postGeneral(formData).subscribe(
         (data) => {

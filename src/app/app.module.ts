@@ -8,9 +8,10 @@ import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AdministradorGuard } from './guards/administrador.guard';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { InterceptorInterceptor } from './interceptor/interceptor.interceptor';
 
 
 @NgModule({
@@ -29,7 +30,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NgxPaginationModule
   ],
   providers: [
-    AdministradorGuard
+    AdministradorGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorInterceptor,
+      multi:true
+    }
   ],
   bootstrap: [AppComponent]
 })
