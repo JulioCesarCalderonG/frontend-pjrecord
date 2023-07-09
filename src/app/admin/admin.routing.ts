@@ -1,3 +1,4 @@
+
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AdminComponent } from './admin.component';
@@ -26,6 +27,7 @@ import { ReporteLicenciasComponent } from './reporte-licencias/reporte-licencias
 import { ReporteMeritoComponent } from './reporte-merito/reporte-merito.component';
 import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacional.component';
 import { RegimenLaboralComponent } from './regimen-laboral/regimen-laboral.component';
+import { HistorialComponent } from './historial/historial.component';
 
 const routes: Routes = [
     {
@@ -56,6 +58,7 @@ const routes: Routes = [
             { path: 'reporte-merito/:id/:personal',component:ReporteMeritoComponent},
             { path: 'reporte-vacacional/:id/:personal', component:ReporteVacacionalComponent},
             { path: 'regimen-laboral',component:RegimenLaboralComponent},
+            { path: 'historial', component:HistorialComponent},
         ],
         canActivateChild: [
           AdministradorGuard

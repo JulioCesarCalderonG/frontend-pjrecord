@@ -33,6 +33,7 @@ import { ReporteMeritoComponent } from './reporte-merito/reporte-merito.componen
 import { ReporteVacacionalComponent } from './reporte-vacacional/reporte-vacacional.component';
 import { RegimenLaboralComponent } from './regimen-laboral/regimen-laboral.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { HistorialComponent } from './historial/historial.component';
 
 
 
@@ -64,7 +65,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ReporteLicenciasComponent,
     ReporteMeritoComponent,
     ReporteVacacionalComponent,
-    RegimenLaboralComponent
+    RegimenLaboralComponent,
+    HistorialComponent
   ],
   exports:[
     DashboardComponent,

@@ -23,10 +23,14 @@ export class AdministradorComponent implements OnInit {
     this.administradorForm = this.fb.group({
       usuario: ['', Validators.required],
       password: ['', Validators.required],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
     });
     this.administradorEditarForm = this.fb.group({
       usuario: ['', Validators.required],
       password: ['', Validators.required],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
     });
   }
 
