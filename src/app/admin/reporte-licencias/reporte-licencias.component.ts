@@ -24,7 +24,7 @@ export class ReporteLicenciasComponent implements OnInit {
   loadDocumentoLicencia: string = '';
   idLicencia: string = '';
   idDocumentoLicencia: string = '';
-  carga: boolean = false;
+  carga: boolean = true;
   @ViewChild('fileLicencia', { static: false }) fileLicencia?: ElementRef;
   @ViewChild('fileDocumentoLicencia', { static: false })
   fileDocumentoLicencia?: ElementRef;
@@ -72,7 +72,6 @@ export class ReporteLicenciasComponent implements OnInit {
 
   /*  Seccion Crear Licencias */
   mostrarTablas() {
-    this.carga = true;
     if (this.carga) {
       Swal.fire({
         title: 'Cargando datos!',
@@ -91,16 +90,18 @@ export class ReporteLicenciasComponent implements OnInit {
       (data) => {
         console.log(data);
         this.listLicencia = data.resp;
-        this.carga = false;
+        this.carga = this.carga?false:true;
         if (!this.carga) {
           Swal.close();
         }
+        this.carga=true;
       },
       (error) => {
         this.carga = false;
         if (!this.carga) {
           Swal.close();
         }
+        this.carga=true
         console.log(error);
       }
     );
@@ -160,6 +161,7 @@ export class ReporteLicenciasComponent implements OnInit {
     formData.append('numero', this.licenciaForm.get('numero')?.value);
     formData.append('ano', this.licenciaForm.get('ano')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
+    formData.append('personal',`${this.personal}`);
     formData.append(
       'id_detalle_licencia',
       this.licenciaForm.get('detallelicencia')?.value
@@ -207,6 +209,7 @@ export class ReporteLicenciasComponent implements OnInit {
       this.licenciaService.postLicencia(formData).subscribe(
         (data) => {
           Swal.fire('Registrado!', data.msg, 'success');
+          this.carga=false;
           this.cancelardos();
           this.reset();
           this.mostrarTablas();
@@ -231,6 +234,7 @@ export class ReporteLicenciasComponent implements OnInit {
     formData.append('numero', this.licenciaEditarForm.get('numero')?.value);
     formData.append('ano', this.licenciaEditarForm.get('ano')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
+    formData.append('personal',`${this.personal}`);
     formData.append(
       'id_detalle_licencia',
       this.licenciaEditarForm.get('detallelicencia')?.value
@@ -270,7 +274,8 @@ export class ReporteLicenciasComponent implements OnInit {
 
     this.licenciaService.putLicencia(formData, this.idLicencia).subscribe(
       (data) => {
-        Swal.fire('Registrado!', data.msg, 'success');
+        Swal.fire('Editado!', data.msg, 'success');
+        this.carga=false;
         this.mostrarTablas();
       },
       (error) => {
@@ -293,12 +298,14 @@ export class ReporteLicenciasComponent implements OnInit {
         'archivo',
         this.fileDocumentoLicencia?.nativeElement.files[0]
       );
+      formData.append('personal',`${this.personal}`);
       this.licenciaService
         .putDocumentoLicencia(formData, this.idDocumentoLicencia)
         .subscribe(
           (data) => {
-            Swal.fire('Registrado!', data.msg, 'success');
+
             this.mostrarTablas();
+            Swal.fire('Registrado!', data.msg, 'success');
           },
           (error) => {
             console.log(error);
@@ -318,7 +325,7 @@ export class ReporteLicenciasComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.licenciaService.deleteLicencia(id).subscribe(
+        this.licenciaService.deleteLicencia(id,this.personal).subscribe(
           (data) => {
             Swal.fire(
               'Eliminar!',

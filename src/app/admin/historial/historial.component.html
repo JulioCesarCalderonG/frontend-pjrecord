@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <div class="row mb-5" style=" align-items: center;">
+        <div class="row" style=" align-items: center;">
           <div class="col-lg-4">
             <div class="form-group">
               <label class="control-label">Seleccionar Tipo de Filtro</label>
@@ -15,18 +15,9 @@
               </select>
             </div>
           </div>
-
-          <div class="col-lg-4">
-            <div class="form-group">
-                <label class="control-label">Ingrese valor a buscar</label>
-                <input type="text" id="firstName" class="form-control" placeholder="Ingresar dato"
-                  [(ngModel)]="datobuscar">
-              </div>
-          </div>
-
-          <div class="col-lg-4">
+          <div class="col-lg-5">
             <button type="button" class="btn waves-effect waves-light btn-outline-primary" (click)="filtrar()">
-              <i class="fas fa-filter"></i> Filtrar Contenido</button>
+              <i class="fas fa-filter"></i> Filtrar Historial</button>
           </div>
         </div>
       </div>
@@ -36,7 +27,8 @@
   <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive">
+            <div class="table-responsive">
+              <table class="table">
                 <thead>
                     <tr>
                         <th scope="col" class="text-center">Id</th>
@@ -56,8 +48,8 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
   </div>
-
 </div>

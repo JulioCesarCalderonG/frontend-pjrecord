@@ -28,7 +28,7 @@ export class ReporteMeritoComponent implements OnInit {
   loadMerito: string = '';
   loadDocumentoMerito: string = '';
   idDocumentoMerito: string = '';
-  carga: boolean = false;
+  carga: boolean = true;
 
   @ViewChild('fileMerito', { static: false }) fileMerito?: ElementRef;
   @ViewChild('fileDocumentoMerito', { static: false })
@@ -79,7 +79,6 @@ export class ReporteMeritoComponent implements OnInit {
   }
 
   mostrarTablas() {
-    this.carga = true;
     if (this.carga) {
       Swal.fire({
         title: 'Generando reporte!',
@@ -94,16 +93,18 @@ export class ReporteMeritoComponent implements OnInit {
       (data) => {
         this.listMerito = data.resp;
         console.log(this.listMerito);
-        this.carga = false;
+        this.carga = this.carga?false:true;
         if (!this.carga) {
           Swal.close();
         }
+        this.carga=true;
       },
       (error) => {
         this.carga = false;
         if (!this.carga) {
           Swal.close();
         }
+        this.carga=true;
         console.log(error);
       }
     );
@@ -161,6 +162,7 @@ export class ReporteMeritoComponent implements OnInit {
     );
     formData.append('observacion', this.meritoForm.get('observacion')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
+    formData.append('personal', this.personal);
     if (this.loadMerito === '') {
       Swal.fire({
         position: 'top-end',
@@ -174,6 +176,7 @@ export class ReporteMeritoComponent implements OnInit {
       this.meritoService.postMerito(formData).subscribe(
         (data) => {
           Swal.fire('Registrado!', data.msg, 'success');
+          this.carga=false;
           this.cancelarcuatro();
           this.reset();
           this.mostrarTablas();
@@ -212,10 +215,12 @@ export class ReporteMeritoComponent implements OnInit {
       'observacion',
       this.meritoEditarForm.get('observacion')?.value
     );
+    formData.append('personal', this.personal);
 
     this.meritoService.putMerito(formData, `${this.idpersonal}`).subscribe(
       (data) => {
         Swal.fire('Editado!', data.msg, 'success');
+        this.carga=false;
         this.mostrarTablas();
       },
       (error) => {
@@ -238,11 +243,13 @@ export class ReporteMeritoComponent implements OnInit {
         'archivo',
         this.fileDocumentoMerito?.nativeElement.files[0]
       );
+      formData.append('personal', this.personal);
       this.meritoService
         .putDocumentoMerito(formData, this.idDocumentoMerito)
         .subscribe(
           (data) => {
             Swal.fire('Actualizado!', data.msg, 'success');
+            this.carga=false;
             this.mostrarTablas();
           },
           (error) => {
@@ -263,7 +270,7 @@ export class ReporteMeritoComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.meritoService.deleteMerito(id).subscribe(
+        this.meritoService.deleteMerito(id, this.personal).subscribe(
           (data) => {
             Swal.fire(
               'Eliminado!',

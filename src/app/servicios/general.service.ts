@@ -31,8 +31,8 @@ export class GeneralService {
   putGeneral(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`, body);
   }
-  deleteGeneral(id:string|number):Observable<any>{
-    return this.http.delete(`${this.url}/${id}`);
+  deleteGeneral(id:string|number, personal:string=''):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`,{params:{personal}});
   }
 
   putDocumentoLaboral(body:FormData, id:string):Observable<any>{

@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('carga','0');
         sessionStorage.setItem('x-token', data.token);
         sessionStorage.setItem('usuario', data.user.usuario);
+        sessionStorage.setItem('personal',`${data.user.nombre}`);
         this.router.navigateByUrl('/admin');
        }
       },

@@ -9,14 +9,13 @@ import { HistorialService } from 'src/app/servicios/historial.service';
 })
 export class HistorialComponent implements OnInit {
   listHistorial?: Array<any>;
-  tipofiltro: string = '';
+  idFiltro: string = '';
   historialForm:FormGroup;
-  datobuscar: string = '';
 
   constructor(
     private fb:FormBuilder,
     private historialService: HistorialService
-  ) { 
+  ) {
     this.historialForm = this.fb.group({
       descripcion: ['', Validators.required],
       fecha: ['', Validators.required],
@@ -29,7 +28,7 @@ export class HistorialComponent implements OnInit {
   }
 
   mostrarHistorial(){
-    this.historialService.getHistorial(this.tipofiltro).subscribe(
+    this.historialService.getHistorial(this.idFiltro).subscribe(
       (data)=>{
         this.listHistorial = data.resp;
       }, (error)=>{
@@ -39,21 +38,19 @@ export class HistorialComponent implements OnInit {
   }
 
   filtrar() {
-    if (this.tipofiltro !== '' && this.datobuscar !== '') {
-      console.log(this.tipofiltro, this.datobuscar);
+    if (this.idFiltro !== '') {
       this.mostrarHistorial();
     }
-    if (this.tipofiltro === '0') {
-      this.tipofiltro = '';
-      this.datobuscar = '';
+    if (this.idFiltro === '0') {
+      this.idFiltro = '';
       this.mostrarHistorial();
     }
   }
 
 
   tipoFiltro(event: any) {
-    this.tipofiltro = event.target.value;
-    console.log(this.tipofiltro);
+    this.idFiltro = event.target.value;
+    console.log(this.idFiltro);
   }
 
 }

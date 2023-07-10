@@ -24,5 +24,7 @@ export class AuthService {
     this.router.navigate(['/login']);
 
   }
-
+  resetPassword(body:FormData):Observable<any>{
+    return this.http.put(`${this.url}/password`,body);
+  }
 }

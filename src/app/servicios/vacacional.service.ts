@@ -15,7 +15,7 @@ export class VacacionalService {
   getVacacionalPersonal(id:string):Observable<any>{
     return this.http.get(`${this.url}/personal/${id}`)
   }
-  
+
   getVacacionalId(id:string|number):Observable<any>{
     return this.http.get(`${this.url}/${id}`)
   }
@@ -28,8 +28,8 @@ export class VacacionalService {
     return this.http.put(`${this.url}/${id}`,body)
   }
 
-  deleteVacacional(id:string|number):Observable<any>{
-    return this.http.delete(`${this.url}/${id}`);
+  deleteVacacional(id:string|number, personal:string=''):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`,{params:{personal}});
   }
 
   putDocumentoVacacional(body:FormData,id:string):Observable<any>{

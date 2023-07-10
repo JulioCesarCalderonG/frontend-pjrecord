@@ -24,8 +24,8 @@ export class LicenciaService {
   putLicencia(body:FormData,id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`,body)
   }
-  deleteLicencia(id:string|number):Observable<any>{
-    return this.http.delete(`${this.url}/${id}`);
+  deleteLicencia(id:string|number,personal:string=''):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`,{params:{personal}});
   }
 
   putDocumentoLicencia(body:FormData, id:string):Observable<any>{

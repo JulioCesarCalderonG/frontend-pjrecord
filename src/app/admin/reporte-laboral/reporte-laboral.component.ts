@@ -37,7 +37,7 @@ export class ReporteLaboralComponent implements OnInit {
   loadImage: string = '';
   loadDocumentoImage: string = '';
   idDocumentoLaboral: string = '';
-  carga: boolean = false;
+  carga: boolean = true;
   url3 = `${environment.backendUrl}/reporte`;
   url = `${environment.backendUrl}/uploadgeneral/recordlaboral`;
   @ViewChild('fileInput', { static: false }) fileInput?: ElementRef;
@@ -101,7 +101,6 @@ export class ReporteLaboralComponent implements OnInit {
   }
 
   mostrarTablas() {
-    this.carga = true;
     if (this.carga) {
       Swal.fire({
         title: 'Cargando datos!',
@@ -114,18 +113,20 @@ export class ReporteLaboralComponent implements OnInit {
     }
     this.generalService.getGeneralPersonal(`${this.idpersonal}`).subscribe(
       (data) => {
+        console.log(data);
         this.listRecord = data.resp;
-        this.carga = false;
+        this.carga = this.carga?false:true;
         if (!this.carga) {
           Swal.close();
         }
-        console.log(data);
+        this.carga=true;
       },
       (error) => {
         this.carga = false;
         if (!this.carga) {
           Swal.close();
         }
+        this.carga=true;
         console.log(error);
       }
     );
@@ -195,6 +196,7 @@ export class ReporteLaboralComponent implements OnInit {
     this.generalService.postGeneral(formData).subscribe(
         (data) => {
           Swal.fire('Registrado!', data.msg, 'success');
+          this.carga=false;
           this.cancelaruno();
           this.reset();
           this.mostrarTablas();
@@ -238,10 +240,11 @@ export class ReporteLaboralComponent implements OnInit {
     formData.append('desde', this.recordEditarForm.get('desde')?.value);
     formData.append('hasta', this.recordEditarForm.get('hasta')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
-
+    formData.append('personal',`${this.personal}`);
     this.generalService.putGeneral(formData, this.idrecord).subscribe(
       (data) => {
         Swal.fire('Editado!', data.msg, 'success');
+        this.carga=false;
         this.mostrarTablas();
       },
       (error) => {
@@ -264,11 +267,13 @@ export class ReporteLaboralComponent implements OnInit {
         'archivo',
         this.fileDocumentoLaboral?.nativeElement.files[0]
       );
+      formData.append('personal',`${this.personal}`);
       this.generalService
         .putDocumentoLaboral(formData, this.idDocumentoLaboral)
         .subscribe(
           (data) => {
-            Swal.fire('Registrado!', data.msg, 'success');
+            Swal.fire('Actualizado!', data.msg, 'success');
+            this.carga=false;
             this.mostrarTablas();
           },
           (error) => {
@@ -289,7 +294,7 @@ export class ReporteLaboralComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.generalService.deleteGeneral(id).subscribe(
+        this.generalService.deleteGeneral(id, this.personal).subscribe(
           (data) => {
             Swal.fire(
               'Eliminar!',

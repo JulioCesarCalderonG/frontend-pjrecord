@@ -23,7 +23,7 @@ export class ReporteVacacionalComponent implements OnInit {
   loadDocumentoVacacional: string = '';
   idVacacional: string = '';
   idDocumentoVacacional: string = '';
-  carga: boolean = false;
+  carga: boolean = true;
 
   @ViewChild('fileVacacional', { static: false }) fileVacacional?: ElementRef;
   @ViewChild('fileDocumentoVacacional', { static: false })
@@ -75,7 +75,6 @@ export class ReporteVacacionalComponent implements OnInit {
   }
 
   mostrarTablas() {
-    this.carga = true;
     if (this.carga) {
       Swal.fire({
         title: 'Generando reporte',
@@ -92,16 +91,18 @@ export class ReporteVacacionalComponent implements OnInit {
         (data) => {
           console.log(data);
           this.listVacacional = data.resp;
-          this.carga = false;
-          if (!this.carga) {
-            Swal.close();
-          }
+          this.carga = this.carga?false:true;
+        if (!this.carga) {
+          Swal.close();
+        }
+        this.carga=true;
         },
         (error) => {
           this.carga = false;
           if (!this.carga) {
             Swal.close();
           }
+          this.carga=true;
           console.log(error);
         }
       );
@@ -170,10 +171,8 @@ export class ReporteVacacionalComponent implements OnInit {
     formData.append('periodo', this.vacacionalForm.get('periodo')?.value);
     formData.append('numero', this.vacacionalForm.get('numero')?.value);
     formData.append('ano', this.vacacionalForm.get('ano')?.value);
-    formData.append(
-      'id_regimen_laboral',
-      this.vacacionalForm.get('regimen')?.value
-    );
+    formData.append('id_regimen_laboral',this.vacacionalForm.get('regimen')?.value);
+    formData.append('personal', this.personal);
     if (tipoDoc === '1') {
       if (areauno === '') {
         Swal.fire({
@@ -215,6 +214,7 @@ export class ReporteVacacionalComponent implements OnInit {
       this.vacacionalService.postVacacional(formData).subscribe(
         (data) => {
           Swal.fire('Registrado!', data.msg, 'success');
+          this.carga=false;
           this.cancelartres();
           this.reset();
           this.mostrarTablas();
@@ -241,6 +241,7 @@ export class ReporteVacacionalComponent implements OnInit {
     formData.append('numero', this.vacacionalEditarForm.get('numero')?.value);
     formData.append('ano', this.vacacionalEditarForm.get('ano')?.value);
     formData.append('id_personal', `${this.idpersonal}`);
+    formData.append('personal', this.personal);
     if (tipoDoc === '1') {
       if (areauno === '') {
         Swal.fire({
@@ -277,9 +278,10 @@ export class ReporteVacacionalComponent implements OnInit {
     }
     this.vacacionalService.putVacacional(formData, this.idVacacional).subscribe(
       (data) => {
-        console.log(data);
-        this.mostrarTablas();
         Swal.fire('Editado!', data.msg, 'success');
+        this.carga=false;
+        this.mostrarTablas();
+        console.log(data);
       },
       (error) => {
         console.log(error);
@@ -302,11 +304,13 @@ export class ReporteVacacionalComponent implements OnInit {
         'archivo',
         this.fileDocumentoVacacional?.nativeElement.files[0]
       );
+      formData.append('personal', this.personal);
       this.vacacionalService
         .putDocumentoVacacional(formData, this.idDocumentoVacacional)
         .subscribe(
           (data) => {
             Swal.fire('Registrado!', data.msg, 'success');
+            this.carga=false;
             this.mostrarTablas();
           },
           (error) => {
@@ -328,7 +332,7 @@ export class ReporteVacacionalComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.vacacionalService.deleteVacacional(id).subscribe(
+        this.vacacionalService.deleteVacacional(id, this.personal).subscribe(
           (data) => {
             Swal.fire(
               'Eliminar!',

@@ -16,8 +16,8 @@ export class HistorialService {
     return this.http.get(`${this.url}/personal/${id}`);
   }
 
-  getHistorial(tipofiltro:string):Observable<any>{
-    return this.http.get(this.url,{params:{tipofiltro}});
+  getHistorial(id:string | number):Observable<any>{
+    return this.http.get(this.url,{params:{id}});
   }
 
 }

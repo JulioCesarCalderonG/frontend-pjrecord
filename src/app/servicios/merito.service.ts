@@ -24,8 +24,8 @@ export class MeritoService {
   putMerito(body:FormData,id:string|number):Observable<any>{
     return this.http.put(`${this.url}/${id}`,body)
   }
-  deleteMerito(id:string|number):Observable<any>{
-    return this.http.delete(`${this.url}/${id}`);
+  deleteMerito(id:string|number, personal:string=''):Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, {params:{personal}});
   }
 
   putDocumentoMerito(body:FormData, id:string):Observable<any>{
