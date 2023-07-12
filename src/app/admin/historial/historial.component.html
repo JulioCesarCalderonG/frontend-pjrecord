@@ -39,7 +39,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr  *ngFor="let historial of listHistorial">
+                    <tr  *ngFor="let historial of listHistorial! | paginate: { itemsPerPage: 10, currentPage: p }">
                         <th scope="row" class="text-center">{{historial.id}}</th>
                         <td class="text-center">{{historial.descripcion}}</td>
                         <td class="text-center">{{historial.fecha}}</td>
@@ -48,6 +48,7 @@
                     </tr>
                 </tbody>
             </table>
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
             </div>
         </div>
     </div>

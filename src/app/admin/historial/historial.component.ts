@@ -11,6 +11,7 @@ export class HistorialComponent implements OnInit {
   listHistorial?: Array<any>;
   idFiltro: string = '';
   historialForm:FormGroup;
+  p: number = 1;
 
   constructor(
     private fb:FormBuilder,

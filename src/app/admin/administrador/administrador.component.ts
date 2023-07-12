@@ -72,6 +72,8 @@ export class AdministradorComponent implements OnInit {
     const formData = new FormData();
     formData.append('usuario', this.administradorForm.get('usuario')?.value);
     formData.append('password', this.administradorForm.get('password')?.value);
+    formData.append('nombre', this.administradorForm.get('nombre')?.value);
+    formData.append('apellido', this.administradorForm.get('apellido')?.value);
 
     this.administradorService.postAdministrador(formData).subscribe(
       (data) => {
@@ -91,19 +93,15 @@ export class AdministradorComponent implements OnInit {
 
   modificarAdministrador() {
     const formData = new FormData();
-    formData.append(
-      'usuario',
-      this.administradorEditarForm.get('usuario')?.value
-    );
-    formData.append(
-      'password',
-      this.administradorEditarForm.get('password')?.value
-    );
+    formData.append('usuario',this.administradorEditarForm.get('usuario')?.value);
+    formData.append('password',this.administradorEditarForm.get('password')?.value);
+    formData.append('nombre', this.administradorEditarForm.get('nombre')?.value);
+    formData.append('apellido', this.administradorEditarForm.get('apellido')?.value);
 
     this.administradorService.putAdministrador(formData, this.ids!).subscribe(
       (data) => {
-        this.mostrarAdministrador();
         Swal.fire('Editado!', 'Se edito el administrador con exito', 'success');
+        this.mostrarAdministrador();      
       },
       (error) => {
         console.log(error);
@@ -155,6 +153,8 @@ export class AdministradorComponent implements OnInit {
         this.administradorEditarForm.setValue({
           usuario: data.resp.usuario,
           password: data.resp.password,
+          nombre:data.resp.nombre,
+          apellido: data.apellido,
         });
         this.ids = data.resp.id;
       },
@@ -168,10 +168,14 @@ export class AdministradorComponent implements OnInit {
     this.administradorForm.setValue({
       usuario: '',
       password: '',
+      nombre: '',
+      apellido: '',
     });
     this.administradorEditarForm.setValue({
       usuario: '',
       password: '',
+      nombre: '',
+      apellido: '',
     });
   }
 }

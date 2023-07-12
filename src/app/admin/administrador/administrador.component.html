@@ -36,10 +36,10 @@
         <th scope="row" class="text-center">{{administrador.id}}</th>
         <td class="text-center">{{administrador.usuario}}</td>
         <td class="text-center">{{administrador.password}}</td>
+        <td class="text-center">{{administrador.nombre}}</td>
+      <td class="text-center">{{administrador.apellido}}</td>
         <td *ngIf="administrador.activo===1" class="text-center">Activo</td>
       <td *ngIf="administrador.activo===0" class="text-center">Inactivo</td>
-      <td class="text-center">{{administrador.nombre}}</td>
-      <td class="text-center">{{administrador.apellido}}</td>
         <td class="text-center">
           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modificarAdministrador" data-whatever="@mdo" (click)="obtenerAdministradorId(administrador.id)">
             <i class="fa fa-edit"></i>
@@ -80,6 +80,14 @@
               <label for="recipient-name" class="col-form-label">Password:</label>
               <input type="text" class="form-control" id="recipient-name" formControlName="password">
             </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Nombres</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Apellidos</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="apellido">
+            </div>
           </form>
         </div>
         <div class="modal-footer">
@@ -108,6 +116,14 @@
             <div class="form-group">
               <label for="recipient-name" class="col-form-label">Password:</label>
               <input type="text" class="form-control" id="recipient-name" formControlName="password">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Nombres</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Apellidos</label>
+              <input type="text" class="form-control" id="recipient-name" formControlName="apellido">
             </div>
           </form>
         </div>
