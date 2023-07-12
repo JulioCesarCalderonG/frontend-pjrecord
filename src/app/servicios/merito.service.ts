@@ -15,6 +15,9 @@ export class MeritoService {
   getMeritoPersonal(id:string):Observable<any>{
     return this.http.get(`${this.url}/personal/${id}`)
   }
+  getMeritoPersonalEscalafon(escalafon:string):Observable<any>{
+    return this.http.get(`${this.url}/personal/escalafon/${escalafon}`)
+  }
   getMeritoId(id:string|number):Observable<any>{
     return this.http.get(`${this.url}/${id}`);
   }

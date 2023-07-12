@@ -12,6 +12,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AdministradorGuard } from './guards/administrador.guard';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { InterceptorInterceptor } from './interceptor/interceptor.interceptor';
+import { ConsultaModule } from './consulta/consulta.module';
+import { PruebaModule } from './prueba/prueba.module';
 
 
 @NgModule({
@@ -24,6 +26,8 @@ import { InterceptorInterceptor } from './interceptor/interceptor.interceptor';
     AppRoutingModule,
     AdminModule,
     AuthModule,
+    ConsultaModule,
+    PruebaModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

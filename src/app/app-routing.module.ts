@@ -5,6 +5,8 @@ import { AdminRoutingModule } from './admin/admin.routing';
 import { AuthRoutingModule } from './auth/auth.routing';
 
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
+import { ConsultaRoutingModule } from './consulta/consulta.routing';
+import { PruebaRoutingModule } from './prueba/prueba.routing';
 
 
 
@@ -15,7 +17,9 @@ const routes: Routes=[
   imports: [
     RouterModule.forRoot(routes),
     AdminRoutingModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    ConsultaRoutingModule,
+    PruebaRoutingModule
   ],
   exports:[RouterModule]
 })
