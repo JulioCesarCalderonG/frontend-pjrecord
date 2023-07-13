@@ -25,6 +25,7 @@
             <thead>
               <tr>
                 <th scope="col" class="text-center">Id</th>
+              <!-- <th scope="col" class="text-center">Nro DNI</th>--> 
                 <th scope="col" class="text-center">Nombre</th>
                 <th scope="col" class="text-center">Apellido</th>
                 <th scope="col" class="text-center">Escalafon</th>
@@ -36,6 +37,7 @@
             <tbody>
               <tr *ngFor="let personal of listPersonal! | paginate: { itemsPerPage: 10, currentPage: p}">
                 <td scope="row" class="text-center">{{personal.ids}}</td>
+                <!--<td class="text-center">{{personal.dni}}</td>-->
                 <td >{{personal.nombre}}</td>
                 <td >{{personal.apellido}}</td>
                 <td class="text-center">{{personal.escalafon}}</td>
@@ -76,6 +78,10 @@
           </div>
           <div class="modal-body">
             <form [formGroup]="personalForm">
+              <!--<div class="form-group">
+                <label for="recipient-name" class="col-form-label">Dni:</label>
+                <input type="text" class="form-control" id="recipient-name" formControlName="dni">
+              </div>-->
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Nombre:</label>
                 <input type="text" class="form-control" id="recipient-name" formControlName="nombre">
@@ -116,6 +122,10 @@
           </div>
           <div class="modal-body">
             <form [formGroup]="personalEditarForm">
+              <!--<div class="form-group">
+                <label for="recipient-name" class="col-form-label">Dni:</label>
+                <input type="text" class="form-control" id="recipient-name" formControlName="dni">
+              </div>-->
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Nombre:</label>
                 <input type="text" class="form-control" id="recipient-name" formControlName="nombre">

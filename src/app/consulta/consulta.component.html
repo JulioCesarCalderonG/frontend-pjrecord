@@ -7,7 +7,7 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label class="control-label">Ingrese Numero de Escalafon</label>
+                <label class="control-label">Ingrese N° Escalafon</label>
                 <input type="text" id="firstName" class="form-control" placeholder="Ingresar escalafon" maxlength="5" formControlName="escalafon">
               </div>
             </div>
@@ -57,7 +57,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let general of listLaboral! | paginate: { itemsPerPage: 7, currentPage: p1 }" style="font-size: 15px;">
+                <tr *ngFor="let general of listLaboral! | paginate: { itemsPerPage: 5, currentPage: p1 }" style="font-size: 15px;">
                   <th scope="row">{{general.ids}}</th>
                   <td class="text-center">{{general.codigo_documento}}</td>
                   <td class="text-center">{{general.dependencia}}</td>
