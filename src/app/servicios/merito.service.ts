@@ -15,9 +15,14 @@ export class MeritoService {
   getMeritoPersonal(id:string):Observable<any>{
     return this.http.get(`${this.url}/personal/${id}`)
   }
-  getMeritoPersonalEscalafon(escalafon:string):Observable<any>{
-    return this.http.get(`${this.url}/personal/escalafon/${escalafon}`)
+  //getMeritoPersonalEscalafon(escalafon:string):Observable<any>{
+    //return this.http.get(`${this.url}/personal/escalafon/${escalafon}`)
+  //}
+
+  getMeritoPersonalDni(dni:string):Observable<any>{
+    return this.http.get(`${this.url}/personal/dni/${dni}`)
   }
+
   getMeritoId(id:string|number):Observable<any>{
     return this.http.get(`${this.url}/${id}`);
   }

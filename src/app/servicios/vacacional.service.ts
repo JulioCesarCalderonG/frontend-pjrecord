@@ -15,8 +15,12 @@ export class VacacionalService {
   getVacacionalPersonal(id:string):Observable<any>{
     return this.http.get(`${this.url}/personal/${id}`)
   }
-  getVacacionalPersonalEscalafon(escalafon:string):Observable<any>{
-    return this.http.get(`${this.url}/personal/escalafon/${escalafon}`)
+  //getVacacionalPersonalEscalafon(escalafon:string):Observable<any>{
+    //return this.http.get(`${this.url}/personal/escalafon/${escalafon}`)
+  //}
+
+  getVacacionalPersonalDni(dni:string):Observable<any>{
+    return this.http.get(`${this.url}/personal/dni/${dni}`)
   }
 
   getVacacionalId(id:string|number):Observable<any>{

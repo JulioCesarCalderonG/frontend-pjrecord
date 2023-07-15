@@ -15,9 +15,14 @@ export class LicenciaService {
   getLicenciaPersonal(id:string):Observable<any>{
     return this.http.get(`${this.url}/personal/${id}`)
   }
-  getLicenciaPersonalEscalafon(escalafon:string):Observable<any>{
-    return this.http.get(`${this.url}/personal/escalafon/${escalafon}`)
+  //getLicenciaPersonalEscalafon(escalafon:string):Observable<any>{
+    //return this.http.get(`${this.url}/personal/escalafon/${escalafon}`)
+  //}
+
+  getLicenciaPersonalDni(dni:string):Observable<any>{
+    return this.http.get(`${this.url}/personal/dni/${dni}`)
   }
+
   getLicenciaId(id:string|number):Observable<any>{
     return this.http.get(`${this.url}/${id}`);
   }

@@ -25,14 +25,14 @@ export class PersonalComponent implements OnInit {
     private router: Router
   ) {
     this.personalForm = this.fb.group({
-      //dni:['', Validators.required],
+      dni: ['', Validators.required],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       escalafon: ['', Validators.required],
       fecha_inicio: ['', Validators.required],
     });
     this.personalEditarForm = this.fb.group({
-      //dni:['', Validators.required],
+      dni:['', Validators.required],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       escalafon: ['', Validators.required],
@@ -76,7 +76,7 @@ export class PersonalComponent implements OnInit {
 
   registrarPersonal() {
     const formData = new FormData();
-    //formData.append('dni', this.personalForm.get('dni')?.value);
+    formData.append('dni', this.personalForm.get('dni')?.value);
     formData.append('nombre', this.personalForm.get('nombre')?.value);
     formData.append('apellido', this.personalForm.get('apellido')?.value);
     formData.append('escalafon', this.personalForm.get('escalafon')?.value);
@@ -104,7 +104,7 @@ export class PersonalComponent implements OnInit {
 
   editarPersonal() {
     const formData = new FormData();
-    //formData.append('dni', this.personalForm.get('dni')?.value);
+    formData.append('dni', this.personalEditarForm.get('dni')?.value);
     formData.append('nombre', this.personalEditarForm.get('nombre')?.value);
     formData.append('apellido', this.personalEditarForm.get('apellido')?.value);
     formData.append(
@@ -169,7 +169,7 @@ export class PersonalComponent implements OnInit {
     this.personalService.getPersonalId(id).subscribe(
       (data) => {
         this.personalEditarForm.setValue({
-          //dni: data.resp.dni,
+          dni: data.resp.dni,
           nombre: data.resp.nombre,
           apellido: data.resp.apellido,
           escalafon: data.resp.escalafon,
@@ -203,14 +203,14 @@ export class PersonalComponent implements OnInit {
   }
   cancelar() {
     this.personalForm.setValue({
-      //dni:'',
+      dni:'',
       nombre: '',
       apellido: '',
       escalafon: '',
       fecha_inicio: '',
     });
     this.personalEditarForm.setValue({
-      //dni:'',
+      dni:'',
       nombre: '',
       apellido: '',
       escalafon: '',

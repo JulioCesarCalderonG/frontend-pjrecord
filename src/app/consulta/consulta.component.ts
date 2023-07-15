@@ -12,6 +12,7 @@ import { MeritoService } from '../servicios/merito.service';
 })
 export class ConsultaComponent implements OnInit {
 
+  idpersonal?: string | number;
   consultaForm:FormGroup;
   listLaboral?:Array<any>;
   listVacacional?:Array<any>;
@@ -29,7 +30,7 @@ export class ConsultaComponent implements OnInit {
     private meritoService:MeritoService
   ) {
     this.consultaForm = this.fb.group({
-      escalafon:['',Validators.required],
+      dni:['', Validators.required],
       tipo:['',Validators.required]
     });
   }
@@ -38,32 +39,32 @@ export class ConsultaComponent implements OnInit {
   }
 
   mostrarLaboral(){
-    const escalafon = this.consultaForm.get('escalafon')?.value;
-    this.laboralService.getGeneralPersonalEscalafon(escalafon).subscribe(
+    const dni = this.consultaForm.get('dni')?.value;
+    this.laboralService.getGeneralPersonalDni(dni).subscribe(
       (data)=>{
         this.listLaboral=data.resp
       }
     )
   }
   mostrarVacacional(){
-    const escalafon = this.consultaForm.get('escalafon')?.value;
-    this.vacacionalService.getVacacionalPersonalEscalafon(escalafon).subscribe(
+    const dni = this.consultaForm.get('dni')?.value;
+    this.vacacionalService.getVacacionalPersonalDni(dni).subscribe(
       (data)=>{
         this.listVacacional=data.resp
       }
     )
   }
   mostrarLicencia(){
-    const escalafon = this.consultaForm.get('escalafon')?.value;
-    this.licenciaService.getLicenciaPersonalEscalafon(escalafon).subscribe(
+    const dni = this.consultaForm.get('dni')?.value;
+    this.licenciaService.getLicenciaPersonalDni(dni).subscribe(
       (data)=>{
         this.listLicencia=data.resp
       }
     )
   }
   mostrarMerito(){
-    const escalafon = this.consultaForm.get('escalafon')?.value;
-    this.meritoService.getMeritoPersonalEscalafon(escalafon).subscribe(
+    const dni = this.consultaForm.get('dni')?.value;
+    this.meritoService.getMeritoPersonalDni(dni).subscribe(
       (data)=>{
         this.listMerito=data.resp
       }
@@ -85,7 +86,6 @@ export class ConsultaComponent implements OnInit {
             tableVacacional?.classList.add('invi');
             tableLicencia?.classList.add('invi');
             tableMerito?.classList.add('invi');
-
             return;
         break;
       case '2':
@@ -125,4 +125,10 @@ export class ConsultaComponent implements OnInit {
         break;
     }
   }
+
+  generarReporteLaborar(){
+  }
+
+
+ 
 }
