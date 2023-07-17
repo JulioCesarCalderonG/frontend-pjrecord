@@ -42,11 +42,20 @@ export class LoginComponent implements OnInit {
           timer: 1500,
         });
        }else if(data.ok===true){
+        const cargo = data.user.Rol.sigla;
+        console.log(cargo);
+
         sessionStorage.setItem('carga','0');
         sessionStorage.setItem('x-token', data.token);
         sessionStorage.setItem('usuario', data.user.usuario);
+        sessionStorage.setItem('cargo',data.user.Rol.sigla)
         sessionStorage.setItem('personal',`${data.user.nombre}`);
-        this.router.navigateByUrl('/admin');
+        if (cargo==='UA') {
+          this.router.navigateByUrl('/admin');
+        }
+        if (cargo ==='UJ') {
+          this.router.navigateByUrl('/jefe');
+        }
        }
       },
       (error)=>{

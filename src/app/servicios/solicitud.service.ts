@@ -20,4 +20,7 @@ export class SolicitudService {
   putFirmar(body:FormData, id:string|number):Observable<any>{
     return this.http.put(`${this.url}/firmar/${id}`,body);
   }
+  putEnviarCorreo(body={}, id:string|number):Observable<any>{
+    return this.http.put(`${this.url}/correo/${id}`,body);
+  }
 }

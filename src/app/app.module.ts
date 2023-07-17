@@ -15,6 +15,7 @@ import { InterceptorInterceptor } from './interceptor/interceptor.interceptor';
 import { ConsultaModule } from './consulta/consulta.module';
 import { PruebaModule } from './prueba/prueba.module';
 import { JefeModule } from './jefe/jefe.module';
+import { JefeGuard } from './guards/jefe.guard';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { JefeModule } from './jefe/jefe.module';
   ],
   providers: [
     AdministradorGuard,
+    //JefeGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorInterceptor,

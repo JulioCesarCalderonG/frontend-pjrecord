@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '../servicios/auth.service';
 import jwtDecode from 'jwt-decode';
 @Injectable({
   providedIn: 'root'
 })
-export class AdministradorGuard implements CanActivateChild {
-  constructor(private authService: AuthService, private router: Router){
+export class JefeGuard implements CanActivateChild {
+  constructor(
+    private authService: AuthService,
+    private router: Router){
   }
   canActivateChild(next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
@@ -18,7 +19,7 @@ export class AdministradorGuard implements CanActivateChild {
       if (dataDecode.exp < date.getTime() / 1000) {
         return this.redirect();
       }
-      if (dataDecode.cargo !== 'UA') {
+      if (dataDecode.cargo !== 'UJ') {
         return this.redirect();
       }
       return true;

@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { JefeComponent } from './jefe.component';
 import { SolicitudComponent } from './solicitud/solicitud.component';
+import { JefeGuard } from '../guards/jefe.guard';
 
 
 const routes: Routes = [
@@ -10,6 +11,9 @@ const routes: Routes = [
     component: JefeComponent,
     children:[
       {path:'',component:SolicitudComponent}
+    ],
+    canActivateChild: [
+      JefeGuard
     ]
   },
 

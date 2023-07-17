@@ -4,6 +4,8 @@ import { GeneralService } from '../servicios/general.service';
 import { VacacionalService } from '../servicios/vacacional.service';
 import { LicenciaService } from '../servicios/licencia.service';
 import { MeritoService } from '../servicios/merito.service';
+import { SolicitudService } from '../servicios/solicitud.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-consulta',
@@ -14,6 +16,7 @@ export class ConsultaComponent implements OnInit {
 
   idpersonal?: string | number;
   consultaForm:FormGroup;
+  reporteForm:FormGroup;
   listLaboral?:Array<any>;
   listVacacional?:Array<any>;
   listLicencia?:Array<any>;
@@ -27,12 +30,16 @@ export class ConsultaComponent implements OnInit {
     private laboralService: GeneralService,
     private vacacionalService:VacacionalService,
     private licenciaService:LicenciaService,
-    private meritoService:MeritoService
+    private meritoService:MeritoService,
+    private solicitudService:SolicitudService
   ) {
     this.consultaForm = this.fb.group({
       dni:['', Validators.required],
       tipo:['',Validators.required]
     });
+    this.reporteForm=this.fb.group({
+      correo:['',Validators.required]
+    })
   }
 
   ngOnInit(): void {
@@ -127,8 +134,24 @@ export class ConsultaComponent implements OnInit {
   }
 
   generarReporteLaborar(){
+    const formData = new FormData();
+
+    formData.append('tipo_reporte', this.consultaForm.get('tipo')?.value);
+    formData.append('dni', this.consultaForm.get('dni')?.value);
+    formData.append('correo', this.reporteForm.get('correo')?.value);
+
+    this.solicitudService.postSolicitud(formData).subscribe(
+      (data)=>{
+        Swal.fire('Solicitud enviada','Se ha enviado su solicitud con exito, se enviara el reporte a su correo','success');
+
+      },(error)=>{
+        console.log(error);
+        Swal.fire('Error de envio',`${error.error.msg}`,'error');
+      }
+    )
+
   }
 
 
- 
+
 }
