@@ -86,7 +86,7 @@ export class SolicitudComponent implements OnInit {
             console.log(data);
             Swal.fire(
               'Enviado al correo!',
-              'DSe ha enviado el reporte con exito.',
+              'Se ha enviado el reporte con exito.',
               'success'
             );
             this.mostrarSolicitudes();
