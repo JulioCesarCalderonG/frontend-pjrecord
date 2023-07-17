@@ -14,6 +14,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { InterceptorInterceptor } from './interceptor/interceptor.interceptor';
 import { ConsultaModule } from './consulta/consulta.module';
 import { PruebaModule } from './prueba/prueba.module';
+import { JefeModule } from './jefe/jefe.module';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { PruebaModule } from './prueba/prueba.module';
     AuthModule,
     ConsultaModule,
     PruebaModule,
+    JefeModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

@@ -7,6 +7,7 @@ import { AuthRoutingModule } from './auth/auth.routing';
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 import { ConsultaRoutingModule } from './consulta/consulta.routing';
 import { PruebaRoutingModule } from './prueba/prueba.routing';
+import { JefeRoutingModule } from './jefe/jefe.routing';
 
 
 
@@ -19,7 +20,8 @@ const routes: Routes=[
     AdminRoutingModule,
     AuthRoutingModule,
     ConsultaRoutingModule,
-    PruebaRoutingModule
+    PruebaRoutingModule,
+    JefeRoutingModule
   ],
   exports:[RouterModule]
 })

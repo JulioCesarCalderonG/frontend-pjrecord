@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdministradorService } from 'src/app/servicios/administrador.service';
+import { RolService } from 'src/app/servicios/rol.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,6 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class AdministradorComponent implements OnInit {
   listAdministrador?: Array<any>;
+  listRol?: Array<any>;
   administradorForm: FormGroup;
   administradorEditarForm: FormGroup;
   ids?: string | number;
@@ -18,6 +20,7 @@ export class AdministradorComponent implements OnInit {
 
   constructor(
     private administradorService: AdministradorService,
+    private rolService:RolService,
     private fb: FormBuilder
   ) {
     this.administradorForm = this.fb.group({
@@ -25,17 +28,20 @@ export class AdministradorComponent implements OnInit {
       password: ['', Validators.required],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
+      id_rol:['',Validators.required]
     });
     this.administradorEditarForm = this.fb.group({
       usuario: ['', Validators.required],
       password: ['', Validators.required],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
+      id_rol:['',Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.mostrarAdministrador();
+    this.mostrarRoles();
   }
 
   mostrarAdministrador() {
@@ -67,14 +73,23 @@ export class AdministradorComponent implements OnInit {
       }
     );
   }
+  mostrarRoles(){
+    this.rolService.getRoles().subscribe(
+      (data)=>{
+        this.listRol = data.resp;
+      },(error)=>{
+        console.log(error);
 
+      }
+    )
+  }
   registrarAdministrador() {
     const formData = new FormData();
     formData.append('usuario', this.administradorForm.get('usuario')?.value);
     formData.append('password', this.administradorForm.get('password')?.value);
     formData.append('nombre', this.administradorForm.get('nombre')?.value);
     formData.append('apellido', this.administradorForm.get('apellido')?.value);
-
+    formData.append('id_rol', this.administradorForm.get('id_rol')?.value);
     this.administradorService.postAdministrador(formData).subscribe(
       (data) => {
         Swal.fire(
@@ -97,11 +112,11 @@ export class AdministradorComponent implements OnInit {
     formData.append('password',this.administradorEditarForm.get('password')?.value);
     formData.append('nombre', this.administradorEditarForm.get('nombre')?.value);
     formData.append('apellido', this.administradorEditarForm.get('apellido')?.value);
-
+    formData.append('id_rol', this.administradorEditarForm.get('id_rol')?.value);
     this.administradorService.putAdministrador(formData, this.ids!).subscribe(
       (data) => {
         Swal.fire('Editado!', 'Se edito el administrador con exito', 'success');
-        this.mostrarAdministrador();      
+        this.mostrarAdministrador();
       },
       (error) => {
         console.log(error);
@@ -154,7 +169,8 @@ export class AdministradorComponent implements OnInit {
           usuario: data.resp.usuario,
           password: data.resp.password,
           nombre:data.resp.nombre,
-          apellido: data.apellido,
+          apellido: data.resp.apellido,
+          id_rol:data.resp.id_rol
         });
         this.ids = data.resp.id;
       },
@@ -170,12 +186,14 @@ export class AdministradorComponent implements OnInit {
       password: '',
       nombre: '',
       apellido: '',
+      id_rol:''
     });
     this.administradorEditarForm.setValue({
       usuario: '',
       password: '',
       nombre: '',
       apellido: '',
+      id_rol:''
     });
   }
 }

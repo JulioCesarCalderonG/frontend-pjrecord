@@ -6,6 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { BuscarPersonasComponent } from './buscar-personas/buscar-personas.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SidebarJefeComponent } from './sidebar-jefe/sidebar-jefe.component';
 
 
 
@@ -14,13 +15,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BreadcrumbsComponent,
     SidebarComponent,
     HeaderComponent,
-    BuscarPersonasComponent
+    BuscarPersonasComponent,
+    SidebarJefeComponent
   ],
   exports:[
     BreadcrumbsComponent,
     SidebarComponent,
     HeaderComponent,
-    BuscarPersonasComponent
+    BuscarPersonasComponent,
+    SidebarJefeComponent
   ],
   imports: [
     CommonModule,

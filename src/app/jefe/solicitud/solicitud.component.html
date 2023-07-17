@@ -1,0 +1,56 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h4 class="m-b-0 text-white">Bienvenido al modulo de validacion de solicitudes</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>DNI</th>
+                        <th>Personal</th>
+                        <th>Fecha solicitud</th>
+                        <th>Hora Solicitud</th>
+                        <th>Fecha atendido</th>
+                        <th>Hora atendido</th>
+                        <th>Ver documento</th>
+                        <th>Firmar</th>
+                        <th>Atender</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let solicitud of listSolicitud">
+                        <td>{{solicitud.Personal.dni}}</td>
+                        <td>{{solicitud.Personal.nombre}} {{solicitud.Personal.apellido}}</td>
+                        <td>{{solicitud.fecha_solicitud}}</td>
+                        <td>{{solicitud.hora_solicitud}}</td>
+                        <td>{{solicitud.fecha_atendido}}</td>
+                        <td>{{solicitud.hora_atendido}}</td>
+                        <td>
+                          <button type="button" class="btn waves-effect waves-light btn-primary">
+                            <i class="fa fa-solid fa-eye"></i>
+                          </button>
+                        </td>
+                        <td>
+                          <button type="button" class="btn waves-effect waves-light btn-warning">
+                            <i class="fa fa-solid fa-file-pen"></i>
+                          </button>
+                        </td>
+                        <td>
+                          <button type="button" class="btn waves-effect waves-light btn-success">
+                            <i class="fa fa-solid fa-envelope-circle-check"></i>
+                          </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
